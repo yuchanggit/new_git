@@ -13,11 +13,13 @@
 #include "TCanvas.h"
 #include "ElectronSelection.h"
 #include "ZtoEEfinder.h"
+#include "isPassZee.h"
 
 using namespace std;
 
 void select_electrons(TreeReader &, vector<int> * );
 
+bool isPassZee(TreeReader &, vector<Int_t>& );
 
 void xAna_ele_selection(TString inputFile, TCanvas *c1 , TCanvas *c2 , TCanvas *c3 ,TCanvas *c4 ,TCanvas *c5 , TCanvas *c6 ,
 int mass_point ,double eff,double eff_err, TString dir_name, int dir_flag ,int signal_background_flag, int background_file_index ){
@@ -116,10 +118,14 @@ int mass_point ,double eff,double eff_err, TString dir_name, int dir_flag ,int s
 
     // Z->e e finder 
     vector<Int_t> Z_electron_index;
-    int FindZ_flag =-1;
-    FindZ_flag = ZtoEEfinder( data , &Z_electron_index );
+//    int FindZ_flag =-1;
+//    FindZ_flag = ZtoEEfinder( data , &Z_electron_index );
     //
-    if( FindZ_flag!=1 )   {  continue;}
+    bool FindZ_flag = false;
+    FindZ_flag = isPassZee(data, &Z_electron_index );
+
+//    if( FindZ_flag!=1 )   {  continue;}
+    if( !FindZ_flag )   {  continue;}
 
     TLorentzVector l4_Z(0,0,0,0);
 

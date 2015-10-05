@@ -22,7 +22,7 @@ int ZtoEEfinder(TreeReader &data, vector<Int_t> *Z_electron_index)
     Float_t* eleSCEt          = data.GetPtrFloat("eleScEt");
     Float_t* eleMiniIso       = data.GetPtrFloat("eleMiniIso");
     Int_t*   eleCharge        = data.GetPtrInt("eleCharge");
-
+    vector<bool>& eleIsPassHEEPNoIso = *((vector<bool>*) data.GetPtr("eleIsPassHEEPNoIso"));
 
     //5. select good electrons
 
@@ -38,17 +38,21 @@ int ZtoEEfinder(TreeReader &data, vector<Int_t> *Z_electron_index)
 
         TLorentzVector* thisEle = (TLorentzVector*)eleP4->At(ie);
 
-        if(fabs(thisEle->Eta())>2.5)continue;
-
+//        if(fabs(thisEle->Eta())>2.5)continue;
+        if( fabs(eleSCEta[ie]) > 2.5 ) continue;
         if(! (fabs(eleSCEta[ie])<1.4442 || fabs(eleSCEta[ie])>1.566))continue;
 
         float ele_pt = thisEle->Pt();
+	if(ele_pt<35)continue; // test
 
+/*
         bool has_accepted = false;
         for(int j=0; j< accepted.size();j++)
                 { if(ie == accepted[j]){has_accepted=true; break;}  }
         if(!has_accepted)continue;
+*/
 
+        if( !eleIsPassHEEPNoIso[ie] ) continue;
         if(eleMiniIso[ie]>0.1)continue;
 
         goodElectrons.push_back(ie);
@@ -80,7 +84,7 @@ int ZtoEEfinder(TreeReader &data, vector<Int_t> *Z_electron_index)
             float ptmax = TMath::Max(pt1,pt2);
             float ptmin = TMath::Min(pt1,pt2);
             if(ptmax<115)continue;
-            if(ptmin<35)continue;
+//            if(ptmin<35)continue; // test
 
             int leadingIndex = pt1>pt2? ie : je;
             int subleadingIndex = pt1 > pt2? je : ie;

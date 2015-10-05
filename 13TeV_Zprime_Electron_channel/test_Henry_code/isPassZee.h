@@ -32,13 +32,14 @@ bool isPassZee(TreeReader &data, vector<Int_t>* goodEleID){
 //    if( eleScEt[ie] < 35 ) continue;
     if( myEle->Pt() < 35 ) continue;
 
-//    if( !eleIsPassHEEPNoIso[ie] ) continue;
+    if( !eleIsPassHEEPNoIso[ie] ) continue;
 
-        bool has_accepted = false;
+
+/*        bool has_accepted = false;
         for(int j=0; j< accepted.size();j++)
                 { if(ie == accepted[j]){has_accepted=true; break;}  }
         if(!has_accepted)continue;
-
+*/
 
     if( eleMiniIso[ie] > 0.1 ) continue;
 
@@ -56,11 +57,13 @@ bool isPassZee(TreeReader &data, vector<Int_t>* goodEleID){
 
     Int_t ie = goodElectrons[i];
     thisEle = (TLorentzVector*)eleP4->At(ie);
+//        TLorentzVector* thisEle = (TLorentzVector*)eleP4->At(ie);
 
     for(unsigned int j = 0; j < i; j++){
 
       Int_t je = goodElectrons[j];
       thatEle = (TLorentzVector*)eleP4->At(je);
+//            TLorentzVector* thatEle = (TLorentzVector*)eleP4->At(je);
 
       Float_t pt1 = thisEle->Pt();
       Float_t pt2 = thatEle->Pt();
