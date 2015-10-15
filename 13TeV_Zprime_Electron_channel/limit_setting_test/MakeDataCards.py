@@ -31,15 +31,15 @@ kmax    *       number of nuisance parameters (sources of systematical uncertain
 
 -------------------------------------------------------------------------------------------------
 
---shapes *     MONOHBB  ROOTFILENAME $PROCESS $PROCESS_$SYSTEMATIC
+--shapes *     ZPTOZHEE  ROOTFILENAME $PROCESS $PROCESS_$SYSTEMATIC
 
 -------------------------------------------------------------------------------------------------
-bin                      MONOHBB
+bin                      ZPTOZHEE
 observation              DATARATE
 
 -------------------------------------------------------------------------------------------------
 
-bin                      MONOHBB   MONOHBB    
+bin                      ZPTOZHEE   ZPTOZHEE    
 process                  Sig       DYJETS      
 
 -------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ print signalvaluemap
 
 def MakeDataCard(masspoint):
     datacard = open('DataCard_MXXXGeV.txt','r')
-    newdatacardname = dirtosave+'/DataCard_'+masspoint+'GeV_MonoHbb_13TeV.txt'
+    newdatacardname = dirtosave+'/DataCard_'+masspoint+'GeV_ZPTOZHEE_13TeV.txt'
     os.system('rm '+newdatacardname)
     datacard600 = open(newdatacardname,'w')
     

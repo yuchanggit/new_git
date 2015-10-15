@@ -5,15 +5,15 @@ kmax    *       number of nuisance parameters (sources of systematical uncertain
 
 -------------------------------------------------------------------------------------------------
 
---shapes *     MONOHBB  ROOTFILENAME $PROCESS $PROCESS_$SYSTEMATIC
+--shapes *     ZPTOZHEE  ROOTFILENAME $PROCESS $PROCESS_$SYSTEMATIC
 
 -------------------------------------------------------------------------------------------------
-bin                      MONOHBB
+bin                      ZPTOZHEE
 observation              DATARATE
 
 -------------------------------------------------------------------------------------------------
 
-bin                      MONOHBB   MONOHBB    
+bin                      ZPTOZHEE   ZPTOZHEE    
 process                  Sig       DYJETS      
 
 -------------------------------------------------------------------------------------------------
