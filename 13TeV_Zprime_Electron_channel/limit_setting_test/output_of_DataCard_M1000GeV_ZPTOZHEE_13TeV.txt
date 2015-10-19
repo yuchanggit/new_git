@@ -1,0 +1,36 @@
+[yuchang@lxplus0207 src]$combine -M Asymptotic DataCard_M1000GeV_ZPTOZHEE_13TeV.txt                         
+>>> including systematics
+>>> method used to compute upper limit is Asymptotic
+>>> random number generator seed is 123456
+TClass::TClass:0: RuntimeWarning: no dictionary for class stack<RooAbsArg*,deque<RooAbsArg*> > is available
+Computing limit starting from observation
+Will compute both limit(s) using minimizer Minuit2 with strategy 0 and tolerance 0.01
+Median for expected limits: 0.390625
+Sigma  for expected limits: 0.199302
+Restricting r to positive values.
+
+Make global fit of real data
+NLL at global minimum of data: 6.4331 (r = 9.64167e-09)
+
+Make global fit of asimov data
+NLL at global minimum of asimov: 6.43674 (r = 5.25677e-06)
+At r = 1.200000:	q_mu = 10.82955	q_A  = 10.81996	CLsb = 0.00050	CLb  = 0.49942	CLs  = 0.00100
+At r = 0.600000:	q_mu = 5.77408	q_A  = 5.76512	CLsb = 0.00813	CLb  = 0.49926	CLs  = 0.01629
+At r = 0.300000:	q_mu = 2.99549	q_A  = 2.98720	CLsb = 0.04175	CLb  = 0.49904	CLs  = 0.08366
+At r = 0.435493:	q_mu = 4.27455	q_A  = 4.26589	CLsb = 0.01934	CLb  = 0.49916	CLs  = 0.03875
+At r = 0.372498:	q_mu = 3.68508	q_A  = 3.67658	CLsb = 0.02745	CLb  = 0.49912	CLs  = 0.05500
+At r = 0.398812:	q_mu = 3.93238	q_A  = 3.92381	CLsb = 0.02368	CLb  = 0.49914	CLs  = 0.04745
+At r = 0.386078:	q_mu = 3.81290	q_A  = 3.80436	CLsb = 0.02543	CLb  = 0.49913	CLs  = 0.05095
+At r = 0.391312:	q_mu = 3.86206	q_A  = 3.85351	CLsb = 0.02469	CLb  = 0.49913	CLs  = 0.04948
+At r = 0.388760:	q_mu = 3.83810	q_A  = 3.82955	CLsb = 0.02505	CLb  = 0.49913	CLs  = 0.05019
+At r = 0.389806:	q_mu = 3.84792	q_A  = 3.83937	CLsb = 0.02490	CLb  = 0.49913	CLs  = 0.04989
+
+ -- Asymptotic -- 
+Observed Limit: r < 0.3898
+Expected  2.5%: r < 0.1110
+Expected 16.0%: r < 0.1984
+Expected 50.0%: r < 0.3906
+Expected 84.0%: r < 0.7861
+Expected 97.5%: r < 1.1847
+
+Done in 0.00 min (cpu), 0.01 min (real)
