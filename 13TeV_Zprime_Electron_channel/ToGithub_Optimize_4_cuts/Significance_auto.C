@@ -38,7 +38,7 @@ int variable_flag=-1;
 
 // to draw all figures automatically
 for(int v=1;v<=4;v++){
-//if(v!=)continue;
+//if(v!=3)continue;
 
 variable_flag= v;
 
@@ -624,21 +624,54 @@ TString path = "plot/";
   float ymax=-99 ;
 
 if (variable_flag==1){
-  if(k==2){xmin=150; xmax=250 ; ymin=0.34 ; ymax=0.42 ;}
-  if(k==7){xmin=300; xmax=500 ; ymin=0.6 ; ymax=0.8 ;}
-  if(k==9){xmin=300; xmax=600 ; ymin=0.8 ; ymax=1.0 ;}
+  if(k==0){xmin=100; xmax=150 ; ymin=0.2 ; ymax=0.4 ;}    // M600
+  if(k==1){xmin=100; xmax=200 ; ymin=0.28 ; ymax=0.36 ;}  // M800
+  if(k==2){xmin=150; xmax=250 ; ymin=0.34 ; ymax=0.42 ;}  // M1000
+  if(k==3){xmin=200; xmax=300 ; ymin=0.40 ; ymax=0.46 ;}  // M1200
+  if(k==4){xmin=200; xmax=400 ; ymin=0.4 ; ymax=0.6 ;}    // M1400
+  if(k==5){xmin=200; xmax=400 ; ymin=0.55 ; ymax=0.65 ;}  // M1600
+  if(k==6){xmin=300; xmax=500 ; ymin=0.55 ; ymax=0.7 ;}   // M1800
+  if(k==7){xmin=300; xmax=500 ; ymin=0.6 ; ymax=0.8 ;}    // M2000
+  if(k==8){xmin=300; xmax=500 ; ymin=0.75 ; ymax=0.875 ;} // M2500
+  if(k==9){xmin=300; xmax=600 ; ymin=0.8 ; ymax=1.0 ;}    // M3000
+  if(k==10){xmin=400; xmax=800 ; ymin=0.8 ; ymax=1.0 ;}   // M3500
+  if(k==11){xmin=100; xmax=800 ; ymin=0.8 ; ymax=1.0 ;}   // M4000
+  if(k==12){xmin=100; xmax=500 ; ymin=0.9 ; ymax=1.1 ;}   // M4500
 }
 
 if (variable_flag==2){
-  if(k==2){xmin=30; xmax=100 ; ymin=0.34 ; ymax=0.40 ;}
-  if(k==7){xmin=50; xmax=150 ; ymin=0.61 ; ymax=0.69 ;}
-  if(k==9){xmin=60; xmax=180 ; ymin=0.78 ; ymax=0.90 ;}
+
+  if(k==0){xmin=20; xmax=50 ; ymin=0.3 ; ymax=0.4 ;}    // M600
+  if(k==1){xmin=30; xmax=70 ; ymin=0.25 ; ymax=0.35 ;}  // M800
+  if(k==2){xmin=30; xmax=150 ; ymin=0.25 ; ymax=0.37 ;}  // M1000
+  if(k==3){xmin=0; xmax=150 ; ymin=0.35 ; ymax=0.45 ;}  // M1200
+  if(k==4){xmin=0; xmax=150 ; ymin=0.4 ; ymax=0.5 ;}    // M1400
+  if(k==5){xmin=0; xmax=150 ; ymin=0.5 ; ymax=0.6 ;}  // M1600
+  if(k==6){xmin=0; xmax=150 ; ymin=0.55 ; ymax=0.65 ;}   // M1800
+  if(k==7){xmin=50; xmax=150 ; ymin=0.61 ; ymax=0.69 ;}    // M2000
+  if(k==8){xmin=50; xmax=150 ; ymin=0.7 ; ymax=0.8 ;} // M2500
+  if(k==9){xmin=60; xmax=180 ; ymin=0.78 ; ymax=0.90 ;}    // M3000
+  if(k==10){xmin=0; xmax=200 ; ymin=0.8 ; ymax=0.95 ;}   // M3500
+  if(k==11){xmin=0; xmax=200 ; ymin=0.8 ; ymax=1.1 ;}   // M4000
+  if(k==12){xmin=0; xmax=300 ; ymin=0.8 ; ymax=1.1 ;}   // M4500
+
 }
 
 if (variable_flag==3 || variable_flag==4){
-  if(k==2){xmin=1.3; xmax=1.8 ; ymin=0.35 ; ymax=0.39 ;}
-  if(k==7){xmin=1.6; xmax=2.6 ; ymin=0.67 ; ymax=0.77 ;}
-  if(k==9){xmin=2.4; xmax=3.4 ; ymin=0.85 ; ymax=0.95 ;}
+
+  if(k==0){xmin=0.6; xmax=1.6 ; ymin=0.2 ; ymax=0.4 ;}    // M600
+  if(k==1){xmin=0.8; xmax=2.2 ; ymin=0.25 ; ymax=0.4 ;}  // M800
+  if(k==2){xmin=1.3; xmax=1.8 ; ymin=0.35 ; ymax=0.39 ;}  // M1000
+  if(k==3){xmin=1.0; xmax=2.5 ; ymin=0.35 ; ymax=0.5 ;}  // M1200
+  if(k==4){xmin=1.0; xmax=2.5 ; ymin=0.4 ; ymax=0.6 ;}    // M1400
+  if(k==5){xmin=1.5; xmax=2.5 ; ymin=0.5 ; ymax=0.7 ;}  // M1600
+  if(k==6){xmin=1.5; xmax=2.5 ; ymin=0.5 ; ymax=0.7 ;}   // M1800
+  if(k==7){xmin=1.6; xmax=2.6 ; ymin=0.67 ; ymax=0.77 ;}    // M2000
+  if(k==8){xmin=1.5; xmax=4.0 ; ymin=0.70 ; ymax=0.85 ;} // M2500
+  if(k==9){xmin=2.4; xmax=3.4 ; ymin=0.85 ; ymax=0.95 ;}    // M3000
+  if(k==10){xmin=2.0; xmax=4.5 ; ymin=0.8 ; ymax=1.1 ;}   // M3500
+  if(k==11){xmin=2.0; xmax=4.5 ; ymin=0.8 ; ymax=1.1 ;}   // M4000
+  if(k==12){xmin=2.0; xmax=4.5 ; ymin=0.9 ; ymax=1.1 ;}   // M4500
 }
 
 
