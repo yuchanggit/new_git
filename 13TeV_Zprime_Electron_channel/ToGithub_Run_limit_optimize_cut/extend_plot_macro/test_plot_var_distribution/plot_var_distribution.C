@@ -26,7 +26,7 @@ int variable_flag = 0;
 //variable_flag = 2;
 
 for (int  variable_index =1; variable_index<=2;variable_index++){ 
-if(variable_index!=1)continue;
+//if(variable_index!=1)continue;
 
 variable_flag = variable_index;
 
@@ -159,7 +159,7 @@ if(variable_flag==2){  rebin_times = 8;   X_upper_bound = 4500; Y_upper_bound = 
 
   // signal 
   for(int i=0;i<N_signal_mass_points;i++){
-     if(i>4)continue;
+//     if(i>4)continue;
 
      // normalize to 1
      h_signal[i] ->Scale(1/h_signal[i]->Integral() );
@@ -174,10 +174,10 @@ if(variable_flag==2){  rebin_times = 8;   X_upper_bound = 4500; Y_upper_bound = 
      h_signal[i]->SetLineColor(colorN);
      h_signal[i]->SetLineWidth(2);
      h_signal[i]->Rebin(rebin_times);
-//     h_signal[i]->GetYaxis()->SetRangeUser(0, Y_upper_bound);
-//     h_signal[i]->GetXaxis()->SetRangeUser(0, X_upper_bound);
-     h_signal[i]->GetYaxis()->SetRangeUser(0, 0.45);
-     h_signal[i]->GetXaxis()->SetRangeUser(0, 800);
+     h_signal[i]->GetYaxis()->SetRangeUser(0, Y_upper_bound);
+     h_signal[i]->GetXaxis()->SetRangeUser(0, X_upper_bound);
+//     h_signal[i]->GetYaxis()->SetRangeUser(0, 0.45);
+//     h_signal[i]->GetXaxis()->SetRangeUser(0, 800);
      h_signal[i]->GetXaxis()->SetTitle(X_title);
      h_signal[i]->GetYaxis()->SetTitle("Arbitrary Unit");
      h_signal[i]->GetXaxis()->SetTitleOffset(TitleOffset);
@@ -216,7 +216,7 @@ if(variable_flag==2){  rebin_times = 8;   X_upper_bound = 4500; Y_upper_bound = 
  TString save_png_name;
 if(variable_flag==1)  {save_png_name = "leading_pt.png";}
 if(variable_flag==2)  {save_png_name = "ZH_mass.png";}
-//  c1  -> SaveAs(save_png_name);
+  c1  -> SaveAs(save_png_name);
 
 
 }// loop variable_flag
