@@ -1,0 +1,4 @@
+/data7/khurana/NCUGlobalTuples/Run2015DFullDataset/crab_SingleElectron-Run2015D-05Oct2015-v1_20151117_2p2fb_SingleEleTextFile/:
+/data7/khurana/NCUGlobalTuples/Run2015DFullDataset/crab_SingleElectron-Run2015D-05Oct2015-v1_20151117_2p2fb_SingleEleTextFile/151117_152256:
+/data7/khurana/NCUGlobalTuples/Run2015DFullDataset/crab_SingleElectron-Run2015D-05Oct2015-v1_20151117_2p2fb_SingleEleTextFile/151117_152256/0000:
+/data7/khurana/NCUGlobalTuples/Run2015DFullDataset/crab_SingleElectron-Run2015D-05Oct2015-v1_20151117_2p2fb_SingleEleTextFile/151117_152256/0000/failed:
