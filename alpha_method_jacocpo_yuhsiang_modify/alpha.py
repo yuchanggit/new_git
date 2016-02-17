@@ -368,7 +368,7 @@ def alpha(channel):
         modelVjet_test.plotOn(Jmass_frame2,RooFit.LineColor(4))
 
 	# make another dataset that remove the signal region 
-        pseudo_data_SB = RooDataSet("pseudo_data_SB", "pseudo_data_SB", RooArgSet(J_mass), RooFit.Import(pseudo_data), RooFit.Cut("J_mass<35") )
+        pseudo_data_SB = RooDataSet("pseudo_data_SB", "pseudo_data_SB", RooArgSet(J_mass), RooFit.Import(pseudo_data), RooFit.Cut("J_mass<65 || J_mass>13`5") )
 	pseudo_data_SB.plotOn(Jmass_frame2,RooFit.LineColor(2))
 
 
