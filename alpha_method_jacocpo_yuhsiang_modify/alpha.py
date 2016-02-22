@@ -582,7 +582,7 @@ def alpha(channel):
 		# fit
                 frVjet_case2 = modelVjet_case2.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
-                # calculate the bias
+                # calculate the bias and pull
 
                 iFit_SR_case2 = modelVjet_case2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
                 iFit_All_case2 = modelVjet_case2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))

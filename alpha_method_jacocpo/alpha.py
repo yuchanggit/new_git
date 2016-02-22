@@ -209,8 +209,8 @@ def alpha(channel):
     treeVjet = TChain(treeName)
     treeVV   = TChain(treeName)
     treeTop  = TChain(treeName)
-    treeSign = {}
-    nevtSign = {}
+#    treeSign = {}
+#    nevtSign = {}
     
     # Read data
     pd = getPrimaryDataset(triName)
@@ -614,7 +614,7 @@ def drawPlot(name, channel, variable, model, dataset, binning, fitRes=None, reg=
     # ======   END PLOT   ======
 
 
-
+"""
 def drawAlpha(name, channel, variable, alpha, bkgSB, bkgSR, fitRes, alpha2=None, bkgSB2=None, bkgSR2=None, fitRes2=None):
 
     # ====== CONTROL PLOT ======
@@ -682,7 +682,7 @@ def drawAlpha(name, channel, variable, alpha, bkgSB, bkgSR, fitRes, alpha2=None,
     c_alpha2.SaveAs(PLOTDIR+"/"+channel+"/AlphaMethod_log.pdf")
     c_alpha2.SaveAs(PLOTDIR+"/"+channel+"/AlphaMethod_log.png")
     #c_alpha2.SaveAs(PLOTDIR+"/"+channel+"/AlphaMethod_log.root")
-
+"""
 
 jobs = []
 
@@ -691,8 +691,14 @@ if options.all:
         p = multiprocessing.Process(target=alpha, args=(c,))
         jobs.append(p)
         p.start()
+
 else:
     if options.channel in channelList: alpha(options.channel)
+
     else:
         print "Channel not set or not recognized. Quitting..."
         exit()
+
+
+os.system('cp -r plotsAlpha /afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha')
+
