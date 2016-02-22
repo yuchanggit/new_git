@@ -3,7 +3,7 @@
 import os, sys, getopt, multiprocessing
 import copy, math
 from array import array
-from ROOT import gROOT, gSystem, gStyle, gRandom, gPad
+from ROOT import gROOT, gSystem, gStyle, gRandom
 from ROOT import TFile, TChain, TTree, TCut, TH1F, TH2F, THStack, TGraph, TGaxis
 from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText, TH1D
 
@@ -375,9 +375,16 @@ def alpha(channel):
         # ------------------------------------------------------------------- 
 	# use the shape of fit to generate the psudo-data
 
-        nPseudo_data = setVjet.sumEntries()
+	Entries_pseudo_data = setVjet.sumEntries()
+#        Entries_pseudo_data = 502
+#        Entries_pseudo_data = 5021
 
-        pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),nPseudo_data )
+
+        pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),Entries_pseudo_data )
+#	pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),setVjet.sumEntries()) 
+#        pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),502 )
+#        pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),5021 )
+#	pseudo_data.Print("v")
 
 	Jmass_frame2 = J_mass.frame(RooFit.Title("test frame2"))
 	pseudo_data.plotOn(Jmass_frame2)
@@ -447,156 +454,64 @@ def alpha(channel):
 #        print "iGen_value:", iGen_value.getVal()
 
 
-        # ------------------------------------------------------------------- # 
-        # ------------------------------------------------------------------- #
-        #        repeat thousand times to see bias distribution               #
-        # ------------------------------------------------------------------- #
-        # ------------------------------------------------------------------- #
+        # ------------------------------------------------------------------- 
+        # repeat thousand times to see bias distribution
 
+        h_Bias = TH1D("h_Bias","h_Bias",40,-4,4);
 
-        h_Bias_case1 = TH1D("h_Bias_case1","h_Bias case1",40,-1,1);
-        h_Pull_case1 = TH1D("h_Pull_case1","h_Pull case1",25,-5,5);
+        Jmass_frame4 = J_mass.frame(RooFit.Title("test frame4"))
 
-        h_Bias_case2 = TH1D("h_Bias_case2","h_Bias case2",40,-1,1);
-        h_Pull_case2 = TH1D("h_Pull_case2","h_Pull case2",25,-5,5);
+	times_max = 100
 
-
-        Jmass_frame4 = J_mass.frame(RooFit.Title("frame for case 1"))
-        Jmass_frame5 = J_mass.frame(RooFit.Title("frame for case 2"))
-
-	# fix modelVjet_test's parameters to generate pseudo-data
-        constVjet_test.setConstant(True) 
+        constVjet_test.setConstant(True)
         offsetVjet_test.setConstant(True)
         widthVjet_test.setConstant(True)
 
-	# parameters in case1 used later
-        constVjet_case1   = RooRealVar("constVjet_case1",   "slope of the exp", constVjet_value_fit_MC , -1.,   0.)
-        offsetVjet_case1  = RooRealVar("offsetVjet_case1",  "offset of the erf", offsetVjet_value_fit_MC ,   -50., 200.)
-        widthVjet_case1   = RooRealVar("widthVjet_case1",   "width of the erf", widthVjet_value_fit_MC ,     1., 200.)
+        constVjet_test3   = RooRealVar("constVjet_test3",   "slope of the exp", constVjet_value_fit_MC , -1.,   0.)
+        offsetVjet_test3  = RooRealVar("offsetVjet_test3",  "offset of the erf", offsetVjet_value_fit_MC ,   -50., 200.)
+        widthVjet_test3   = RooRealVar("widthVjet_test3",   "width of the erf", widthVjet_value_fit_MC ,     1., 200.)
 
-        # parameters in case2 used later
-	constVjet_value_case2 =-0.020 	
-	a0Vjet_value_case2 = -0.1 
-	a1Vjet_value_case2 =  0.6
-	a2Vjet_value_case2 = -0.1
 
-        constVjet_case2   = RooRealVar("constVjet_test4",   "slope of the exp", constVjet_value_case2 , -1.,   0.)
-    	a0Vjet_case2 = RooRealVar("a0Vjet_test4", "width of the erf", a0Vjet_value_case2, -5, 0)
-    	a1Vjet_case2 = RooRealVar("a1Vjet_test4", "width of the erf", a1Vjet_value_case2,  0, 5)
-    	a2Vjet_case2 = RooRealVar("a2Vjet_test4", "width of the erf", a2Vjet_value_case2, -1, 1)
-
-        times_max = 1000
-	times_to_plot =500
-
-	# starts loop
 	for times in range(0,times_max):  
 
     		# inside loop
 #		print "times:", times
-		if times % 100 == 0 :
+		if times % 10 == 0 :
 			print "Processing times:", times+1 ,"of", times_max 
 
 
 		# generate pseudo-data
-		nPseudo_data_fluc = gRandom.Poisson( nPseudo_data )
+		pseudo_data2 = modelVjet_test.generate(RooArgSet(J_mass),Entries_pseudo_data )
 
-                pseudo_data_fluc = modelVjet_test.generate(RooArgSet(J_mass),nPseudo_data )
-#                pseudo_data_fluc = modelVjet_test.generate(RooArgSet(J_mass),nPseudo_data_fluc )
-
+#        	pseudo_data2.plotOn(Jmass_frame3,RooFit.LineColor(4),RooFit.Range("h_reasonable_range"))
 
                 # take out VR+SR		
-	        pseudo_data_SB_fluc = RooDataSet("pseudo_data_SB_fluc", "pseudo_data_SB_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
+	        pseudo_data_SB2 = RooDataSet("pseudo_data_SB2", "pseudo_data_SB2", RooArgSet(J_mass), RooFit.Import(pseudo_data2), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
 
-		# take only SR(signal Region) dataset for # in SR
-		pseudo_data_SR_fluc = RooDataSet("pseudo_data_SR_fluc", "pseudo_data_SR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135") )
+		# use other PDF to fit
+#		print "constVjet_value_fit_MC:",constVjet_value_fit_MC
 
-		# calculation of generation 
-                iGen_value_fix = modelVjet_test.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+		constVjet_test3.setVal(constVjet_value_fit_MC)
+		offsetVjet_test3.setVal(offsetVjet_value_fit_MC)
+		widthVjet_test3.setVal(widthVjet_value_fit_MC)
 
-                iGen_All_fix = modelVjet_test.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
-                nGen_SR_fluc = pseudo_data_SR_fluc.sumEntries()
-#                nGen_SR_fluc = nPseudo_data_fluc * (iGen_value_fix.getVal()/iGen_All_fix.getVal())
-
-#		print "nGen_SR_fluc2:",nGen_SR_fluc2
-#		print "nGen_SR_fluc:",nGen_SR_fluc
-
-                sigma_Gen_fluc = math.sqrt( nGen_SR_fluc )
-
-		# plot fixed PDF and SB dataset (optional)
-
-                if times == times_to_plot : pseudo_data_fluc.plotOn(Jmass_frame4)
-                if times == times_to_plot : pseudo_data_fluc.plotOn(Jmass_frame5)
-
-                if times == times_to_plot : modelVjet_test.plotOn(Jmass_frame4,RooFit.LineColor(4))
-                if times == times_to_plot : modelVjet_test.plotOn(Jmass_frame5,RooFit.LineColor(4))
+		modelVjet_test3 = RooErfExpPdf("modelVjet_test3", "error function for V+jets mass", J_mass, constVjet_test3, offsetVjet_test3, widthVjet_test3)
 
 
-                if times == times_to_plot : pseudo_data_SB_fluc.plotOn(Jmass_frame4,RooFit.LineColor(3))
-                if times == times_to_plot : pseudo_data_SB_fluc.plotOn(Jmass_frame5,RooFit.LineColor(3))
+        	frVjet_test3 = modelVjet_test3.fitTo(pseudo_data_SB2, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
+		# calculate the bias
+        	iGen_value2 = modelVjet_test.createIntegral(RooArgSet(J_mass), RooFit.Range("VRrange,SRrange"))
+#        	print "iGen_value2:", iGen_value2.getVal()
 
-                # ---------------------------------
-                # case 1, fit with the same function
-                # ---------------------------------
+        	iFit_value2 = modelVjet_test3.createIntegral(RooArgSet(J_mass), RooFit.Range("VRrange,SRrange"))
+#        	print "iFit_value2:", iFit_value2.getVal()
 
-		# reset parameters
-		constVjet_case1.setVal(constVjet_value_fit_MC)
-		offsetVjet_case1.setVal(offsetVjet_value_fit_MC)
-		widthVjet_case1.setVal(widthVjet_value_fit_MC)
+        	Bias_value2 = ( iFit_value2.getVal() - iGen_value2.getVal() ) / iGen_value2.getVal()
+#        	print "Bias_value2 of VR+SR:", Bias_value2
+		
+		h_Bias.Fill(Bias_value2)
 
-		# make PDF with same function
-		modelVjet_case1 = RooErfExpPdf("modelVjet_case1", "error function for V+jets mass", J_mass, constVjet_case1, offsetVjet_case1, widthVjet_case1)
-
-		# fit
-        	frVjet_case1 = modelVjet_case1.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
-
-		# calculate the bias and pull
-        	iFit_SR_case1 = modelVjet_case1.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
-                iFit_All_case1 = modelVjet_case1.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
-                nFit_SR_case1 = nPseudo_data_fluc * (iFit_SR_case1.getVal()/iFit_All_case1.getVal())
-
-		Bias_value_case1 = ( nFit_SR_case1 - nGen_SR_fluc )/ nGen_SR_fluc
-		h_Bias_case1.Fill(Bias_value_case1)
-
-		pull_value_case1 = ( nFit_SR_case1 - nGen_SR_fluc )/ sigma_Gen_fluc
-		h_Pull_case1.Fill( pull_value_case1 )
-
-		# plot PDF used to fit (optional)
-                if times == times_to_plot : modelVjet_case1.plotOn(Jmass_frame4,RooFit.LineColor(2),RooFit.Range("h_reasonable_range"))
-
-		# ---------------------------------
-		# case 2, fit with another function
-		# ---------------------------------
-
-		# reset parameter
-		constVjet_case2.setVal(constVjet_value_case2 )
-		a0Vjet_case2.setVal(a0Vjet_value_case2 )
-		a1Vjet_case2.setVal( a1Vjet_value_case2)
-		a2Vjet_case2.setVal(a2Vjet_value_case2 )
-
-		# make PDF with different function   	 
-#		modelVjet_case2 = RooExponential("modelVjet_case2", "exp for V+jets mass", J_mass, constVjet_case2)
-#		modelVjet_case2 = RooChebychev("modelVjet_case2", "polynomial for V+jets mass", J_mass, RooArgList(a0Vjet_case2, a1Vjet_case2, a2Vjet_case2))
-		modelVjet_case2 = RooGenericPdf("modelVjet_case2", "powerlaw for X mass", "@0^@1", RooArgList(J_mass, a0Vjet_case2))
-
-		# fit
-                frVjet_case2 = modelVjet_case2.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
-
-                # calculate the bias
-
-                iFit_SR_case2 = modelVjet_case2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
-                iFit_All_case2 = modelVjet_case2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
-                nFit_SR_case2 = nPseudo_data_fluc * (iFit_SR_case2.getVal()/iFit_All_case2.getVal())
-
-                Bias_value_case2 = ( nFit_SR_case2 - nGen_SR_fluc )/ nGen_SR_fluc
-                h_Bias_case2.Fill(Bias_value_case2)
-
-                pull_value_case2 = ( nFit_SR_case2 - nGen_SR_fluc )/ sigma_Gen_fluc
-                h_Pull_case2.Fill( pull_value_case2 )
-
-
-                # plot PDF used to fit (optional)
-                if times == times_to_plot : modelVjet_case2.plotOn(Jmass_frame5,RooFit.LineColor(2),RooFit.Range("h_reasonable_range"))
 
 
         # ------------------------------------------------------------------- 
@@ -619,60 +534,10 @@ def alpha(channel):
         Jmass_frame3.Draw()
         c_test3.SaveAs(Save_Dir+"/"+"fit_pseudo_data_in_SB_only.pdf")
 
-        # -----------------------------
-	# case 1 figure
-
-        c_test4 = TCanvas("test4","test draw 4",800,400)
-	c_test4.Divide(2)
-
-	c_test4.cd(1)
-	gPad.SetLeftMargin(0.15)
-	h_Bias_case1.GetYaxis().SetTitleOffset(1.6)
-	h_Bias_case1.Draw()
-
-	c_test4.cd(2)
-	gPad.SetLeftMargin(0.15)
-	h_Pull_case1.GetYaxis().SetTitleOffset(1.6)
-	h_Pull_case1.Draw() 
-
-        c_test4.SaveAs(Save_Dir+"/"+"h_Bias_and_pull_case1.pdf")
-
-        # -----------------------------
-	# case 2 figure
-
-        c_test5 = TCanvas("test5","test draw 5",800,400)
-        c_test5.Divide(2)
-
-        c_test5.cd(1)
-        gPad.SetLeftMargin(0.15)
-        h_Bias_case2.GetYaxis().SetTitleOffset(1.6)
-        h_Bias_case2.Draw()
-
-        c_test5.cd(2)
-        gPad.SetLeftMargin(0.15)
-        h_Pull_case2.GetYaxis().SetTitleOffset(1.6)
-        h_Pull_case2.Draw()
-
-        c_test5.SaveAs(Save_Dir+"/"+"h_Bias_and_pull_case2.pdf")
-
-        # -----------------------------
-        # plot one time fit of case1 and case2 
-
-        c_test6 = TCanvas("test6","test draw 6",800,400)
-        c_test6.Divide(2)
-
-        c_test6.cd(1)
-        gPad.SetLeftMargin(0.15)
-        Jmass_frame4.GetYaxis().SetTitleOffset(1.6)
-        Jmass_frame4.Draw()
-
-        c_test6.cd(2)
-        gPad.SetLeftMargin(0.15)
-        Jmass_frame5.GetYaxis().SetTitleOffset(1.6)
-        Jmass_frame5.Draw()
-
-        c_test6.SaveAs(Save_Dir+"/"+"plot_one_time_fit_of_case1_case2.pdf")
-
+        c_test4 = TCanvas("test4","test draw 4",800,600)
+        c_test4.cd()
+	h_Bias.Draw()
+        c_test4.SaveAs(Save_Dir+"/"+"h_Bias.pdf")
 
 #    else
 #	print "not XZhnnb channel"
@@ -1088,5 +953,5 @@ else:
         exit()
 
 
-# os.system('cp -r plotsAlpha/* /afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study')
+os.system('cp -r plotsAlpha/* /afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study')
 
