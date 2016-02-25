@@ -1,0 +1,3 @@
+/data7/syu/NCUGlobalTuples/Spring15_ReMiniAODSim/9b33d00/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8:
+/data7/syu/NCUGlobalTuples/Spring15_ReMiniAODSim/9b33d00/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/151120_155200:
+/data7/syu/NCUGlobalTuples/Spring15_ReMiniAODSim/9b33d00/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/151120_155200/0000:

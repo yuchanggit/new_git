@@ -1,0 +1,502 @@
+run run_step2.sh 
+
+Processing produce_txt_ROOT_for_cuts.C++...
+Info in <TUnixSystem::ACLiC>: creating shared library /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts_C.so
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C: In function 'void produce_txt_ROOT_for_cuts()':
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:156:17: warning: declaration of 'Zprime_mass' shadows a previous local [-Wshadow]
+       Float_t   Zprime_mass    = data.GetFloat("Zprime_mass"); 
+                 ^
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:45:7: warning: shadowed declaration is here [-Wshadow]
+   int Zprime_mass[N_signal_mass_points]={800,1000,1200,1400,1600,1800,2000,2500,3000,3500,4000};
+       ^
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:208:17: warning: declaration of 'Zprime_mass' shadows a previous local [-Wshadow]
+       Float_t   Zprime_mass    = data.GetFloat("Zprime_mass");
+                 ^
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:45:7: warning: shadowed declaration is here [-Wshadow]
+   int Zprime_mass[N_signal_mass_points]={800,1000,1200,1400,1600,1800,2000,2500,3000,3500,4000};
+       ^
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:272:32: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int i=0;i<v_mZprime.size();i++){
+                                ^
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:305:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int i=0;i<v_DYJetHT_range.size();i++){
+                                      ^
+In file included from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./produce_txt_ROOT_for_cuts.C:14:0,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.h:34,
+                 from /afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/produce_txt_ROOT_for_cuts_C_ACLiC_dict.cxx:17:
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./plot_mass.C: In function 'void plot_mass(TString, int)':
+/afs/cern.ch/work/y/yuchang/13_TeV_Task/limit_setting_test/CMSSW_7_1_5/src/run_new_samples/test_shape_analysis_optimization_leading_pt/step2_produce_TxtFile_and_ShapeROOT_for_each_cut_points/./plot_mass.C:213:68: warning: 'First_NonZero_bin_DYJet' may be used uninitialized in this function [-Wmaybe-uninitialized]
+         <<" First non zero bin value: " << (First_NonZero_bin_DYJet-1)*bin_width
+                                                                    ^
+variable_name: Ele_1st_pt
+cut_point[i]: 115
+cut_point[i]: 215
+cut_point[i]: 315
+cut_point[i]: 415
+histo_start: 0
+histo_end: 5000
+Nbins: 200
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-800.root
+Processing event 1 of 3755
+total #:48400
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-1000.root
+Processing event 1 of 5645
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-1200.root
+Processing event 1 of 6379
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-1400.root
+Processing event 1 of 6692
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-1600.root
+Processing event 1 of 6818
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-1800.root
+Processing event 1 of 6806
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-2000.root
+Processing event 1 of 6742
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-2500.root
+Processing event 1 of 6726
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-3000.root
+Processing event 1 of 6182
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-3500.root
+Processing event 1 of 5751
+total #:49800
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/signal_shape_in_Zprime_M-4000.root
+Processing event 1 of 5164
+total #:50000
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/background_shape_DYJets_HT100to200_in_Zprime_M-600.root
+total #:2.63296e+06
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/background_shape_DYJets_HT200to400_in_Zprime_M-600.root
+Processing event 1 of 29
+total #:973937
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/background_shape_DYJets_HT400to600_in_Zprime_M-600.root
+Processing event 1 of 5319
+total #:1.04202e+07
+ read ROOT file:../step1_apply_PreSelection_save_TTree/plot/background_shape_DYJets_HT600toInf_in_Zprime_M-600.root
+Processing event 1 of 1110
+total #:809357
+Size of theory Zprime xsects vector 11
+Size of theory DYJetHT xsects vector 4
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+
+text_and_ROOT_files/YuHsiang_DY_Ele_1st_pt_cut_115.txt
+
+DATA 28.322
+DYJETS 26.322
+M800 6.57897
+M1000 5.20728
+M1200 3.02693
+M1400 1.69195
+M1600 0.954461
+M1800 0.54525
+M2000 0.317596
+M2500 0.09168
+M3000 0.0264933
+M3500 0.00816625
+M4000 0.00247094
+
+text_and_ROOT_files/YuHsiang_DY_Ele_1st_pt_cut_215.txt
+
+DATA 28.322
+DYJETS 17.5601
+M800 4.53607
+M1000 4.89641
+M1200 2.96714
+M1400 1.67298
+M1600 0.951102
+M1800 0.543888
+M2000 0.317408
+M2500 0.09168
+M3000 0.026489
+M3500 0.00816625
+M4000 0.00247094
+
+text_and_ROOT_files/YuHsiang_DY_Ele_1st_pt_cut_315.txt
+
+DATA 28.322
+DYJETS 7.50709
+M800 0.653517
+M1000 2.23973
+M1200 2.16663
+M1400 1.50434
+M1600 0.907424
+M1800 0.53099
+M2000 0.313121
+M2500 0.0912574
+M3000 0.0264205
+M3500 0.00816057
+M4000 0.00246855
+
+text_and_ROOT_files/YuHsiang_DY_Ele_1st_pt_cut_415.txt
+
+DATA 28.322
+DYJETS 2.74765
+M800 0.0175206
+M1000 0.340387
+M1200 0.849855
+M1400 0.88415
+M1600 0.690998
+M1800 0.473149
+M2000 0.293242
+M2500 0.089649
+M3000 0.0262105
+M3500 0.00811939
+M4000 0.0024652
+
+inside plot_mass.C variable_name: Ele_1st_pt cut_point: 115
+
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Info in <TCanvas::Print>: pdf file /afs/cern.ch/user/y/yuchang/www/set_limit_optimize_leading_pt/Zprime_mass_for_Ele_1st_pt_cut_115.pdf has been created
+signal Zprime mass:800 First non zero bin value: 700 Last non zero bin value: 1500
+signal Zprime mass:1000 First non zero bin value: 750 Last non zero bin value: 2100
+signal Zprime mass:1200 First non zero bin value: 875 Last non zero bin value: 2400
+signal Zprime mass:1400 First non zero bin value: 775 Last non zero bin value: 2975
+signal Zprime mass:1600 First non zero bin value: 875 Last non zero bin value: 2200
+signal Zprime mass:1800 First non zero bin value: 700 Last non zero bin value: 2625
+signal Zprime mass:2000 First non zero bin value: 700 Last non zero bin value: 2525
+signal Zprime mass:2500 First non zero bin value: 725 Last non zero bin value: 2925
+signal Zprime mass:3000 First non zero bin value: 850 Last non zero bin value: 3550
+signal Zprime mass:3500 First non zero bin value: 1100 Last non zero bin value: 4200
+signal Zprime mass:4000 First non zero bin value: 750 Last non zero bin value: 4825
+DYJet:  First non zero bin value: 700 Last non zero bin value: 3925
+
+cout DYJets event yield in the signal range
+M= 800
+Background_yield_all: 26.322
+signal_yield: 6.57897
+background event yield: 19.0943
+ratio: 0.344552
+M= 1000
+Background_yield_all: 26.322
+signal_yield: 5.20728
+background event yield: 19.0301
+ratio: 0.273633
+M= 1200
+Background_yield_all: 26.322
+signal_yield: 3.02693
+background event yield: 13.0679
+ratio: 0.23163
+M= 1400
+Background_yield_all: 26.322
+signal_yield: 1.69195
+background event yield: 8.63502
+ratio: 0.19594
+M= 1600
+Background_yield_all: 26.322
+signal_yield: 0.954461
+background event yield: 6.53859
+ratio: 0.145974
+M= 1800
+Background_yield_all: 26.322
+signal_yield: 0.54525
+background event yield: 8.03806
+ratio: 0.0678336
+M= 2000
+Background_yield_all: 26.322
+signal_yield: 0.317596
+background event yield: 6.70457
+ratio: 0.0473701
+M= 2500
+Background_yield_all: 26.322
+signal_yield: 0.09168
+background event yield: 6.74381
+ratio: 0.0135947
+M= 3000
+Background_yield_all: 26.322
+signal_yield: 0.0264933
+background event yield: 3.39511
+ratio: 0.00780338
+M= 3500
+Background_yield_all: 26.322
+signal_yield: 0.00816625
+background event yield: 2.04874
+ratio: 0.00398599
+M= 4000
+Background_yield_all: 26.322
+signal_yield: 0.00247094
+background event yield: 4.18527
+ratio: 0.000590389
+
+inside plot_mass.C variable_name: Ele_1st_pt cut_point: 215
+
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TCanvas::Constructor>: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: pdf file /afs/cern.ch/user/y/yuchang/www/set_limit_optimize_leading_pt/Zprime_mass_for_Ele_1st_pt_cut_215.pdf has been created
+signal Zprime mass:800 First non zero bin value: 700 Last non zero bin value: 1500
+signal Zprime mass:1000 First non zero bin value: 750 Last non zero bin value: 2100
+signal Zprime mass:1200 First non zero bin value: 900 Last non zero bin value: 2400
+signal Zprime mass:1400 First non zero bin value: 775 Last non zero bin value: 2975
+signal Zprime mass:1600 First non zero bin value: 875 Last non zero bin value: 2200
+signal Zprime mass:1800 First non zero bin value: 700 Last non zero bin value: 2625
+signal Zprime mass:2000 First non zero bin value: 700 Last non zero bin value: 2525
+signal Zprime mass:2500 First non zero bin value: 725 Last non zero bin value: 2925
+signal Zprime mass:3000 First non zero bin value: 850 Last non zero bin value: 3550
+signal Zprime mass:3500 First non zero bin value: 1100 Last non zero bin value: 4200
+signal Zprime mass:4000 First non zero bin value: 750 Last non zero bin value: 4825
+DYJet:  First non zero bin value: 700 Last non zero bin value: 3925
+
+cout DYJets event yield in the signal range
+M= 800
+Background_yield_all: 17.5601
+signal_yield: 4.53607
+background event yield: 11.9362
+ratio: 0.380026
+M= 1000
+Background_yield_all: 17.5601
+signal_yield: 4.89641
+background event yield: 12.2319
+ratio: 0.400299
+M= 1200
+Background_yield_all: 17.5601
+signal_yield: 2.96714
+background event yield: 9.05671
+ratio: 0.327617
+M= 1400
+Background_yield_all: 17.5601
+signal_yield: 1.67298
+background event yield: 6.70155
+ratio: 0.249641
+M= 1600
+Background_yield_all: 17.5601
+signal_yield: 0.951102
+background event yield: 5.01079
+ratio: 0.189811
+M= 1800
+Background_yield_all: 17.5601
+signal_yield: 0.543888
+background event yield: 5.0579
+ratio: 0.107532
+M= 2000
+Background_yield_all: 17.5601
+signal_yield: 0.317408
+background event yield: 4.22806
+ratio: 0.0750718
+M= 2500
+Background_yield_all: 17.5601
+signal_yield: 0.09168
+background event yield: 4.33173
+ratio: 0.0211647
+M= 3000
+Background_yield_all: 17.5601
+signal_yield: 0.026489
+background event yield: 2.47341
+ratio: 0.0107095
+M= 3500
+Background_yield_all: 17.5601
+signal_yield: 0.00816625
+background event yield: 1.58326
+ratio: 0.00515786
+M= 4000
+Background_yield_all: 17.5601
+signal_yield: 0.00247094
+background event yield: 2.68871
+ratio: 0.000919004
+
+inside plot_mass.C variable_name: Ele_1st_pt cut_point: 315
+
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TCanvas::Constructor>: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: pdf file /afs/cern.ch/user/y/yuchang/www/set_limit_optimize_leading_pt/Zprime_mass_for_Ele_1st_pt_cut_315.pdf has been created
+signal Zprime mass:800 First non zero bin value: 700 Last non zero bin value: 1500
+signal Zprime mass:1000 First non zero bin value: 825 Last non zero bin value: 2100
+signal Zprime mass:1200 First non zero bin value: 925 Last non zero bin value: 2400
+signal Zprime mass:1400 First non zero bin value: 950 Last non zero bin value: 2975
+signal Zprime mass:1600 First non zero bin value: 875 Last non zero bin value: 2200
+signal Zprime mass:1800 First non zero bin value: 700 Last non zero bin value: 2625
+signal Zprime mass:2000 First non zero bin value: 700 Last non zero bin value: 2525
+signal Zprime mass:2500 First non zero bin value: 725 Last non zero bin value: 2925
+signal Zprime mass:3000 First non zero bin value: 850 Last non zero bin value: 3550
+signal Zprime mass:3500 First non zero bin value: 1100 Last non zero bin value: 4200
+signal Zprime mass:4000 First non zero bin value: 750 Last non zero bin value: 4825
+DYJet:  First non zero bin value: 700 Last non zero bin value: 3925
+
+cout DYJets event yield in the signal range
+M= 800
+Background_yield_all: 7.50709
+signal_yield: 0.653517
+background event yield: 3.12877
+ratio: 0.208874
+M= 1000
+Background_yield_all: 7.50709
+signal_yield: 2.23973
+background event yield: 4.56756
+ratio: 0.490356
+M= 1200
+Background_yield_all: 7.50709
+signal_yield: 2.16663
+background event yield: 4.50383
+ratio: 0.481064
+M= 1400
+Background_yield_all: 7.50709
+signal_yield: 1.50434
+background event yield: 3.4787
+ratio: 0.432444
+M= 1600
+Background_yield_all: 7.50709
+signal_yield: 0.907424
+background event yield: 2.83859
+ratio: 0.319675
+M= 1800
+Background_yield_all: 7.50709
+signal_yield: 0.53099
+background event yield: 2.77045
+ratio: 0.191662
+M= 2000
+Background_yield_all: 7.50709
+signal_yield: 0.313121
+background event yield: 2.12054
+ratio: 0.147661
+M= 2500
+Background_yield_all: 7.50709
+signal_yield: 0.0912574
+background event yield: 1.82974
+ratio: 0.0498746
+M= 3000
+Background_yield_all: 7.50709
+signal_yield: 0.0264205
+background event yield: 1.28004
+ratio: 0.0206404
+M= 3500
+Background_yield_all: 7.50709
+signal_yield: 0.00816057
+background event yield: 1.02513
+ratio: 0.00796051
+M= 4000
+Background_yield_all: 7.50709
+signal_yield: 0.00246855
+background event yield: 1.27822
+ratio: 0.00193124
+
+inside plot_mass.C variable_name: Ele_1st_pt cut_point: 415
+
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TH1D::Sumw2>: Sum of squares of weights structure already created
+Warning in <TCanvas::Constructor>: Deleting canvas with same name: c1
+Info in <TCanvas::Print>: pdf file /afs/cern.ch/user/y/yuchang/www/set_limit_optimize_leading_pt/Zprime_mass_for_Ele_1st_pt_cut_415.pdf has been created
+signal Zprime mass:800 First non zero bin value: 750 Last non zero bin value: 1325
+signal Zprime mass:1000 First non zero bin value: 850 Last non zero bin value: 1450
+signal Zprime mass:1200 First non zero bin value: 925 Last non zero bin value: 2400
+signal Zprime mass:1400 First non zero bin value: 950 Last non zero bin value: 2975
+signal Zprime mass:1600 First non zero bin value: 875 Last non zero bin value: 2150
+signal Zprime mass:1800 First non zero bin value: 750 Last non zero bin value: 2625
+signal Zprime mass:2000 First non zero bin value: 800 Last non zero bin value: 2525
+signal Zprime mass:2500 First non zero bin value: 725 Last non zero bin value: 2925
+signal Zprime mass:3000 First non zero bin value: 1100 Last non zero bin value: 3550
+signal Zprime mass:3500 First non zero bin value: 1100 Last non zero bin value: 4200
+signal Zprime mass:4000 First non zero bin value: 750 Last non zero bin value: 4825
+DYJet:  First non zero bin value: 700 Last non zero bin value: 3500
+
+cout DYJets event yield in the signal range
+M= 800
+Background_yield_all: 2.74765
+signal_yield: 0.0175206
+background event yield: 0.453315
+ratio: 0.0386498
+M= 1000
+Background_yield_all: 2.74765
+signal_yield: 0.340387
+background event yield: 1.03139
+ratio: 0.330027
+M= 1200
+Background_yield_all: 2.74765
+signal_yield: 0.849855
+background event yield: 1.46256
+ratio: 0.581075
+M= 1400
+Background_yield_all: 2.74765
+signal_yield: 0.88415
+background event yield: 1.61031
+ratio: 0.549056
+M= 1600
+Background_yield_all: 2.74765
+signal_yield: 0.690998
+background event yield: 1.4718
+ratio: 0.469492
+M= 1800
+Background_yield_all: 2.74765
+signal_yield: 0.473149
+background event yield: 1.28334
+ratio: 0.368684
+M= 2000
+Background_yield_all: 2.74765
+signal_yield: 0.293242
+background event yield: 0.936434
+ratio: 0.313147
+M= 2500
+Background_yield_all: 2.74765
+signal_yield: 0.089649
+background event yield: 0.804085
+ratio: 0.111492
+M= 3000
+Background_yield_all: 2.74765
+signal_yield: 0.0262105
+background event yield: 0.495216
+ratio: 0.0529274
+M= 3500
+Background_yield_all: 2.74765
+signal_yield: 0.00811939
+background event yield: 0.553461
+ratio: 0.0146702
+M= 4000
+Background_yield_all: 2.74765
+signal_yield: 0.0024652
+background event yield: 0.517301
+ratio: 0.0047655

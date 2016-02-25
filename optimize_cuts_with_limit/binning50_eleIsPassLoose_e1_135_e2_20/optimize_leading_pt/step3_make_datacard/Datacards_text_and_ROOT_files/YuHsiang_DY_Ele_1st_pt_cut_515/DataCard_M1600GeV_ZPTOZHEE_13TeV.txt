@@ -1,0 +1,36 @@
+
+imax    1        number of channels
+jmax    *        number of backgrounds
+kmax    *        number of nuisance parameters (sources of systematical uncertainties)
+
+-------------------------------------------------------------------------------------------------
+
+shapes  *        ZPTOZHMM  text_and_ROOT_files/Zprime_shape_Ele_1st_pt_cut_515.root  $PROCESS  $PROCESS_$SYSTEMATIC
+
+-------------------------------------------------------------------------------------------------
+
+bin              ZPTOZHMM
+observation      4.45273
+
+-------------------------------------------------------------------------------------------------
+
+bin              ZPTOZHMM    ZPTOZHMM       
+process          SIG_M1600      DYJETS      
+
+-------------------------------------------------------------------------------------------------
+
+process          0            1             
+rate             0.351378   1.21469   
+
+-------------------------------------------------------------------------------------------------
+
+lumi_13TeV       lnN          1.1    1.1     
+
+CMS_xs_Sig       lnN          1.20   -      
+CMS_xs_DYJets    lnN          -      1.10   
+
+CMS_trigg        lnN          1.05   1.05    
+CMS_JES          lnN          1.05   1.05   
+CMS_Sig          lnN          1.10   -      
+CMS_DYJets       lnN          -      1.10    
+
