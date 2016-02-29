@@ -1,0 +1,597 @@
+#! /usr/bin/env python
+
+import os, sys, getopt, multiprocessing
+import copy, math
+from array import array
+from ROOT import gROOT, gSystem, gStyle, gRandom
+from ROOT import TFile, TChain, TTree, TCut, TH1F, TH2F, THStack, TGraph, TGaxis
+from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText
+
+# Import PDF library and PDF diagonalizer
+gSystem.Load("PDFs/HWWLVJRooPdfs_cxx.so")
+gSystem.Load("PDFs/PdfDiagonalizer_cc.so")
+
+from ROOT import RooFit, RooRealVar, RooDataHist, RooDataSet, RooAbsData, RooAbsReal, RooAbsPdf, RooPlot, RooBinning, RooCategory, RooSimultaneous, RooArgList, RooArgSet, RooWorkspace, RooMsgService
+from ROOT import RooFormulaVar, RooGenericPdf, RooGaussian, RooExponential, RooPolynomial, RooChebychev, RooBreitWigner, RooCBShape, RooExtendPdf, RooAddPdf, RooProdPdf, RooNumConvPdf, RooFFTConvPdf
+from ROOT import PdfDiagonalizer, RooAlphaExp, RooErfExpPdf, Roo2ExpPdf, RooAlpha42ExpPdf, RooExpNPdf, RooAlpha4ExpNPdf, RooExpTailPdf, RooAlpha4ExpTailPdf, RooAlpha
+
+from tools.utils import *
+
+import optparse
+usage = "usage: %prog [options]"
+parser = optparse.OptionParser(usage)
+parser.add_option("-a", "--all", action="store_true", default=False, dest="all")
+parser.add_option("-b", "--bash", action="store_true", default=False, dest="bash")
+parser.add_option("-c", "--channel", action="store", type="string", dest="channel", default="")
+parser.add_option("-d", "--different", action="store_true", default=False, dest="different")
+parser.add_option("-e", "--extrapolate", action="store_true", default=False, dest="extrapolate")
+parser.add_option("-s", "--scan", action="store_true", default=False, dest="scan")
+parser.add_option("-v", "--verbose", action="store_true", default=False, dest="verbose")
+(options, args) = parser.parse_args()
+if options.bash: gROOT.SetBatch(True)
+
+########## SETTINGS ##########
+
+#gStyle.SetOptStat(0)
+gStyle.SetOptTitle(0)
+gStyle.SetPadTopMargin(0.06)
+gStyle.SetPadRightMargin(0.05)
+
+ALTERNATIVE = options.different
+EXTRAPOLATE = options.extrapolate
+SCAN        = options.scan
+NTUPLEDIR   = "ntuples/"
+PLOTDIR     = "plotsAlpha/"
+RATIO       = 4
+SHOWERR     = True
+BLIND       = False#True if not EXTRAPOLATE else False
+LUMISILVER  = 2460.
+LUMIGOLDEN  = 2110.
+VERBOSE     = options.verbose
+
+channelList = ['XZhnnb', 'XZhnnbb', 'XWhenb', 'XWhenbb', 'XWhmnb', 'XWhmnbb', 'XZheeb', 'XZhmmb', 'XZheebb', 'XZhmmbb']
+massPoints = [600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000, 3500, 4000, 4500]
+
+LOWMIN = 30.
+LOWMAX = 65.
+
+SIGMIN = 105. if not EXTRAPOLATE else 135.
+SIGMAX = 135. if not EXTRAPOLATE else 300.
+
+HIGMIN = 135. if not EXTRAPOLATE else 300.
+HIGMAX = 300.
+
+HBINMIN= 30.
+HBINMAX= 300.
+HBINS  = 54
+
+XBINMIN= 750.
+XBINMAX= 4250.
+XBINS  = 35
+
+# topSF[nLept][nBtag]
+topSF = [[1, 0.852, 0.541], [1, 0.818, 0.826], [1, 1, 1]]
+topSFErr = [[1, 0.062, 0.126], [1, 0.032, 0.073], [1, 1, 1]]
+
+########## ######## ##########
+
+
+def alpha(channel):
+
+    nElec = channel.count('e')
+    nMuon = channel.count('m')
+    nLept = nElec + nMuon
+    nBtag = channel.count('b')
+    
+    # Channel-dependent settings
+    # Background function. Semi-working options are: EXP, EXP2, EXPN, EXPTAIL
+    if nLept == 0:
+        treeName = 'SR'
+        signName = 'XZh'
+        colorVjet = sample['DYJetsToNuNu']['linecolor']
+        triName = "HLT_PFMET"
+        leptCut = "0==0"
+        topVeto = selection["TopVetocut"]
+        massVar = "X_cmass"
+        binFact = 1
+        fitFunc = "EXPN" if nBtag < 2 else "EXPN"
+        fitAltFunc = "EXPTAIL" if nBtag < 2 else "EXPTAIL"
+        fitFuncVjet = "ERFEXP" if nBtag < 2 else "EXP"
+        fitAltFuncVjet = "POL" if nBtag < 2 else "POL"
+        fitFuncVV   = "EXPGAUS" if nBtag < 2 else "EXPGAUS"
+        fitFuncTop  = "GAUS2"
+    elif nLept == 1:
+        treeName = 'WCR'
+        signName = 'XWh'
+        colorVjet = sample['WJetsToLNu']['linecolor']
+        triName = "HLT_Ele" if nElec > 0 else "HLT_Mu"
+        leptCut = "isWtoEN" if nElec > 0 else "isWtoMN"
+        topVeto = selection["TopVetocut"]
+        massVar = "X_mass"
+        binFact = 2
+        if nElec > 0:
+            fitFunc = "EXPTAIL" if nBtag < 2 else "EXPN"
+            fitAltFunc  = "EXPN" if nBtag < 2 else "POW"
+        else:
+            fitFunc = "EXPN" if nBtag < 2 else "EXPN"
+            fitAltFunc  = "EXPTAIL" if nBtag < 2 else "POW"
+        fitFuncVjet = "ERFEXP" if nBtag < 2 else "EXP"
+        fitAltFuncVjet = "POL" if nBtag < 2 else "POL"
+        fitFuncVV   = "EXPGAUS" if nBtag < 2 else "EXPGAUS"
+        fitFuncTop  = "GAUS3" if nBtag < 2 else "GAUS2"
+    else:
+        treeName = 'XZh'
+        signName = 'XZh'
+        colorVjet = sample['DYJetsToLL']['linecolor']
+        triName = "HLT_Ele" if nElec > 0 else "HLT_Mu"
+        leptCut = "isZtoEE" if nElec > 0 else "isZtoMM"
+        topVeto = "X_dPhi>2.5"
+        massVar = "X_mass"
+        binFact = 2
+        if nElec > 0:
+            fitFunc = "EXPTAIL" if nBtag < 2 else "EXPTAIL"
+            fitAltFunc = "POW" if nBtag < 2 else "POW"
+        else:
+            fitFunc = "EXPTAIL" if nBtag < 2 else "EXPTAIL"
+            fitAltFunc = "POW" if nBtag < 2 else "POW"
+        fitFuncVjet = "ERFEXP" if nBtag < 2 and nElec < 1 else "EXP"
+        fitAltFuncVjet = "POL" if nBtag < 2 else "POL"
+        fitFuncVV   = "EXPGAUS2" if nBtag < 2 else "EXPGAUS2"
+        fitFuncTop  = "GAUS"
+    
+    btagCut = selection["2Btag"] if nBtag == 2 else selection["1Btag"]
+    
+    print "--- Channel", channel, "---"
+    print "  number of electrons:", nElec, " muons:", nMuon, " b-tags:", nBtag
+    print "  read tree:", treeName, "and trigger:", triName
+    if ALTERNATIVE: print "  using ALTERNATIVE fit functions"
+    print "-"*11*2
+    
+    # Silent RooFit
+    RooMsgService.instance().setGlobalKillBelow(RooFit.FATAL)
+    
+    #*******************************************************#
+    #                                                       #
+    #              Variables and selections                 #
+    #                                                       #
+    #*******************************************************#
+    
+    # Define all the variables from the trees that will be used in the cuts and fits
+    # this steps actually perform a "projection" of the entire tree on the variables in thei ranges, so be careful once setting the limits
+    X_mass = RooRealVar(  massVar, "m_{X}" if nLept > 0 else "m_{T}^{X}", XBINMIN, XBINMAX, "GeV")
+    J_mass = RooRealVar( "fatjet1_prunedMassCorr", "jet corrected pruned mass", HBINMIN, HBINMAX, "GeV")
+    CSV1 = RooRealVar(   "fatjet1_CSVR1",                           "",        -1.e99,   1.e4     )
+    CSV2 = RooRealVar(   "fatjet1_CSVR2",                           "",        -1.e99,   1.e4     )
+    nB   = RooRealVar(   "fatjet1_nBtag",                           "",            0.,   4        )
+    CSVTop = RooRealVar( "bjet1_CSVR",                              "",        -1.e99,   1.e4     )
+    X_dPhi = RooRealVar( "X_dPhi",                                  "",            0.,   3.15     )
+    isZtoEE = RooRealVar("isZtoEE",                                 "",            0.,   2        )
+    isZtoMM = RooRealVar("isZtoMM",                                 "",            0.,   2        )
+    isWtoEN = RooRealVar("isWtoEN",                                 "",            0.,   2        )
+    isWtoMN = RooRealVar("isWtoMN",                                 "",            0.,   2        )
+    weight = RooRealVar( "eventWeightLumi",                         "",         -1.e9,   1.       )
+    
+    # Define the RooArgSet which will include all the variables defined before
+    # there is a maximum of 9 variables in the declaration, so the others need to be added with 'add'
+    variables = RooArgSet(X_mass, J_mass, CSV1, CSV2, nB, CSVTop, X_dPhi)
+    variables.add(RooArgSet(isZtoEE, isZtoMM, isWtoEN, isWtoMN, weight))
+    
+    # set reasonable ranges for J_mass and X_mass
+    # these are used in the fit in order to avoid ROOFIT to look in regions very far away from where we are fitting 
+    # (honestly, it is not clear to me why it is necessary, but without them the fit often explodes)
+    J_mass.setRange("h_reasonable_range", LOWMIN, HIGMAX)
+    X_mass.setRange("X_reasonable_range", XBINMIN, XBINMAX)
+    
+    # Set RooArgSets once for all, see https://root.cern.ch/phpBB3/viewtopic.php?t=11758
+    jetMassArg = RooArgSet(J_mass)
+    # Define the ranges in fatJetMass - these will be used to define SB and SR
+    J_mass.setRange("LSBrange", LOWMIN, LOWMAX)
+    J_mass.setRange("HSBrange", HIGMIN, HIGMAX)
+    J_mass.setRange("VRrange",  LOWMAX, SIGMIN)
+    J_mass.setRange("SRrange",  SIGMIN, SIGMAX)
+    
+    # Set binning for plots
+    J_mass.setBins(HBINS)
+    X_mass.setBins(binFact*XBINS)
+    
+    # Define the selection for the various categories (base + SR / LSBcut / HSBcut )
+    baseCut = leptCut + " && " + btagCut + "&&" + topVeto
+    massCut = massVar + ">%d" % XBINMIN
+    baseCut += " && " + massCut
+    
+    # Cuts
+    SRcut  = baseCut + " && %s>%d && %s<%d" % (J_mass.GetName(), SIGMIN, J_mass.GetName(), SIGMAX)
+    LSBcut = baseCut + " && %s>%d && %s<%d" % (J_mass.GetName(), LOWMIN, J_mass.GetName(), LOWMAX)
+    HSBcut = baseCut + " && %s>%d && %s<%d" % (J_mass.GetName(), HIGMIN, J_mass.GetName(), HIGMAX)
+    SBcut  = baseCut + " && ((%s>%d && %s<%d) || (%s>%d && %s<%d))" % (J_mass.GetName(), LOWMIN, J_mass.GetName(), LOWMAX, J_mass.GetName(), HIGMIN, J_mass.GetName(), HIGMAX)
+    VRcut  = baseCut + " && %s>%d && %s<%d" % (J_mass.GetName(), LOWMAX, J_mass.GetName(), SIGMIN)
+    
+    # Binning
+    binsJmass = RooBinning(HBINS, HBINMIN, HBINMAX)
+    #binsJmass.addUniform(HBINS, HBINMIN, HBINMAX)
+    binsXmass = RooBinning(binFact*XBINS, XBINMIN, XBINMAX)
+    #binsXmass.addUniform(binFact*XBINS, XBINMIN, XBINMAX)
+    
+    #*******************************************************#
+    #                                                       #
+    #                      Input files                      #
+    #                                                       #
+    #*******************************************************#
+    
+    # Import the files using TChains (separately for the bkg "classes" that we want to describe: here DY and VV+ST+TT)
+    treeData = TChain(treeName)
+    treeMC   = TChain(treeName)
+    treeVjet = TChain(treeName)
+    treeVV   = TChain(treeName)
+    treeTop  = TChain(treeName)
+    treeSign = {}
+    nevtSign = {}
+    for i, m in enumerate(massPoints): treeSign[m] = TChain(treeName)
+    
+    # Read data
+    pd = getPrimaryDataset(triName)
+    if len(pd)==0: raw_input("Warning: Primary Dataset not recognized, continue?")
+    for i, s in enumerate(pd): treeData.Add(NTUPLEDIR + s + ".root")
+    
+    # Read V+jets backgrounds
+    for i, s in enumerate(["WJetsToLNu_HT", "DYJetsToNuNu_HT", "DYJetsToLL_HT"]):
+        for j, ss in enumerate(sample[s]['files']): treeVjet.Add(NTUPLEDIR + ss + ".root")
+    
+    # Read VV backgrounds
+    for i, s in enumerate(["VV"]):
+        for j, ss in enumerate(sample[s]['files']): treeVV.Add(NTUPLEDIR + ss + ".root")
+    
+    # Read Top backgrounds
+    for i, s in enumerate(["ST", "TTbar"]):
+        for j, ss in enumerate(sample[s]['files']): treeTop.Add(NTUPLEDIR + ss + ".root")
+    
+    # Read signals
+    for i, m in enumerate(massPoints):
+        for j, ss in enumerate(sample["%s_M%d" % (signName, m)]['files']):
+            treeSign[m].Add(NTUPLEDIR + ss + ".root")
+            sfile = TFile(NTUPLEDIR + ss + ".root", "READ")
+            shist = sfile.Get("Counters/Counter")
+            nevtSign[m] = shist.GetBinContent(1)
+            sfile.Close()
+    
+    # Sum all background MC
+    treeMC.Add(treeVjet)
+    treeMC.Add(treeVV)
+    treeMC.Add(treeTop)
+    
+    # create a dataset to host data in sideband (using this dataset we are automatically blind in the SR!)
+    setDataSB = RooDataSet("setDataSB", "setDataSB", variables, RooFit.Cut(SBcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
+    setDataLSB = RooDataSet("setDataLSB", "setDataLSB", variables, RooFit.Import(setDataSB), RooFit.Cut(LSBcut), RooFit.WeightVar(weight))
+    setDataHSB = RooDataSet("setDataHSB", "setDataHSB", variables, RooFit.Import(setDataSB), RooFit.Cut(HSBcut), RooFit.WeightVar(weight))
+    
+    # Observed data (WARNING, BLIND!)
+    setDataSR = RooDataSet("setDataSR", "setDataSR", variables, RooFit.Cut(SRcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
+    setDataVR = RooDataSet("setDataVR", "setDataVR", variables, RooFit.Cut(VRcut), RooFit.WeightVar(weight), RooFit.Import(treeData)) # Observed in the VV mass, just for plotting purposes
+    
+    setDataSRSB = RooDataSet("setDataSRSB", "setDataSRSB", variables, RooFit.Cut("("+SRcut+") || ("+SBcut+")"), RooFit.WeightVar(weight), RooFit.Import(treeData))
+    
+    # same for the bkg datasets from MC, where we just apply the base selections (not blind)
+    setVjet = RooDataSet("setVjet", "setVjet", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeVjet))
+    setVjetSB = RooDataSet("setVjetSB", "setVjetSB", variables, RooFit.Import(setVjet), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
+    setVjetSR = RooDataSet("setVjetSR", "setVjetSR", variables, RooFit.Import(setVjet), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+    setVV = RooDataSet("setVV", "setVV", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeVV))
+    setVVSB = RooDataSet("setVVSB", "setVVSB", variables, RooFit.Import(setVV), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
+    setVVSR = RooDataSet("setVVSR", "setVVSR", variables, RooFit.Import(setVV), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+    setTop = RooDataSet("setTop", "setTop", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeTop))
+    setTopSB = RooDataSet("setTopSB", "setTopSB", variables, RooFit.Import(setTop), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
+    setTopSR = RooDataSet("setTopSR", "setTopSR", variables, RooFit.Import(setTop), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+    
+    print "  Data events SB: %.2f" % setDataSB.sumEntries()
+    print "  V+jets entries: %.2f" % setVjet.sumEntries()
+    print "  VV, VH entries: %.2f" % setVV.sumEntries()
+    print "  Top,ST entries: %.2f" % setTop.sumEntries()
+    
+    nVV   = RooRealVar("nVV",  "VV normalization",   setVV.sumEntries(SBcut),   0., 2*setVV.sumEntries(SBcut))
+    nTop  = RooRealVar("nTop", "Top normalization",  setTop.sumEntries(SBcut),  0., 2*setTop.sumEntries(SBcut))
+    nVjet = RooRealVar("nVjet","Vjet normalization", setDataSB.sumEntries(), 0., 2*setDataSB.sumEntries(SBcut))
+    nVjet2 = RooRealVar("nVjet2","Vjet2 normalization", setDataSB.sumEntries(), 0., 2*setDataSB.sumEntries(SBcut))
+    
+    # Apply Top SF
+    nTop.setVal(nTop.getVal()*topSF[nLept][nBtag])
+    nTop.setError(nTop.getVal()*topSFErr[nLept][nBtag])
+    
+    # Define entries
+    entryVjet = RooRealVar("entryVjets",  "V+jets normalization", setVjet.sumEntries(), 0., 1.e6)
+    entryVV = RooRealVar("entryVV",  "VV normalization", setVV.sumEntries(), 0., 1.e6)
+    entryTop = RooRealVar("entryTop",  "Top normalization", setTop.sumEntries(), 0., 1.e6)
+    
+    entrySB = RooRealVar("entrySB",  "Data SB normalization", setDataSB.sumEntries(SBcut), 0., 1.e6)
+    entrySB.setError(math.sqrt(entrySB.getVal()))
+    
+    entryLSB = RooRealVar("entryLSB",  "Data LSB normalization", setDataSB.sumEntries(LSBcut), 0., 1.e6)
+    entryLSB.setError(math.sqrt(entryLSB.getVal()))
+
+    entryHSB = RooRealVar("entryHSB",  "Data HSB normalization", setDataSB.sumEntries(HSBcut), 0., 1.e6)
+    entryHSB.setError(math.sqrt(entryHSB.getVal()))
+    
+    ###################################################################################
+    #        _   _                                                                    #
+    #       | \ | |                          | (_)         | | (_)                    #
+    #       |  \| | ___  _ __ _ __ ___   __ _| |_ ___  __ _| |_ _  ___  _ __          #
+    #       | . ` |/ _ \| '__| '_ ` _ \ / _` | | / __|/ _` | __| |/ _ \| '_ \         #
+    #       | |\  | (_) | |  | | | | | | (_| | | \__ \ (_| | |_| | (_) | | | |        #
+    #       |_| \_|\___/|_|  |_| |_| |_|\__,_|_|_|___/\__,_|\__|_|\___/|_| |_|        #
+    #                                                                                 #
+    ###################################################################################
+    # fancy ASCII art thanks to, I guess, Jose
+    
+    # start by creating the fit models to get the normalization: 
+    # * MAIN and SECONDARY bkg are taken from MC by fitting the whole J_mass range
+    # * The two PDFs are added together using the relative normalizations of the two bkg from MC
+    # * DATA is then fit in the sidebands only using the combined bkg PDF
+    # * The results of the fit are then estrapolated in the SR and the integral is evaluated.
+    # * This defines the bkg normalization in the SR
+    
+    #*******************************************************#
+    #                                                       #
+    #                 V+jets normalization                  #
+    #                                                       #
+    #*******************************************************#
+    
+    # Variables for V+jets
+    constVjet   = RooRealVar("constVjet",   "slope of the exp",      -0.020, -1.,   0.)
+    offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",     30.,   -50., 400.)
+    widthVjet   = RooRealVar("widthVjet",   "width of the erf",     100.,     1., 200.) #0, 400
+    a0Vjet = RooRealVar("a0Vjet", "width of the erf", -0.1, -5, 0)
+    a1Vjet = RooRealVar("a1Vjet", "width of the erf", 0.6,  0, 5)
+    a2Vjet = RooRealVar("a2Vjet", "width of the erf", -0.1, -1, 1)
+    
+    if channel=="XZhnnb":
+        offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",     500.,   200., 1000.)
+    if channel=="XZhnnbb":
+        offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",     350.,   200., 500.)
+#    if channel == "XWhenb" or channel == "XZheeb":
+#        offsetVjet.setVal(120.)
+#        offsetVjet.setConstant(True)
+    if channel == "XWhenb":
+        offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",    120.,  80., 155.)
+    if channel == "XWhenbb" or channel == "XZhmmb":
+        offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",     67.,   50., 100.)
+    if channel == "XWhmnb":
+        offsetVjet  = RooRealVar("offsetVjet",  "offset of the erf",    30.,   -50., 600.)
+    if channel == "XZheeb":
+        offsetVjet.setMin(-400)
+        offsetVjet.setVal(0.)
+        offsetVjet.setMax(1000)
+        widthVjet.setVal(1.)
+    
+    # Define V+jets model
+    if fitFuncVjet == "ERFEXP": VjetMass = RooErfExpPdf("VjetMass", fitFuncVjet, J_mass, constVjet, offsetVjet, widthVjet)
+    elif fitFuncVjet == "EXP": VjetMass = RooExponential("VjetMass", fitFuncVjet, J_mass, constVjet)
+    elif fitFuncVjet == "GAUS": VjetMass = RooGaussian("VjetMass", fitFuncVjet, J_mass, offsetVjet, widthVjet)
+    elif fitFuncVjet == "POL": VjetMass = RooChebychev("VjetMass", fitFuncVjet, J_mass, RooArgList(a0Vjet, a1Vjet, a2Vjet))
+    elif fitFuncVjet == "POW": VjetMass = RooGenericPdf("VjetMass", fitFuncVjet, "@0^@1", RooArgList(J_mass, a0Vjet))
+    else:
+        print "  ERROR! Pdf", fitFuncVjet, "is not implemented for Vjets"
+        exit()
+    
+    if fitAltFuncVjet == "POL": VjetMass2 = RooChebychev("VjetMass2", "polynomial for V+jets mass", J_mass, RooArgList(a0Vjet, a1Vjet, a2Vjet))
+    else:
+        print "  ERROR! Pdf", fitAltFuncVjet, "is not implemented for Vjets"
+        exit()
+    
+    # fit to main bkg in MC (whole range)
+    frVjet = VjetMass.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+    frVjet2 = VjetMass2.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+    
+    if VERBOSE: print "********** Fit result [JET MASS Vjets] *"+"*"*40, "\n", frVjet.Print(), "\n", "*"*80
+    
+    #likelihoodScan(VjetMass, setVjet, [constVjet, offsetVjet, widthVjet])
+    
+    #*******************************************************#
+    #                                                       #
+    #                 VV, VH normalization                  #
+    #                                                       #
+    #*******************************************************#
+    
+    # Variables for VV
+    # Error function and exponential to model the bulk
+    constVV  = RooRealVar("constVV",  "slope of the exp",  -0.030, -0.1,   0.)
+    offsetVV = RooRealVar("offsetVV", "offset of the erf", 90.,     1., 300.)
+    widthVV  = RooRealVar("widthVV",  "width of the erf",  50.,     1., 100.)
+    erfrVV   = RooErfExpPdf("baseVV", "error function for VV jet mass", J_mass, constVV, offsetVV, widthVV)
+    expoVV   = RooExponential("baseVV", "error function for VV jet mass", J_mass, constVV)
+    # gaussian for the V mass peak
+    meanVV   = RooRealVar("meanVV",   "mean of the gaussian",           90.,    60., 100.)
+    sigmaVV  = RooRealVar("sigmaVV",  "sigma of the gaussian",          10.,     6.,  30.)
+    fracVV   = RooRealVar("fracVV",   "fraction of gaussian wrt erfexp", 3.2e-1, 0.,   1.)
+    gausVV   = RooGaussian("gausVV",  "gaus for VV jet mass", J_mass, meanVV, sigmaVV)
+    # gaussian for the H mass peak
+    meanVH   = RooRealVar("meanVH",   "mean of the gaussian",           125.,   100., 150.)
+    sigmaVH  = RooRealVar("sigmaVH",  "sigma of the gaussian",           10.,     5.,  50.)
+    fracVH   = RooRealVar("fracVH",   "fraction of gaussian wrt erfexp",  1.5e-2, 0.,   1.)
+    gausVH   = RooGaussian("gausVH",  "gaus for VH jet mass", J_mass, meanVH, sigmaVH)
+    
+    # Define VV model
+    if fitFuncVV == "ERFEXPGAUS": VVMass  = RooAddPdf("VVMass",   fitFuncVV, RooArgList(gausVV, erfrVV), RooArgList(fracVV))
+    elif fitFuncVV == "ERFEXPGAUS2": VVMass  = RooAddPdf("VVMass",   fitFuncVV, RooArgList(gausVH, gausVV, erfrVV), RooArgList(fracVH, fracVV))
+    elif fitFuncVV == "EXPGAUS": VVMass  = RooAddPdf("VVMass",   fitFuncVV, RooArgList(gausVV, expoVV), RooArgList(fracVV))
+    elif fitFuncVV == "EXPGAUS2": VVMass  = RooAddPdf("VVMass",   fitFuncVV, RooArgList(gausVH, gausVV, expoVV), RooArgList(fracVH, fracVV))
+    else:
+        print "  ERROR! Pdf", fitFuncVV, "is not implemented for VV"
+        exit()
+    
+    # fit to secondary bkg in MC (whole range)
+    frVV = VVMass.fitTo(setVV, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+    
+    if VERBOSE: print "********** Fit result [JET MASS VV] ****"+"*"*40, "\n", frVV.Print(), "\n", "*"*80
+    
+    #*******************************************************#
+    #                                                       #
+    #                 Top, ST normalization                 #
+    #                                                       #
+    #*******************************************************#
+    
+    # Variables for Top
+    # Error Function * Exponential to model the bulk
+    constTop  = RooRealVar("constTop",  "slope of the exp", -0.030,   -1.,   0.)
+    offsetTop = RooRealVar("offsetTop", "offset of the erf", 175.0,   50., 250.)
+    widthTop  = RooRealVar("widthTop",  "width of the erf",  100.0,    1., 300.)
+    gausTop   = RooGaussian("baseTop",  "gaus for Top jet mass", J_mass, offsetTop, widthTop)
+    erfrTop   = RooErfExpPdf("baseTop", "error function for Top jet mass", J_mass, constTop, offsetTop, widthTop)
+    # gaussian for the W mass peak
+    meanW     = RooRealVar("meanW",     "mean of the gaussian",           80., 70., 90.)
+    sigmaW    = RooRealVar("sigmaW",    "sigma of the gaussian",          10.,  2., 20.)
+    fracW     = RooRealVar("fracW",     "fraction of gaussian wrt erfexp", 0.1, 0.,  1.)
+    gausW     = RooGaussian("gausW",    "gaus for W jet mass", J_mass, meanW, sigmaW)
+    # gaussian for the Top mass peak
+    meanT     = RooRealVar("meanT",     "mean of the gaussian",           175., 150., 200.)
+    sigmaT    = RooRealVar("sigmaT",    "sigma of the gaussian",           12.,   5.,  30.)
+    fracT     = RooRealVar("fracT",     "fraction of gaussian wrt erfexp",  0.1,  0.,   1.)
+    gausT     = RooGaussian("gausT",    "gaus for T jet mass", J_mass, meanT, sigmaT)
+    
+    if channel=="XZheeb" or channel=="XZheebb" or channel=="XZhmmb" or channel=="XZhmmbb":
+        offsetTop = RooRealVar("offsetTop", "offset of the erf", 200.0,   -50., 450.)
+        widthTop  = RooRealVar("widthTop",  "width of the erf",  100.0,    1., 1000.)
+    
+    # Define Top model
+    if fitFuncTop == "ERFEXPGAUS2": TopMass = RooAddPdf("TopMass",   fitFuncTop, RooArgList(gausW, gausT, erfrTop), RooArgList(fracW, fracT))
+    elif fitFuncTop == "ERFEXPGAUS": TopMass = RooAddPdf("TopMass",   fitFuncTop, RooArgList(gausT, erfrTop), RooArgList(fracT))
+    elif fitFuncTop == "GAUS3": TopMass  = RooAddPdf("TopMass",   fitFuncTop, RooArgList(gausW, gausT, gausTop), RooArgList(fracW, fracT))
+    elif fitFuncTop == "GAUS2": TopMass  = RooAddPdf("TopMass",   fitFuncTop, RooArgList(gausT, gausTop), RooArgList(fracT))
+    elif fitFuncTop == "GAUS": TopMass  = RooGaussian("TopMass", fitFuncTop, J_mass, offsetTop, widthTop)
+    else:
+        print "  ERROR! Pdf", fitFuncTop, "is not implemented for Top"
+        exit()
+    
+    # fit to secondary bkg in MC (whole range)
+    frTop = TopMass.fitTo(setTop, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+    
+    if VERBOSE: print "********** Fit result [JET MASS TOP] ***"+"*"*40, "\n", frTop.Print(), "\n", "*"*80
+    
+    #likelihoodScan(TopMass, setTop, [offsetTop, widthTop])
+    
+    #*******************************************************#
+    #                                                       #
+    #                 All bkg normalization                 #
+    #                                                       #
+    #*******************************************************#
+    
+#    nVjet.setConstant(False)
+#    nVjet2.setConstant(False)
+#    
+#    constVjet.setConstant(False)
+#    offsetVjet.setConstant(False)
+#    widthVjet.setConstant(False)
+#    a0Vjet.setConstant(False)
+#    a1Vjet.setConstant(False)
+#    a2Vjet.setConstant(False)
+    
+    constVV.setConstant(True)
+    offsetVV.setConstant(True)
+    widthVV.setConstant(True)
+    meanVV.setConstant(True)
+    sigmaVV.setConstant(True)
+    fracVV.setConstant(True)
+    meanVH.setConstant(True)
+    sigmaVH.setConstant(True)
+    fracVH.setConstant(True)
+    
+    constTop.setConstant(True)
+    offsetTop.setConstant(True)
+    widthTop.setConstant(True)
+    meanW.setConstant(True)
+    sigmaW.setConstant(True)
+    fracW.setConstant(True)
+    meanT.setConstant(True)
+    sigmaT.setConstant(True)
+    fracT.setConstant(True)
+    
+    nVV.setConstant(True)
+    nTop.setConstant(True)
+    nVjet.setConstant(False)
+    nVjet2.setConstant(False)
+    
+    # Final background model by adding the main+secondary pdfs (using 'coef': ratio of the secondary/main, from MC)
+    TopMass_ext  = RooExtendPdf("TopMass_ext",  "extended p.d.f", TopMass,  nTop)
+    VVMass_ext   = RooExtendPdf("VVMass_ext",   "extended p.d.f", VVMass,   nVV)
+    VjetMass_ext = RooExtendPdf("VjetMass_ext", "extended p.d.f", VjetMass, nVjet)
+    VjetMass2_ext = RooExtendPdf("VjetMass_ext", "extended p.d.f", VjetMass, nVjet2)
+    BkgMass = RooAddPdf("BkgMass", "BkgMass", RooArgList(TopMass_ext, VVMass_ext, VjetMass_ext), RooArgList(nTop, nVV, nVjet))
+    BkgMass2 = RooAddPdf("BkgMass2", "BkgMass2", RooArgList(TopMass_ext, VVMass_ext, VjetMass2_ext), RooArgList(nTop, nVV, nVjet2))
+    BkgMass.fixAddCoefRange("h_reasonable_range")
+    BkgMass2.fixAddCoefRange("h_reasonable_range")
+    
+    # Extended fit model to data in SB
+    frMass = BkgMass.fitTo(setDataSB, RooFit.SumW2Error(True), RooFit.Extended(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1)) #, RooFit.NumCPU(10)
+    if VERBOSE: print "********** Fit result [JET MASS DATA] **"+"*"*40, "\n", frMass.Print(), "\n", "*"*80
+    frMass2 = BkgMass2.fitTo(setDataSB, RooFit.SumW2Error(True), RooFit.Extended(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+    if VERBOSE: print "********** Fit result [JET MASS DATA] **"+"*"*40, "\n", frMass2.Print(), "\n", "*"*80
+    
+    #if SCAN:
+    #    likelihoodScan(VjetMass, setVjet, [constVjet, offsetVjet, widthVjet])
+    
+    # Fix normalization and parameters of V+jets after the fit to data
+    nVjet.setConstant(True)
+    nVjet2.setConstant(True)
+    
+    constVjet.setConstant(True)
+    offsetVjet.setConstant(True)
+    widthVjet.setConstant(True)
+    a0Vjet.setConstant(True)
+    a1Vjet.setConstant(True)
+    a2Vjet.setConstant(True)
+    
+    # integrals for global normalization
+    # do not integrate the composte model: results have no sense
+    
+    # integral for normalization in the SB
+    iSBVjet = VjetMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+    iSBVV = VVMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+    iSBTop = TopMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+    
+    # integral for normalization in the SR
+    iSRVjet = VjetMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iSRVV = VVMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iSRTop = TopMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    
+    # integral for normalization in the VR
+    iVRVjet = VjetMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("VRrange"))
+    iVRVV = VVMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("VRrange"))
+    iVRTop = TopMass.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("VRrange"))
+    
+    # formual vars
+    SByield = RooFormulaVar("SByield", "extrapolation to SR", "@0*@1 + @2*@3 + @4*@5", RooArgList(iSBVjet, nVjet, iSBVV, nVV, iSBTop, nTop))
+    VRyield = RooFormulaVar("VRyield", "extrapolation to VR", "@0*@1 + @2*@3 + @4*@5", RooArgList(iVRVjet, nVjet, iVRVV, nVV, iVRTop, nTop))
+    SRyield = RooFormulaVar("SRyield", "extrapolation to SR", "@0*@1 + @2*@3 + @4*@5", RooArgList(iSRVjet, nVjet, iSRVV, nVV, iSRTop, nTop))
+    
+    # fractions
+    fSBVjet = RooRealVar("fVjet", "Fraction of Vjet events in SB", iSBVjet.getVal()*nVjet.getVal()/SByield.getVal(), 0., 1.)
+    fSBVV = RooRealVar("fSBVV", "Fraction of VV events in SB", iSBVV.getVal()*nVV.getVal()/SByield.getVal(), 0., 1.)
+    fSBTop = RooRealVar("fSBTop", "Fraction of Top events in SB", iSBTop.getVal()*nTop.getVal()/SByield.getVal(), 0., 1.)
+    
+    fSRVjet = RooRealVar("fSRVjet", "Fraction of Vjet events in SR", iSRVjet.getVal()*nVjet.getVal()/SRyield.getVal(), 0., 1.)
+    fSRVV = RooRealVar("fSRVV", "Fraction of VV events in SR", iSRVV.getVal()*nVV.getVal()/SRyield.getVal(), 0., 1.)
+    fSRTop = RooRealVar("fSRTop", "Fraction of Top events in SR", iSRTop.getVal()*nTop.getVal()/SRyield.getVal(), 0., 1.)
+    
+    # final normalization values
+    bkgYield            = SRyield.getVal()
+    bkgYield2           = (VjetMass2.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))).getVal()*nVjet2.getVal() + iSRVV.getVal()*nVV.getVal() + iSRTop.getVal()*nTop.getVal()
+    bkgYield_syst       = math.sqrt(SRyield.getPropagatedError(frVV)**2 + SRyield.getPropagatedError(frTop)**2)
+    bkgYield_stat       = math.sqrt(SRyield.getPropagatedError(frMass)**2)
+    bkgYield_alte       = abs(bkgYield - bkgYield2) #/bkgYield
+    bkgYield_eig_norm   = RooRealVar("predSR_eig_norm", "expected yield in SR", bkgYield, 0., 1.e6)   
+    
+    print "Events in channel", channel, ": V+jets %.3f (%.1f%%),   VV %.3f (%.1f%%),   Top %.3f (%.1f%%)" % (iSRVjet.getVal()*nVjet.getVal(), fSRVjet.getVal()*100, iSRVV.getVal()*nVV.getVal(), fSRVV.getVal()*100, iSRTop.getVal()*nTop.getVal(), fSRTop.getVal()*100)
+    print "Events in channel", channel, ": Integral = $%.3f$ & $\pm %.3f$ & $\pm %.3f$ & $\pm %.3f$, observed = %.0f" % (bkgYield, bkgYield_stat, bkgYield_syst, bkgYield_alte, setDataSR.sumEntries() if not False else -1)
+    
+    # ====== CONTROL VALUE ======
+
+
+jobs = []
+
+if options.all:
+    for c in channelList:
+        p = multiprocessing.Process(target=alpha, args=(c,))
+        jobs.append(p)
+        p.start()
+else:
+    if options.channel in channelList: alpha(options.channel)
+    else:
+        print "Channel not set or not recognized. Quitting..."
+        exit()
