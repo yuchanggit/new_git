@@ -5,11 +5,16 @@ import copy, math
 from array import array
 from ROOT import gROOT, gSystem, gStyle, gRandom, gPad
 from ROOT import TFile, TChain, TTree, TCut, TH1F, TH2F, THStack, TGraph, TGaxis
-from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText, TH1D
+from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText, TH1D, TFile, TMatrixDSym 
+from ROOT import TMatrixD
+from ROOT import TColor 
+
 
 # Import PDF library and PDF diagonalizer
-gSystem.Load("../jacopo_codes/PDFs/HWWLVJRooPdfs_cxx.so")
-gSystem.Load("../jacopo_codes/PDFs/PdfDiagonalizer_cc.so")
+gSystem.Load("PDFs/HWWLVJRooPdfs_cxx.so")
+gSystem.Load("PDFs/PdfDiagonalizer_cc.so")
+#gSystem.Load("../jacopo_codes/PDFs/HWWLVJRooPdfs_cxx.so")
+#gSystem.Load("../jacopo_codes/PDFs/PdfDiagonalizer_cc.so")
 
 from ROOT import RooFit, RooRealVar, RooDataHist, RooDataSet, RooAbsData, RooAbsReal, RooAbsPdf, RooPlot, RooBinning, RooCategory, RooSimultaneous, RooArgList, RooArgSet, RooWorkspace, RooMsgService
 from ROOT import RooFormulaVar, RooGenericPdf, RooGaussian, RooExponential, RooPolynomial, RooChebychev, RooBreitWigner, RooCBShape, RooExtendPdf, RooAddPdf, RooProdPdf, RooNumConvPdf, RooFFTConvPdf
@@ -29,6 +34,23 @@ parser.add_option("-e", "--extrapolate", action="store_true", default=False, des
 parser.add_option("-v", "--verbose", action="store_true", default=False, dest="verbose")
 (options, args) = parser.parse_args()
 if options.bash: gROOT.SetBatch(True)
+
+
+#####  test TMatrixD #####
+
+print "Hellooooooooooo"
+
+#m = TMatrixD(5,5)
+#print m(2,2)
+#m(2,2) = 5.4
+#print m(2,2)
+
+m = TMatrixD(5,5)
+print m[2][2]
+m[2][2] = 5.4
+print m[2][2]
+
+
 
 ########## SETTINGS ##########
 
@@ -103,7 +125,7 @@ def alpha(channel):
     elif nLept == 1:
         treeName = 'WCR'
         signName = 'XWh'
-        colorVjet = sample['WJetsToLNu']['linecolor']
+        #colorVjet = sample['WJetsToLNu']['linecolor']
         triName = "HLT_Ele" if nElec > 0 else "HLT_Mu"
         leptCut = "isWtoEN" if nElec > 0 else "isWtoMN"
         topVeto = selection["TopVetocut"]
@@ -170,7 +192,7 @@ def alpha(channel):
     
     # Define the RooArgSet which will include all the variables defined before
     # there is a maximum of 9 variables in the declaration, so the others need to be added with 'add'
-    variables = RooArgSet(X_mass, J_mass, CSV1, CSV2, nBtag, CSVTop)
+    variables = RooArgSet(X_mass, J_mass, CSV1, CSV2, nBtag, CSVTop) 
     variables.add(RooArgSet(isZtoEE, isZtoMM, isWtoEN, isWtoMN, weight))
     
     # Define the ranges in fatJetMass - these will be used to define SB and SR
@@ -347,6 +369,8 @@ def alpha(channel):
     	offsetVjet_test  = RooRealVar("offsetVjet_test",  "offset of the erf", offsetVjet_value_initial,   -50., 200.)
     	widthVjet_test   = RooRealVar("widthVjet_test",   "width of the erf",  widthVjet_value_initial,     1., 200.)
 
+	offsetVjet_test.setConstant(True)
+
         modelVjet_test = RooErfExpPdf("modelVjet_test", "error function for V+jets mass", J_mass, constVjet_test, offsetVjet_test, widthVjet_test)
 
 #	constVjet_test.Print()
@@ -357,11 +381,23 @@ def alpha(channel):
 #    	offsetVjet_test.setConstant(True)
 #    	widthVjet_test.setConstant(True)
 
-        frVjet_test = modelVjet_test.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+#	minimizer_choose = "Minuit2"
+        minimizer_choose = "Minuit"
 
-#        constVjet_test.Print()
-#        offsetVjet_test.Print()
-#        widthVjet_test.Print()
+        frVjet_test = modelVjet_test.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+
+        par1_fitresult = frVjet_test.floatParsFinal().find("constVjet_test")
+        par2_fitresult = frVjet_test.floatParsFinal().find("widthVjet_test")
+	print ""
+	print "fit from MC" 
+        print "par1 value:",par1_fitresult.getVal()
+        print "par1 error:",par1_fitresult.getError()
+        print "par2 value:",par2_fitresult.getVal()
+        print "par2 error:",par2_fitresult.getError()
+	print ""
+
+
 
 	constVjet_value_fit_MC = constVjet_test.getVal()
 	offsetVjet_value_fit_MC = offsetVjet_test.getVal()
@@ -376,17 +412,22 @@ def alpha(channel):
 	# use the shape of fit to generate the psudo-data
 
         nPseudo_data = setVjet.sumEntries()
+        nPseudo_data_fluc = gRandom.Poisson( nPseudo_data )
 
-        pseudo_data = modelVjet_test.generate(RooArgSet(J_mass),nPseudo_data )
+        pseudo_data_fluc = modelVjet_test.generate(RooArgSet(J_mass),nPseudo_data_fluc )
 
 	Jmass_frame2 = J_mass.frame(RooFit.Title("test frame2"))
-	pseudo_data.plotOn(Jmass_frame2)
+	pseudo_data_fluc.plotOn(Jmass_frame2)
         modelVjet_test.plotOn(Jmass_frame2,RooFit.LineColor(4))
 
         # -------------------------------------------------------------------
 	# make another dataset that remove the signal region 
-        pseudo_data_SB = RooDataSet("pseudo_data_SB", "pseudo_data_SB", RooArgSet(J_mass), RooFit.Import(pseudo_data), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
+        pseudo_data_SB = RooDataSet("pseudo_data_SB", "pseudo_data_SB", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
 	pseudo_data_SB.plotOn(Jmass_frame2,RooFit.LineColor(2))
+
+	# SR data set
+        pseudo_data_SR_fluc = RooDataSet("pseudo_data_SR_fluc", "pseudo_data_SR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135") )
+        nGen_SR_fluc = pseudo_data_SR_fluc.sumEntries()
 
         # -------------------------------------------------------------------
         # use another PDF to fit the pseudo-data in SB only
@@ -395,56 +436,103 @@ def alpha(channel):
         offsetVjet_test2  = RooRealVar("offsetVjet_test2",  "offset of the erf", offsetVjet_value_fit_MC ,   -50., 200.)
         widthVjet_test2   = RooRealVar("widthVjet_test2",   "width of the erf", widthVjet_value_fit_MC ,     1., 200.)
 
+	offsetVjet_test2.setConstant(True)
+
         modelVjet_test2 = RooErfExpPdf("modelVjet_test2", "error function for V+jets mass", J_mass, constVjet_test2, offsetVjet_test2, widthVjet_test2)
 
-        frVjet_test2 = modelVjet_test2.fitTo(pseudo_data_SB, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))	
-#        frVjet_test2 = modelVjet_test2.fitTo(pseudo_data_SB, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+        frVjet_test2 = modelVjet_test2.fitTo(pseudo_data_SB, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))	
+#        frVjet_test2 = modelVjet_test2.fitTo(pseudo_data_SB, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
-        constVjet_value_fit_pseudo_data_SB = constVjet_test2.getVal()
-        offsetVjet_value_fit_pseudo_data_SB = offsetVjet_test2.getVal()
-        widthVjet_value_fit_pseudo_data_SB = widthVjet_test2.getVal()
+	# fit result
+	print "frVjet_test2.Print():", frVjet_test2.Print("v")
 
-        print "constVjet_value_fit_pseudo_data_SB:", constVjet_value_fit_pseudo_data_SB, "offsetVjet_value_fit_pseudo_data_SB:",offsetVjet_value_fit_pseudo_data_SB,"widthVjet_value_fit_pseudo_data_SB:",widthVjet_value_fit_pseudo_data_SB
 
+	# get error
+	par1_fitresult = frVjet_test2.floatParsFinal().find("constVjet_test2")
+        par2_fitresult = frVjet_test2.floatParsFinal().find("widthVjet_test2")
+	print ""
+	print "fit toy MC in SB only"
+	print "constVjet_test2 (par1):", par1_fitresult.getVal(), " +/-", par1_fitresult.getError()
+        print "widthVjet_test2 (par2):", par2_fitresult.getVal(), " +/-", par2_fitresult.getError()
+#	print "par1 value:",par1_fitresult.getVal()
+#        print "par1 error:",par1_fitresult.getError()
+#        print "par2 value:",par2_fitresult.getVal()
+#        print "par2 error:",par2_fitresult.getError()
+	print ""
+
+	par1_value = par1_fitresult.getVal()
+        par1_error = par1_fitresult.getError()
+
+        par2_value = par2_fitresult.getVal()
+        par2_error = par2_fitresult.getError()
+
+	# get correlation matrix
+	print "correlation(constVjet_test2,widthVjet_test2):",frVjet_test2.correlation("constVjet_test2","widthVjet_test2")
+  	cor = frVjet_test2.correlationMatrix() ;
+#	cor.Print()
+
+	# use defined function to get sigma of fit
+
+	par1_name = "constVjet_test2"
+	par2_name = "widthVjet_test2"
+
+	N_fit_central, fit_error_by_function = Get_Fit_Sigma( J_mass , nPseudo_data_fluc, modelVjet_test2 , frVjet_test2, constVjet_test2, par1_name , widthVjet_test2, par2_name  )
+	print ""
+	print "get fit error by def function"
+	print "N_Fit_SR: ",N_fit_central," +/- ", fit_error_by_function
+
+
+	# plot
         Jmass_frame3 = J_mass.frame(RooFit.Title("test frame3, fit the pseudo-data in SB only"))
         pseudo_data_SB.plotOn(Jmass_frame3)
         modelVjet_test2.plotOn(Jmass_frame3,RooFit.LineColor(4),RooFit.Range("h_reasonable_range"))
 
+
         # ------------------------------------------------------------------- 
         # calculate the Gen_value, the Fit_value and the Bias= ( Fit_value - Gen_value)/Gen_value 
 
-        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass), RooFit.Range("VRrange,SRrange"))
-        print "iGen_value:", iGen_value.getVal()
 
-        iFit_value = modelVjet_test2.createIntegral(RooArgSet(J_mass), RooFit.Range("VRrange,SRrange"))
-        print "iFit_value:", iFit_value.getVal()
-
-        Bias_value = ( iFit_value.getVal() - iGen_value.getVal() ) / iGen_value.getVal()
-        print "Bias_value of VR+SR:", Bias_value
-
-        # --------------
-
-        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass), RooFit.Range("SRrange"))
-        print "iGen_value:", iGen_value.getVal()
-        
-        iFit_value = modelVjet_test2.createIntegral(RooArgSet(J_mass), RooFit.Range("SRrange"))
-        print "iFit_value:", iFit_value.getVal()
+        constVjet_test2.setVal(par1_value)
+        widthVjet_test2.setVal(par2_value)
 
 
-	Bias_value = ( iFit_value.getVal() - iGen_value.getVal() ) / iGen_value.getVal()
-        print "Bias_value of SR:", Bias_value
+        iFit_SR = modelVjet_test2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+        iFit_All = modelVjet_test2.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+        nFit_SR = nPseudo_data_fluc * (  iFit_SR.getVal() / iFit_All.getVal() )
+       
+#	iFit_SR_central = iFit_SR.getVal()
 
-#        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass),RooFit.NormSet(RooArgSet(J_mass)), RooFit.Range("VRrange,SRrange"))
-#	print "iGen_value:", iGen_value.getVal()
+#	print ""
+#	print "check1"
+# 	print "nPseudo_data_fluc:", nPseudo_data_fluc ,"iFit_SR:", iFit_SR.getVal(), "iFit_All: ",iFit_All.getVal() 
+#	print ""
 
-#        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass),RooFit.NormSet(RooArgSet(J_mass)), RooFit.Range("VRrange,SRrange"))
-#        print "iGen_value:", iGen_value.getVal()
+	Bias_value = ( nFit_SR  - nGen_SR_fluc ) / nGen_SR_fluc
 
-#        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass), RooFit.Range("h_reasonable_range"))
-#        print "iGen_value:", iGen_value.getVal()
+#	print "nGen_SR_fluc:", nGen_SR_fluc
+#	print "nFit_SR:",nFit_SR
+#        print "Bias_value of SR:", Bias_value
 
-#        iGen_value = modelVjet_test.createIntegral(RooArgSet(J_mass))
-#        print "iGen_value:", iGen_value.getVal()
+
+        # ------------------------------------------------------------------- 
+        # calculate the pull
+
+	
+        # test to get nFit_SR by RooFormulaVar
+
+	constVjet_test2.setVal(par1_value)
+        widthVjet_test2.setVal(par2_value)
+
+
+	print ""
+	print "use RooFormulaVar"
+        nTotal = RooRealVar("nTotal","for nPseudo_data_fluc", nPseudo_data_fluc, 0., 2*nPseudo_data_fluc)
+        nFit_SR_formula = RooFormulaVar("nFit_SR_formula", "nFit SR formula", "@0 * @1 / @2", RooArgList(nTotal,iFit_SR,iFit_All) )
+
+        nFit_SR_formula_error = nFit_SR_formula.getPropagatedError( frVjet_test2 )
+	print "nFit_SR_formula: ", nFit_SR_formula.getVal(), " +/-", nFit_SR_formula_error
+	print ""
+
 
 
         # ------------------------------------------------------------------- # 
@@ -489,10 +577,13 @@ def alpha(channel):
 	times_to_plot =500
 
 	# starts loop
+	print ""
+	print "starting loop"
 	for times in range(0,times_max):  
 
     		# inside loop
 #		print "times:", times
+
 		if times % 100 == 0 :
 			print "Processing times:", times+1 ,"of", times_max 
 
@@ -511,11 +602,8 @@ def alpha(channel):
 		pseudo_data_SR_fluc = RooDataSet("pseudo_data_SR_fluc", "pseudo_data_SR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135") )
 
 		# calculation of generation 
-                iGen_value_fix = modelVjet_test.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
 
-                iGen_All_fix = modelVjet_test.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
                 nGen_SR_fluc = pseudo_data_SR_fluc.sumEntries()
-#                nGen_SR_fluc = nPseudo_data_fluc * (iGen_value_fix.getVal()/iGen_All_fix.getVal())
 
 #		print "nGen_SR_fluc2:",nGen_SR_fluc2
 #		print "nGen_SR_fluc:",nGen_SR_fluc
@@ -544,25 +632,88 @@ def alpha(channel):
 		offsetVjet_case1.setVal(offsetVjet_value_fit_MC)
 		widthVjet_case1.setVal(widthVjet_value_fit_MC)
 
+		offsetVjet_case1.setConstant(True)
+
 		# make PDF with same function
 		modelVjet_case1 = RooErfExpPdf("modelVjet_case1", "error function for V+jets mass", J_mass, constVjet_case1, offsetVjet_case1, widthVjet_case1)
 
 		# fit
-        	frVjet_case1 = modelVjet_case1.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+        	frVjet_case1 = modelVjet_case1.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+                if times == times_to_plot : modelVjet_case1.plotOn(Jmass_frame4,RooFit.LineColor(2),RooFit.Range("h_reasonable_range"))
+
+
 
 		# calculate the bias and pull
+
+		# ------- bias
         	iFit_SR_case1 = modelVjet_case1.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
                 iFit_All_case1 = modelVjet_case1.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
                 nFit_SR_case1 = nPseudo_data_fluc * (iFit_SR_case1.getVal()/iFit_All_case1.getVal())
 
+
 		Bias_value_case1 = ( nFit_SR_case1 - nGen_SR_fluc )/ nGen_SR_fluc
 		h_Bias_case1.Fill(Bias_value_case1)
 
-		pull_value_case1 = ( nFit_SR_case1 - nGen_SR_fluc )/ sigma_Gen_fluc
+		# ------- pull
+
+		# get error by def fn
+        	par1_name = "constVjet_case1"
+        	par2_name = "widthVjet_case1"
+
+		N_fit_central, fit_error_by_function = Get_Fit_Sigma( J_mass , nPseudo_data_fluc, modelVjet_case1 , frVjet_case1, constVjet_case1, par1_name , widthVjet_case1, par2_name  )
+#		print ""
+#		print "get error by function"
+#		print "N_Fit_SR: ", N_fit_central," +/- ", fit_error_by_function
+#                print ""
+
+
+#		sigma_Fit_case1 = fit_error_by_function
+
+
+                # get parameter
+                par1_fitresult = frVjet_case1.floatParsFinal().find(par1_name)
+                par2_fitresult = frVjet_case1.floatParsFinal().find(par2_name)
+
+                par1_value = par1_fitresult.getVal()
+                par1_error = par1_fitresult.getError()
+
+                par2_value = par2_fitresult.getVal()
+                par2_error = par2_fitresult.getError()
+
+
+        	# get nFit_SR by RooFormulaVar
+
+        	constVjet_case1.setVal(par1_value)
+        	widthVjet_case1.setVal(par2_value)
+
+        	nTotal = RooRealVar("nTotal","for nPseudo_data_fluc", nPseudo_data_fluc, 0., 2*nPseudo_data_fluc)
+        	nFit_SR_formula = RooFormulaVar("nFit_SR_formula", "nFit SR formula", "@0 * @1 / @2", RooArgList(nTotal,iFit_SR_case1,iFit_All_case1) )
+
+        	nFit_SR_formula_error = nFit_SR_formula.getPropagatedError( frVjet_case1 )
+
+#		print ""
+#		print "get error by RooFormulaVar"
+#		print "N_Fit_SR", nFit_SR_formula.getVal() ," +/- ", nFit_SR_formula_error 
+#                print ""
+
+		sigma_Fit_case1 = nFit_SR_formula_error
+
+                # pull 
+
+#                sigma_Fit_case1 = math.sqrt( nFit_SR_case1 )
+                pull_value_case1 = ( nFit_SR_case1 - nGen_SR_fluc )/ sigma_Fit_case1
+
+
 		h_Pull_case1.Fill( pull_value_case1 )
 
-		# plot PDF used to fit (optional)
-                if times == times_to_plot : modelVjet_case1.plotOn(Jmass_frame4,RooFit.LineColor(2),RooFit.Range("h_reasonable_range"))
+
+
+
+
+
+
+
 
 		# ---------------------------------
 		# case 2, fit with another function
@@ -570,9 +721,9 @@ def alpha(channel):
 
 		# reset parameter
 		constVjet_case2.setVal(constVjet_value_case2 )
-		a0Vjet_case2.setVal(a0Vjet_value_case2 )
-		a1Vjet_case2.setVal( a1Vjet_value_case2)
-		a2Vjet_case2.setVal(a2Vjet_value_case2 )
+		a0Vjet_case2.setVal( a0Vjet_value_case2 )
+		a1Vjet_case2.setVal( a1Vjet_value_case2 )
+		a2Vjet_case2.setVal( a2Vjet_value_case2 )
 
 		# make PDF with different function   	 
 #		modelVjet_case2 = RooExponential("modelVjet_case2", "exp for V+jets mass", J_mass, constVjet_case2)
@@ -580,7 +731,7 @@ def alpha(channel):
 		modelVjet_case2 = RooGenericPdf("modelVjet_case2", "powerlaw for X mass", "@0^@1", RooArgList(J_mass, a0Vjet_case2))
 
 		# fit
-                frVjet_case2 = modelVjet_case2.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+                frVjet_case2 = modelVjet_case2.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
                 # calculate the bias and pull
 
@@ -671,8 +822,28 @@ def alpha(channel):
         Jmass_frame5.GetYaxis().SetTitleOffset(1.6)
         Jmass_frame5.Draw()
 
+	latex = TLatex()
+	latex.SetNDC()
+    	latex.SetTextSize(0.04)
+    	latex.SetTextAlign(31)
+    	latex.SetTextAlign(11)
+
+        c_test6.cd(1)
+	latex.DrawLatex(0.25, 0.87, "case 1")
+        c_test6.cd(2)
+        latex.DrawLatex(0.25, 0.87, "case 2")
+
         c_test6.SaveAs(Save_Dir+"/"+"plot_one_time_fit_of_case1_case2.pdf")
 
+        # -----------------------------
+        # save histogram in ROOT file
+
+	myFile = TFile("bias_and_pull.root","recreate");
+	h_Bias_case1.Write()
+	h_Pull_case1.Write()
+
+        h_Bias_case2.Write()
+        h_Pull_case2.Write()
 
 #    else
 #	print "not XZhnnb channel"
@@ -1000,6 +1171,112 @@ def drawPlot(name, channel, variable, model, dataset, binning, fitRes=None, reg=
     #c.SaveAs(PLOTDIR+"/"+channel+"/"+name+".root")
     if VERBOSE: raw_input("Press Enter to continue...")
     # ======   END PLOT   ======
+
+
+
+def Get_Fit_Sigma( J_mass ,N_total_events , model_PDF , fit_result , par1 , par1_name, par2, par2_name): 
+
+    jetMassArg = RooArgSet(J_mass)
+
+    # get parameter
+    par1_fitresult = fit_result.floatParsFinal().find(par1_name)
+    par2_fitresult = fit_result.floatParsFinal().find(par2_name)
+
+    par1_value = par1_fitresult.getVal()
+    par1_error = par1_fitresult.getError()
+
+    par2_value = par2_fitresult.getVal()
+    par2_error = par2_fitresult.getError()
+
+    # par plus, minus
+    par1_plus = par1_value + par1_error
+    par1_minus = par1_value - par1_error  
+
+    par2_plus = par2_value + par2_error
+    par2_minus = par2_value - par2_error
+
+
+    # get correlation matrix
+    cor = fit_result.correlationMatrix() ;
+        
+    # get N_fit_central value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_All_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    N_fit_central = N_total_events * (  iFit_SR_error.getVal() / iFit_All_error.getVal() )
+
+    # get N_fit_par1_plus value
+
+    par1.setVal(par1_plus )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_All_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    N_fit_par1_plus = N_total_events * (  iFit_SR_error.getVal() / iFit_All_error.getVal() )
+
+    # get N_fit_par1_minus value
+
+    par1.setVal(par1_minus )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_All_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    N_fit_par1_minus = N_total_events * (  iFit_SR_error.getVal() / iFit_All_error.getVal() )
+
+    # get N_fit_par2_plus value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_plus )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_All_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    N_fit_par2_plus = N_total_events * (  iFit_SR_error.getVal() / iFit_All_error.getVal() )
+
+    # get N_fit_par2_minus value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_minus )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_All_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    N_fit_par2_minus = N_total_events * (  iFit_SR_error.getVal() / iFit_All_error.getVal() )
+
+    # get shift
+
+    nFit_SR_shift_par1 = max( abs( N_fit_par1_plus - N_fit_central ) , abs( N_fit_central - N_fit_par1_minus) )
+    nFit_SR_shift_par2 = max( abs( N_fit_par2_plus - N_fit_central ) , abs( N_fit_central - N_fit_par2_minus) )
+
+    # row matirx * correlation matrix * column matrix
+
+    rowM = TMatrixD(1,2)
+    rowM[0][0] = nFit_SR_shift_par1
+    rowM[0][1] = nFit_SR_shift_par2
+
+    colM = TMatrixD(2,1)
+    colM[0][0] = nFit_SR_shift_par1
+    colM[1][0] = nFit_SR_shift_par2
+
+#    cor.Print()
+#    rowM.Print()
+#    colM.Print()
+
+    resultM = rowM * ( cor * colM )
+    sigma_Fit = math.sqrt( pow( resultM(0,0) , 2 ) )
+    return (N_fit_central,sigma_Fit)
+
+
+
+
+    # ======   END Get_Fit_Sigma  ======
+
 
 
 """
