@@ -3,18 +3,24 @@
 import os, sys, getopt, multiprocessing
 import copy, math
 from array import array
-from ROOT import gROOT, gSystem, gStyle, gRandom
+from ROOT import gROOT, gSystem, gStyle, gRandom, gPad
 from ROOT import TFile, TChain, TTree, TCut, TH1F, TH2F, THStack, TGraph, TGaxis
-from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText
+from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText, TH1D, TFile, TMatrixDSym 
+from ROOT import TMatrixD
+from ROOT import TColor 
+
 
 # Import PDF library and PDF diagonalizer
 gSystem.Load("PDFs/HWWLVJRooPdfs_cxx.so")
 gSystem.Load("PDFs/PdfDiagonalizer_cc.so")
+#gSystem.Load("../jacopo_codes/PDFs/HWWLVJRooPdfs_cxx.so")
+#gSystem.Load("../jacopo_codes/PDFs/PdfDiagonalizer_cc.so")
 
 from ROOT import RooFit, RooRealVar, RooDataHist, RooDataSet, RooAbsData, RooAbsReal, RooAbsPdf, RooPlot, RooBinning, RooCategory, RooSimultaneous, RooArgList, RooArgSet, RooWorkspace, RooMsgService
 from ROOT import RooFormulaVar, RooGenericPdf, RooGaussian, RooExponential, RooPolynomial, RooChebychev, RooBreitWigner, RooCBShape, RooExtendPdf, RooAddPdf, RooProdPdf, RooNumConvPdf, RooFFTConvPdf
 from ROOT import PdfDiagonalizer, RooAlphaExp, RooErfExpPdf, Roo2ExpPdf, RooAlpha42ExpPdf, RooExpNPdf, RooAlpha4ExpNPdf, RooExpTailPdf, RooAlpha4ExpTailPdf, RooAlpha
 
+sys.path.append("../jacopo_codes/tools")
 from tools.utils import *
 
 import optparse
@@ -29,6 +35,23 @@ parser.add_option("-v", "--verbose", action="store_true", default=False, dest="v
 (options, args) = parser.parse_args()
 if options.bash: gROOT.SetBatch(True)
 
+
+#####  test TMatrixD #####
+
+print "Hellooooooooooo"
+
+#m = TMatrixD(5,5)
+#print m(2,2)
+#m(2,2) = 5.4
+#print m(2,2)
+
+m = TMatrixD(5,5)
+print m[2][2]
+m[2][2] = 5.4
+print m[2][2]
+
+
+
 ########## SETTINGS ##########
 
 #gStyle.SetOptStat(0)
@@ -36,7 +59,7 @@ gStyle.SetOptTitle(0)
 gStyle.SetPadTopMargin(0.06)
 gStyle.SetPadRightMargin(0.05)
 
-NTUPLEDIR   = "ntuples/"
+NTUPLEDIR   = "../jacopo_codes/ntuples/"
 PLOTDIR     = "plotsAlpha/"
 RATIO       = 4
 SHOWERR     = True
@@ -102,7 +125,7 @@ def alpha(channel):
     elif nLept == 1:
         treeName = 'WCR'
         signName = 'XWh'
-        colorVjet = sample['WJetsToLNu']['linecolor']
+        #colorVjet = sample['WJetsToLNu']['linecolor']
         triName = "HLT_Ele" if nElec > 0 else "HLT_Mu"
         leptCut = "isWtoEN" if nElec > 0 else "isWtoMN"
         topVeto = selection["TopVetocut"]
@@ -169,7 +192,7 @@ def alpha(channel):
     
     # Define the RooArgSet which will include all the variables defined before
     # there is a maximum of 9 variables in the declaration, so the others need to be added with 'add'
-    variables = RooArgSet(X_mass, J_mass, CSV1, CSV2, nBtag, CSVTop)
+    variables = RooArgSet(X_mass, J_mass, CSV1, CSV2, nBtag, CSVTop) 
     variables.add(RooArgSet(isZtoEE, isZtoMM, isWtoEN, isWtoMN, weight))
     
     # Define the ranges in fatJetMass - these will be used to define SB and SR
@@ -211,21 +234,27 @@ def alpha(channel):
     treeTop  = TChain(treeName)
 #    treeSign = {}
 #    nevtSign = {}
+
     
     # Read data
+    print "read data start"
     pd = getPrimaryDataset(triName)
     if len(pd)==0: raw_input("Warning: Primary Dataset not recognized, continue?")
     for i, s in enumerate(pd): treeData.Add(NTUPLEDIR + s + ".root")
+
     
     # Read V+jets backgrounds
+    print "read V+jet start"
     for i, s in enumerate(["WJetsToLNu_HT", "DYJetsToNuNu_HT", "DYJetsToLL_HT"]):
         for j, ss in enumerate(sample[s]['files']): treeVjet.Add(NTUPLEDIR + ss + ".root")
     
     # Read VV backgrounds
+    print "read VV start"
     for i, s in enumerate(["VV"]):
         for j, ss in enumerate(sample[s]['files']): treeVV.Add(NTUPLEDIR + ss + ".root")
     
     # Read Top backgrounds
+    print "read Top start"
     for i, s in enumerate(["ST", "TTbar"]):
         for j, ss in enumerate(sample[s]['files']): treeTop.Add(NTUPLEDIR + ss + ".root")
         
@@ -233,53 +262,71 @@ def alpha(channel):
     treeMC.Add(treeVjet)
     treeMC.Add(treeVV)
     treeMC.Add(treeTop)
+
+
+#    print "prepare SB dataset"
     
     # create a dataset to host data in sideband (using this dataset we are automatically blind in the SR!)
-    setDataSB = RooDataSet("setDataSB", "setDataSB", variables, RooFit.Cut(SBcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
-    setDataLSB = RooDataSet("setDataLSB", "setDataLSB", variables, RooFit.Import(setDataSB), RooFit.Cut(LSBcut), RooFit.WeightVar(weight))
-    setDataHSB = RooDataSet("setDataHSB", "setDataHSB", variables, RooFit.Import(setDataSB), RooFit.Cut(HSBcut), RooFit.WeightVar(weight))
+#    setDataSB = RooDataSet("setDataSB", "setDataSB", variables, RooFit.Cut(SBcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
+#    setDataLSB = RooDataSet("setDataLSB", "setDataLSB", variables, RooFit.Import(setDataSB), RooFit.Cut(LSBcut), RooFit.WeightVar(weight))
+#    setDataHSB = RooDataSet("setDataHSB", "setDataHSB", variables, RooFit.Import(setDataSB), RooFit.Cut(HSBcut), RooFit.WeightVar(weight))
+
+#    print "prepare SR dataset"
     
     # Observed data (WARNING, BLIND!)
-    setDataSR = RooDataSet("setDataSR", "setDataSR", variables, RooFit.Cut(SRcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
-    setDataVR = RooDataSet("setDataVR", "setDataVR", variables, RooFit.Cut(VRcut), RooFit.WeightVar(weight), RooFit.Import(treeData)) # Observed in the VV mass, just for plotting purposes
+#    setDataSR = RooDataSet("setDataSR", "setDataSR", variables, RooFit.Cut(SRcut), RooFit.WeightVar(weight), RooFit.Import(treeData))
+#    setDataVR = RooDataSet("setDataVR", "setDataVR", variables, RooFit.Cut(VRcut), RooFit.WeightVar(weight), RooFit.Import(treeData)) # Observed in the VV mass, just for plotting purposes
     
+
+    print "prepare MC dataset"
+
     # same for the bkg datasets from MC, where we just apply the base selections (not blind)
     setVjet = RooDataSet("setVjet", "setVjet", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeVjet))
     setVjetSB = RooDataSet("setVjetSB", "setVjetSB", variables, RooFit.Import(setVjet), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
     setVjetSR = RooDataSet("setVjetSR", "setVjetSR", variables, RooFit.Import(setVjet), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
-    setVV = RooDataSet("setVV", "setVV", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeVV))
-    setVVSB = RooDataSet("setVVSB", "setVVSB", variables, RooFit.Import(setVV), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
-    setVVSR = RooDataSet("setVVSR", "setVVSR", variables, RooFit.Import(setVV), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
-    setTop = RooDataSet("setTop", "setTop", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeTop))
-    setTopSB = RooDataSet("setTopSB", "setTopSB", variables, RooFit.Import(setTop), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
-    setTopSR = RooDataSet("setTopSR", "setTopSR", variables, RooFit.Import(setTop), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+
+    print "finish Vjet dataset"
+
+
+#    setVV = RooDataSet("setVV", "setVV", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeVV))
+#    setVVSB = RooDataSet("setVVSB", "setVVSB", variables, RooFit.Import(setVV), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
+#    setVVSR = RooDataSet("setVVSR", "setVVSR", variables, RooFit.Import(setVV), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+
+#    print "finish VV dataset"
+
+#    setTop = RooDataSet("setTop", "setTop", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeTop))
+#    setTopSB = RooDataSet("setTopSB", "setTopSB", variables, RooFit.Import(setTop), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
+#    setTopSR = RooDataSet("setTopSR", "setTopSR", variables, RooFit.Import(setTop), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
+
+#    print "finish Top dataset"
+
     
-    print "  Data events SB: %.2f" % setDataSB.sumEntries()
+#    print "  Data events SB: %.2f" % setDataSB.sumEntries()
     print "  V+jets entries: %.2f" % setVjet.sumEntries()
-    print "  VV, VH entries: %.2f" % setVV.sumEntries()
-    print "  Top,ST entries: %.2f" % setTop.sumEntries()
+#    print "  VV, VH entries: %.2f" % setVV.sumEntries()
+#    print "  Top,ST entries: %.2f" % setTop.sumEntries()
     
     
     # the relative normalization of the varius bkg is taken from MC by counting all the events in the full fatJetMass range
     #coef = RooRealVar("coef", "coef", setVV.sumEntries()/setVjet.sumEntries(),0.,1.)
-    coef_VV_Vjet = RooRealVar("coef2_1", "coef2_1", setVV.sumEntries()/setVjet.sumEntries(), 0., 1.)
-    coef_Top_VVVjet = RooRealVar("coef3_21", "coef3_21", setTop.sumEntries()/(setVjet.sumEntries()+setVV.sumEntries()),0.,1.);
-    coef_VV_Vjet.setConstant(True)
-    coef_Top_VVVjet.setConstant(True)
+#    coef_VV_Vjet = RooRealVar("coef2_1", "coef2_1", setVV.sumEntries()/setVjet.sumEntries(), 0., 1.)
+#    coef_Top_VVVjet = RooRealVar("coef3_21", "coef3_21", setTop.sumEntries()/(setVjet.sumEntries()+setVV.sumEntries()),0.,1.);
+#    coef_VV_Vjet.setConstant(True)
+#    coef_Top_VVVjet.setConstant(True)
     
     # Define entries
     entryVjet = RooRealVar("entryVjets",  "V+jets normalization", setVjet.sumEntries(), 0., 1.e6)
-    entryVV = RooRealVar("entryVV",  "VV normalization", setVV.sumEntries(), 0., 1.e6)
-    entryTop = RooRealVar("entryTop",  "Top normalization", setTop.sumEntries(), 0., 1.e6)
+#    entryVV = RooRealVar("entryVV",  "VV normalization", setVV.sumEntries(), 0., 1.e6)
+#    entryTop = RooRealVar("entryTop",  "Top normalization", setTop.sumEntries(), 0., 1.e6)
     
-    entrySB = RooRealVar("entrySB",  "Data SB normalization", setDataSB.sumEntries(SBcut), 0., 1.e6)
-    entrySB.setError(math.sqrt(entrySB.getVal()))
+#    entrySB = RooRealVar("entrySB",  "Data SB normalization", setDataSB.sumEntries(SBcut), 0., 1.e6)
+#    entrySB.setError(math.sqrt(entrySB.getVal()))
     
-    entryLSB = RooRealVar("entryLSB",  "Data LSB normalization", setDataSB.sumEntries(LSBcut), 0., 1.e6)
-    entryLSB.setError(math.sqrt(entryLSB.getVal()))
+#    entryLSB = RooRealVar("entryLSB",  "Data LSB normalization", setDataSB.sumEntries(LSBcut), 0., 1.e6)
+#    entryLSB.setError(math.sqrt(entryLSB.getVal()))
 
-    entryHSB = RooRealVar("entryHSB",  "Data HSB normalization", setDataSB.sumEntries(HSBcut), 0., 1.e6)
-    entryHSB.setError(math.sqrt(entryHSB.getVal()))
+#    entryHSB = RooRealVar("entryHSB",  "Data HSB normalization", setDataSB.sumEntries(HSBcut), 0., 1.e6)
+#    entryHSB.setError(math.sqrt(entryHSB.getVal()))
     
     #*******************************************************#
     #                                                       #
@@ -294,6 +341,174 @@ def alpha(channel):
     
     # Set RooArgSets once for all, see https://root.cern.ch/phpBB3/viewtopic.php?t=11758
     jetMassArg = RooArgSet(J_mass)
+
+    ##############################
+    #                            #
+    #    Yu-hsiang test region   #
+    #                            #
+    ##############################
+
+    # test it in the channel "XZhnnb"
+    print "the channel is", channel 
+    if channel == "XZhnnb":
+
+	# -------------------------------------------------------------------    
+    	# draw the setVjet
+    	Jmass_frame = J_mass.frame(RooFit.Title("test frame"))
+    	setVjet.plotOn(Jmass_frame)    
+
+        # ------------------------------------------------------------------- 
+    	# use a PDF to fit the MC dataset
+    	print "fitFuncVjet is", fitFuncVjet 
+
+        constVjet_value_initial = -0.020
+	offsetVjet_value_initial = 30.
+	widthVjet_value_initial = 100.
+
+    	constVjet_test   = RooRealVar("constVjet_test",   "slope of the exp", constVjet_value_initial , -1.,   0.)
+    	offsetVjet_test  = RooRealVar("offsetVjet_test",  "offset of the erf", offsetVjet_value_initial,   -50., 200.)
+    	widthVjet_test   = RooRealVar("widthVjet_test",   "width of the erf",  widthVjet_value_initial,     1., 200.)
+
+	offsetVjet_test.setConstant(True)
+
+        modelVjet_test = RooErfExpPdf("modelVjet_test", "error function for V+jets mass", J_mass, constVjet_test, offsetVjet_test, widthVjet_test)
+
+
+#	minimizer_choose = "Minuit2"
+        minimizer_choose = "Minuit"
+
+        frVjet_test = modelVjet_test.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+	constVjet_test.setConstant(True)
+        offsetVjet_test.setConstant(True)
+	widthVjet_test.setConstant(True)
+
+        par1_fitresult = frVjet_test.floatParsFinal().find("constVjet_test")
+        par2_fitresult = frVjet_test.floatParsFinal().find("widthVjet_test")
+	print ""
+	print "fit from MC" 
+        print "par1 value:",par1_fitresult.getVal()
+        print "par1 error:",par1_fitresult.getError()
+        print "par2 value:",par2_fitresult.getVal()
+        print "par2 error:",par2_fitresult.getError()
+	print ""
+
+
+	list_of_fit_MC_par_value = []
+
+	list_of_fit_MC_par_value.append(constVjet_test.getVal()   ) 
+        list_of_fit_MC_par_value.append(offsetVjet_test.getVal() )
+        list_of_fit_MC_par_value.append(widthVjet_test.getVal() )
+
+
+
+        modelVjet_test.plotOn(Jmass_frame,RooFit.LineColor(4))
+
+        # ------------------------------------------------------------------- 
+
+        nPseudo_data = setVjet.sumEntries()
+
+
+        # ------------------------------------------------------------------- # 
+        # ------------------------------------------------------------------- #
+        #        repeat thousand times to see bias distribution               #
+        # ------------------------------------------------------------------- #
+        # ------------------------------------------------------------------- #
+
+
+        h_Bias_case1 = TH1D("h_Bias_case1","h_Bias case1",40,-1,1);
+        h_Pull_case1 = TH1D("h_Pull_case1","h_Pull case1",40,-8,8);
+#        h_Pull_case1 = TH1D("h_Pull_case1","h_Pull case1",35,-7,7);
+#        h_Pull_case1 = TH1D("h_Pull_case1","h_Pull case1",20,-8,8);
+
+
+        Jmass_frame4 = J_mass.frame(RooFit.Title("frame for case 1"))
+
+
+        times_max = 1000
+	times_to_plot =500
+
+	# starts loop
+	print ""
+	print "starting loop"
+
+	for times in range(0,times_max):  
+
+    		# inside loop
+#		print "times:", times
+
+		if times % 100 == 0 :
+			print "Processing times:", times+1 ,"of", times_max
+ 
+		plot_flag =0
+		if times_to_plot == times: plot_flag = 1   
+
+
+		# try to use def fn to do Gen,Fit,BiasPull
+		function_name = "ERFEXP"
+
+		bias ,pull = Gen_Fit_BiasPull(J_mass, nPseudo_data  , modelVjet_test, list_of_fit_MC_par_value , function_name ,Jmass_frame4 ,plot_flag )
+
+
+                h_Bias_case1.Fill( bias )
+                h_Pull_case1.Fill( pull )
+
+
+        # ------------------------------------------------------------------- 
+	# plot and save
+        Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study"
+
+        c_test = TCanvas("test","test draw",800,600)
+        c_test.cd()
+        Jmass_frame.Draw()
+        c_test.SaveAs(Save_Dir+"/"+"VJet_MC_fit_get_shape.pdf")
+
+
+        # -----------------------------
+	# case 1 figure
+
+        c_test4 = TCanvas("test4","test draw 4",800,400)
+	c_test4.Divide(2)
+
+	c_test4.cd(1)
+	gPad.SetLeftMargin(0.15)
+	h_Bias_case1.GetYaxis().SetTitleOffset(1.6)
+	h_Bias_case1.Draw()
+
+	c_test4.cd(2)
+	gPad.SetLeftMargin(0.15)
+	h_Pull_case1.GetYaxis().SetTitleOffset(1.6)
+	h_Pull_case1.Draw() 
+
+        c_test4.SaveAs(Save_Dir+"/"+"h_Bias_and_pull_case1.pdf")
+
+	
+        # -----------------------------
+        # plot one time fit of case1  
+
+        c_test6 = TCanvas("test6","test draw 6",800,600)
+
+        gPad.SetLeftMargin(0.15)
+        Jmass_frame4.GetYaxis().SetTitleOffset(1.6)
+        Jmass_frame4.Draw()
+
+
+        c_test6.SaveAs(Save_Dir+"/"+"plot_one_time_fit_of_pseudo_data_SB.pdf")
+
+        # -----------------------------
+        # save histogram in ROOT file
+
+	myFile = TFile("bias_and_pull.root","recreate");
+	h_Bias_case1.Write()
+	h_Pull_case1.Write()
+
+
+#    else
+#	print "not XZhnnb channel"
+
+    ###################
+
+"""
     
     #*******************************************************#
     #                                                       #
@@ -522,48 +737,14 @@ def alpha(channel):
     bkgNorm             = entrySB.getVal() + SRyield.getVal() + VRyield.getVal()
     bkgYield_eig_norm   = RooRealVar("predSR_eig_norm", "expected yield in SR", bkgYield, 0., 1.e6)
     bkgYieldExt         = HSByield.getVal()
-
-    print "start ploting the stack plot"    
+    
     drawPlot("JetMass", channel, J_mass, model, setDataSB, binsJmass, None, None, "", bkgNorm, True)
 
-    # --- Yuhsiang test plot ---  
-
-    Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/my_test_plot"
-    test_frame = J_mass.frame(RooFit.Title("test frame"))    
-
-#    setDataSB.plotOn(test_frame)    
-#    model.plotOn(test_frame)
-
-    # for here 1
-    binning = binsJmass
-    cut = ""
-    isData = True
-    setDataSB.plotOn(test_frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
-
-    # for here 4
-    norm = bkgNorm
-    color = 418
-    pre = "model"
-    post = ""
-
-    model.plotOn(test_frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
-    model.plotOn(test_frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.Components(pre+"VV"+post+","+pre+"Top"+post), RooFit.LineColor(798), RooFit.DrawOption("F"), RooFit.FillColor(798), RooFit.FillStyle(1001))
-    model.plotOn(test_frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.Components(pre+"VV"+post), RooFit.LineColor(602), RooFit.DrawOption("F"), RooFit.FillColor(602), RooFit.FillStyle(1001))
-
-    # for here 8
-    setDataSB.plotOn(test_frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
-
-
-    c_test = TCanvas("test","test draw",800,600)
-    c_test.cd()
-    test_frame.Draw()
-    c_test.SaveAs(Save_Dir+"/"+"test_to_plot_dataSB_and_several_background.pdf")
-
-
-    # --------------------------
-
+    
     print channel, "normalization = %.3f +/- %.3f, observed = %.0f" % (bkgYield, bkgYield_error, setDataSR.sumEntries() if not BLIND else -1)
     if VERBOSE: raw_input("Press Enter to continue...")
+
+"""
     
     #exit()
     # ====== CONTROL VALUE ======
@@ -595,70 +776,34 @@ def drawPlot(name, channel, variable, model, dataset, binning, fitRes=None, reg=
     frame = variable.frame()
     setHistStyle(frame)
     # Plot Data
-    if dataset is not None: 
-	dataset.plotOn(frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
+    if dataset is not None: dataset.plotOn(frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
     # dataset.plotOn(frame, RooFit.Binning(binning), RooFit.DataError(RooAbsData.Poisson), RooFit.Range("LSBrange,HSBrange"))
     # Plot models
     # Case 1: multifits
-    	print "here 1"
-
-
     if reg is not None:
         model.plotOn(frame, RooFit.Slice(reg, cat), RooFit.ProjWData(RooArgSet(reg), dataset), RooFit.LineColor(color)) #, RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001), RooFit.VLines()
         res = frame.pullHist()
         model.plotOn(frame, RooFit.Slice(reg, cat), RooFit.ProjWData(RooArgSet(reg), dataset), RooFit.Components(pre+"VV"+post+","+pre+"Top"+post), RooFit.LineColor(798)) # , RooFit.DrawOption("F"), RooFit.FillColor(798), RooFit.FillStyle(1001), RooFit.VLines()
         model.plotOn(frame, RooFit.Slice(reg, cat), RooFit.ProjWData(RooArgSet(reg), dataset), RooFit.Components(pre+"VV"+post), RooFit.LineColor(602)) # , RooFit.DrawOption("F"), RooFit.FillColor(602), RooFit.FillStyle(1001), RooFit.VLines()
-    	print "here 2"
-
-
-        if SHOWERR and fitRes is not None: 
-		model.plotOn(frame, RooFit.Slice(reg, cat), RooFit.ProjWData(RooArgSet(reg), dataset), RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
+        if SHOWERR and fitRes is not None: model.plotOn(frame, RooFit.Slice(reg, cat), RooFit.ProjWData(RooArgSet(reg), dataset), RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
     # Case 2: normalization is already set
-        	print "here 3"
-
-
     elif norm>0:
-        print "here 4"
-	print "here 4 color:", color
-        print "pre: ", pre
-	print "post: ", post
         model.plotOn(frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
         res = frame.pullHist()
         #model.plotOn(frame, RooFit.Range("h_reasonable_range"), RooFit.Range("LSBrange,HSBrange"), RooFit.LineColor(colorVjet), RooFit.FillStyle(3003), RooFit.FillColor(colorVjet))
         model.plotOn(frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.Components(pre+"VV"+post+","+pre+"Top"+post), RooFit.LineColor(798), RooFit.DrawOption("F"), RooFit.FillColor(798), RooFit.FillStyle(1001))
         model.plotOn(frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.Components(pre+"VV"+post), RooFit.LineColor(602), RooFit.DrawOption("F"), RooFit.FillColor(602), RooFit.FillStyle(1001))
-
-
-        if SHOWERR and fitRes is not None: 
-		model.plotOn(frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
-    		print "here 5"
-
-
+        if SHOWERR and fitRes is not None: model.plotOn(frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
     # Case 2: basic scenario
     else:
         model.plotOn(frame, RooFit.LineColor(color))
         res = frame.pullHist()
-    	print "here 6"
-        if SHOWERR and fitRes is not None: 
-		model.plotOn(frame, RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
-    		print "here 7"
-
-
+        if SHOWERR and fitRes is not None: model.plotOn(frame, RooFit.VisualizeError(fitRes, 1, False), RooFit.FillColor(1), RooFit.FillStyle(3003))
     # Replot data
-    if dataset is not None: 
-	dataset.plotOn(frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
+    if dataset is not None: dataset.plotOn(frame, RooFit.Binning(binning), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
 
-    	print "here 8"
-
-
-    if SHOWERR and fitRes is not None: 
-	model.paramOn(frame, RooFit.Layout(0.5, 0.95, 0.8))
-    	print "here 9"
-
+    if SHOWERR and fitRes is not None: model.paramOn(frame, RooFit.Layout(0.5, 0.95, 0.8))
     frame.GetXaxis().SetRangeUser(XBINMIN, XBINMAX)
-
-
-
     if logscale: 
         frame.SetMaximum(frame.GetMaximum()*2)
         frame.SetMinimum(max(frame.SetMinimum(), 2.e-3))
@@ -684,6 +829,230 @@ def drawPlot(name, channel, variable, model, dataset, binning, fitRes=None, reg=
     #c.SaveAs(PLOTDIR+"/"+channel+"/"+name+".root")
     if VERBOSE: raw_input("Press Enter to continue...")
     # ======   END PLOT   ======
+
+
+def Gen_Fit_BiasPull( J_mass, nPseudo_data , modelVjet_fit_MC, list_of_fit_MC_par_value , function_name , Jmass_frame4 ,plot_flag ):
+
+    # --------------------------------
+    # generate pseudo-data
+
+    nPseudo_data_fluc = gRandom.Poisson( nPseudo_data )
+
+    pseudo_data_fluc = modelVjet_fit_MC.generate(RooArgSet(J_mass),nPseudo_data )
+#    pseudo_data_fluc = modelVjet_fit_MC.generate(RooArgSet(J_mass),nPseudo_data_fluc )
+
+    # Sideband(SB) dataset                
+    pseudo_data_SB_fluc = RooDataSet("pseudo_data_SB_fluc", "pseudo_data_SB_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
+
+    # signal region(SR) dataset
+    pseudo_data_SR_fluc = RooDataSet("pseudo_data_SR_fluc", "pseudo_data_SR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135") )
+
+    # number of event in SR, SB      
+    nGen_SR_fluc = pseudo_data_SR_fluc.sumEntries()
+    nGen_SB_fluc = pseudo_data_SB_fluc.sumEntries()
+
+    # Plot
+    if plot_flag ==1: 
+	pseudo_data_fluc.plotOn(Jmass_frame4)  
+	modelVjet_fit_MC.plotOn(Jmass_frame4,RooFit.LineColor(4))
+	pseudo_data_SB_fluc.plotOn(Jmass_frame4,RooFit.LineColor(3))
+
+
+    # --------------------------------
+    # fit pseudo-data in SB only
+
+    if function_name == "ERFEXP":
+
+    	constVjet_fit_data   = RooRealVar("constVjet_fit_data",   "slope of the exp", list_of_fit_MC_par_value[0] ,  -1.,   0.)
+        offsetVjet_fit_data  = RooRealVar("offsetVjet_fit_data",  "offset of the erf",list_of_fit_MC_par_value[1] , -50., 200.)
+        widthVjet_fit_data   = RooRealVar("widthVjet_fit_data",   "width of the erf", list_of_fit_MC_par_value[2] ,   1., 200.)
+
+	offsetVjet_fit_data.setConstant(True)
+
+	modelVjet_fit_data = RooErfExpPdf("modelVjet_fit_data", "error function for V+jets mass", J_mass, constVjet_fit_data, offsetVjet_fit_data, widthVjet_fit_data)
+
+    # fit
+
+#   minimizer_choose = "Minuit2"
+    minimizer_choose = "Minuit"
+
+    frVjet_fit_data = modelVjet_fit_data.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer(minimizer_choose), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+    if plot_flag ==1:  modelVjet_fit_data.plotOn(Jmass_frame4,RooFit.LineColor(2),RooFit.Range("h_reasonable_range"))
+
+    # get parameter
+    par1_name = "constVjet_fit_data"
+    par2_name = "widthVjet_fit_data"
+
+    par1_fitresult = frVjet_fit_data.floatParsFinal().find(par1_name)
+    par2_fitresult = frVjet_fit_data.floatParsFinal().find(par2_name)
+
+    par1_value = par1_fitresult.getVal()
+    par1_error = par1_fitresult.getError()
+
+    par2_value = par2_fitresult.getVal()
+    par2_error = par2_fitresult.getError()
+
+#    print "par value and error"
+#    print "constVjet_fit_data: ", par1_value," +/-", par1_error
+#    print "widthVjet_fit_data: ", par2_value," +/-", par2_error
+
+    # --------------------------------
+    # Bias & Pull
+
+    # get error by def fn
+    N_fit_central, fit_error_by_function = Get_Fit_Sigma( J_mass , nGen_SB_fluc , modelVjet_fit_data , frVjet_fit_data, constVjet_fit_data, par1_name , widthVjet_fit_data, par2_name  )
+
+#    print "get error by function"
+#    print "N_Fit_SR: ", N_fit_central," +/- ", fit_error_by_function
+#    print ""
+
+    # get error by RooFormulaVar
+
+    constVjet_fit_data.setVal(par1_value)
+    widthVjet_fit_data.setVal(par2_value)
+
+    jetMassArg = RooArgSet(J_mass)
+
+    iFit_SR_fit_data = modelVjet_fit_data.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_fit_data = modelVjet_fit_data.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+
+#    iFit_All_fit_data = modelVjet_fit_data.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("h_reasonable_range"))
+
+    n_data_SB = RooRealVar("n_data_SB","n data SB", nGen_SB_fluc, 0., 2*nGen_SB_fluc)
+#    n_data_SB.setError(     math.sqrt(  n_data_SB.getVal()  )   )
+
+
+    nFit_SR_formula = RooFormulaVar("nFit_SR_formula", "nFit SR formula", "@0 * @1 / @2", RooArgList(n_data_SB,iFit_SR_fit_data,iFit_SB_fit_data) )
+
+    nFit_SR_formula_error = nFit_SR_formula.getPropagatedError( frVjet_fit_data )
+
+#    print "get error by RooFormulaVar"
+#    print "nFit_SR_formula: ", nFit_SR_formula.getVal()," +/- ", nFit_SR_formula_error
+#    print ""
+
+    # bias
+
+    bias = ( N_fit_central - nGen_SR_fluc )/ nGen_SR_fluc 
+
+    # pull
+
+#    fit_error = fit_error_by_function
+    fit_error = nFit_SR_formula_error
+ 
+    pull = ( N_fit_central - nGen_SR_fluc )/fit_error 
+
+    # return
+    return ( bias , pull )
+
+
+    # ======   END Gen_Fit_BiasPull  ======
+
+
+def Get_Fit_Sigma( J_mass ,N_SB_events , model_PDF , fit_result , par1 , par1_name, par2, par2_name): 
+
+    jetMassArg = RooArgSet(J_mass)
+
+    # get parameter
+    par1_fitresult = fit_result.floatParsFinal().find(par1_name)
+    par2_fitresult = fit_result.floatParsFinal().find(par2_name)
+
+    par1_value = par1_fitresult.getVal()
+    par1_error = par1_fitresult.getError()
+
+    par2_value = par2_fitresult.getVal()
+    par2_error = par2_fitresult.getError()
+
+    # par plus, minus
+    par1_plus = par1_value + par1_error
+    par1_minus = par1_value - par1_error  
+
+    par2_plus = par2_value + par2_error
+    par2_minus = par2_value - par2_error
+
+
+    # get correlation matrix
+    cor = fit_result.correlationMatrix() ;
+        
+    # get N_fit_central value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    N_fit_central = N_SB_events * (  iFit_SR_error.getVal() / iFit_SB_error.getVal() )
+
+    # get N_fit_par1_plus value
+
+    par1.setVal(par1_plus )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    N_fit_par1_plus = N_SB_events * (  iFit_SR_error.getVal() / iFit_SB_error.getVal() )
+
+    # get N_fit_par1_minus value
+
+    par1.setVal(par1_minus )
+    par2.setVal(par2_value )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    N_fit_par1_minus = N_SB_events * (  iFit_SR_error.getVal() / iFit_SB_error.getVal() )
+
+    # get N_fit_par2_plus value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_plus )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    N_fit_par2_plus = N_SB_events * (  iFit_SR_error.getVal() / iFit_SB_error.getVal() )
+
+    # get N_fit_par2_minus value
+
+    par1.setVal(par1_value )
+    par2.setVal(par2_minus )
+
+    iFit_SR_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iFit_SB_error = model_PDF.createIntegral(jetMassArg,RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    N_fit_par2_minus = N_SB_events * (  iFit_SR_error.getVal() / iFit_SB_error.getVal() )
+
+    # get shift
+
+    nFit_SR_shift_par1 = max( abs( N_fit_par1_plus - N_fit_central ) , abs( N_fit_central - N_fit_par1_minus) )
+    nFit_SR_shift_par2 = max( abs( N_fit_par2_plus - N_fit_central ) , abs( N_fit_central - N_fit_par2_minus) )
+
+    # row matirx * correlation matrix * column matrix
+
+    rowM = TMatrixD(1,2)
+    rowM[0][0] = nFit_SR_shift_par1
+    rowM[0][1] = nFit_SR_shift_par2
+
+    colM = TMatrixD(2,1)
+    colM[0][0] = nFit_SR_shift_par1
+    colM[1][0] = nFit_SR_shift_par2
+
+#    cor.Print()
+#    rowM.Print()
+#    colM.Print()
+
+    resultM = rowM * ( cor * colM )
+    sigma_Fit = math.sqrt( resultM(0,0)  )
+    return (N_fit_central,sigma_Fit)
+
+    # ======   END Get_Fit_Sigma  ======
+
+
+
+
 
 
 """
@@ -772,5 +1141,5 @@ else:
         exit()
 
 
-os.system('cp -r plotsAlpha /afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha')
+# os.system('cp -r plotsAlpha/* /afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study')
 
