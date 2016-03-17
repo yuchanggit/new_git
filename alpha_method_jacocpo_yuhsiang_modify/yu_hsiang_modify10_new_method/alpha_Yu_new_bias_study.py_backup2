@@ -142,7 +142,10 @@ def alpha(channel):
     # -----------------------------------------
     # collect the function name
 
-    list_function_name = [["fitFuncVjet",fitFuncVjet],["fitFuncVV",fitFuncVV],["fitFuncTop",fitFuncTop]]
+    list_function_name = []
+    list_function_name.append( fitFuncVjet)
+    list_function_name.append( fitFuncVV  )
+    list_function_name.append( fitFuncTop )
 
     # -----------------------------------------
 
@@ -287,14 +290,6 @@ def alpha(channel):
     setTop = RooDataSet("setTop", "setTop", variables, RooFit.Cut(baseCut), RooFit.WeightVar(weight), RooFit.Import(treeTop))
     setTopSB = RooDataSet("setTopSB", "setTopSB", variables, RooFit.Import(setTop), RooFit.Cut(SBcut), RooFit.WeightVar(weight))
     setTopSR = RooDataSet("setTopSR", "setTopSR", variables, RooFit.Import(setTop), RooFit.Cut(SRcut), RooFit.WeightVar(weight))
-
-    list_of_set = []
-    list_of_set.append( [ ["setDataSB" ,setDataSB ],["setDataLSB" ,setDataLSB ],["setDataHSB" ,setDataHSB ] ]  )    
-    list_of_set.append( [ ["setVjet" ,setVjet ]  , ["setVjetSB" ,setVjetSB ] , ["setVjetSR" ,setVjetSR ]  ]          )
-    list_of_set.append( [ ["setVV" ,setVV ]  , ["setVVSB" ,setVVSB ] , ["setVVSR" ,setVVSR ]  ]          )
-    list_of_set.append( [ ["setTop" ,setTop ]  , ["setTopSB" ,setTopSB ] , ["setTopSR" ,setTopSR ]  ]          )
-
-#    list_set = [["fitFuncVjet",fitFuncVjet],["fitFuncVV",fitFuncVV],["fitFuncTop",fitFuncTop]]
     
     print "  Data events SB: %.2f" % setDataSB.sumEntries()
     print "  V+jets entries: %.2f" % setVjet.sumEntries()
@@ -389,8 +384,7 @@ def alpha(channel):
     else:
         print "  ERROR! Pdf", fitAltFuncVjet, "is not implemented for Vjets"
         exit()
-   
- 
+    
     # fit to main bkg in MC (whole range)
     frVjet = VjetMass.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
     frVjet2 = VjetMass2.fitTo(setVjet, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
@@ -398,15 +392,6 @@ def alpha(channel):
     if VERBOSE: print "********** Fit result [JET MASS Vjets] *"+"*"*40, "\n", frVjet.Print(), "\n", "*"*80
     
     #likelihoodScan(VjetMass, setVjet, [constVjet, offsetVjet, widthVjet])
-
-
-    list_Vjet_pars = []
-    list_Vjet_pars.append( ["constVjet" ,constVjet.getVal()  ] )
-    list_Vjet_pars.append( ["offsetVjet",offsetVjet.getVal() ] )
-    list_Vjet_pars.append( ["widthVjet" ,widthVjet.getVal()  ] )
-    list_Vjet_pars.append( ["a0Vjet"    ,a0Vjet.getVal()     ] )
-    list_Vjet_pars.append( ["a1Vjet"    ,a1Vjet.getVal()     ] )
-    list_Vjet_pars.append( ["a2Vjet"    ,a2Vjet.getVal()     ] )
     
     #*******************************************************#
     #                                                       #
@@ -445,17 +430,6 @@ def alpha(channel):
     frVV = VVMass.fitTo(setVV, RooFit.SumW2Error(True), RooFit.Range("h_reasonable_range"), RooFit.Strategy(2), RooFit.Minimizer("Minuit2"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
     
     if VERBOSE: print "********** Fit result [JET MASS VV] ****"+"*"*40, "\n", frVV.Print(), "\n", "*"*80
-
-    list_VV_pars = []
-    list_VV_pars.append( ["constVV" ,constVV.getVal()  ] )
-    list_VV_pars.append( ["offsetVV",offsetVV.getVal() ] )
-    list_VV_pars.append( ["widthVV" ,widthVV.getVal()  ] )
-    list_VV_pars.append( ["meanVV"  ,meanVV.getVal()   ] )
-    list_VV_pars.append( ["sigmaVV" ,sigmaVV.getVal()  ] )
-    list_VV_pars.append( ["fracVV"  ,fracVV.getVal()   ] )
-    list_VV_pars.append( ["meanVH"  ,meanVH.getVal()   ] )
-    list_VV_pars.append( ["sigmaVH" ,sigmaVH.getVal()  ] )
-    list_VV_pars.append( ["fracVH"  ,fracVH.getVal()   ] )
     
     #*******************************************************#
     #                                                       #
@@ -501,19 +475,7 @@ def alpha(channel):
     if VERBOSE: print "********** Fit result [JET MASS TOP] ***"+"*"*40, "\n", frTop.Print(), "\n", "*"*80
     
     #likelihoodScan(TopMass, setTop, [offsetTop, widthTop])
-
-    list_Top_pars = []
-    list_Top_pars.append( ["constTop" ,  constTop.getVal() ] )
-    list_Top_pars.append( ["offsetTop",  offsetTop.getVal()] )
-    list_Top_pars.append( ["widthTop" ,  widthTop.getVal() ] )
-    list_Top_pars.append( ["meanW"    ,  meanW.getVal()    ] )
-    list_Top_pars.append( ["sigmaW" ,  sigmaW.getVal()  ] )
-    list_Top_pars.append( ["fracW"    ,  fracW.getVal()    ] )
-    list_Top_pars.append( ["meanT"    ,  meanT.getVal()    ] )
-    list_Top_pars.append( ["sigmaT"   ,  sigmaT.getVal()   ] )
-    list_Top_pars.append( ["fracT"    ,  fracT.getVal()    ] )
-
-
+    
     #*******************************************************#
     #                                                       #
     #                 All bkg normalization                 #
@@ -558,10 +520,29 @@ def alpha(channel):
     # -------------------------------------------
     # bias study
 
-    Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study"
+    print ""
+    print "channel: ", channel
+    print ""
+
+#    if channel=="XZhnnb":
+    if channel=="XZheebb":
+	
+	print "fitFuncVjet: ", fitFuncVjet
+        print "fitFuncVV: ", fitFuncVV
+	print "fitFuncTop: ", fitFuncTop
 
 
-    Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set, Save_Dir  )
+#    list_nVJet_nVV_nTop = []
+#    list_nVJet_nVV_nTop.append( nVjet.getVal() ) 
+#    list_nVJet_nVV_nTop.append( nVV.getVal()   )
+#    list_nVJet_nVV_nTop.append( nTop.getVal()  )
+
+#    list_function_name = []
+#    list_function_name.append( fitFuncVjet)	
+#    list_function_name.append( fitFuncVV  ) 
+#    list_function_name.append( fitFuncTop )
+
+    Gen_Fit_BiasPull(J_mass )
 
 
     # -------------------------------------------
@@ -595,6 +576,73 @@ def alpha(channel):
     a0Vjet.setConstant(True)
     a1Vjet.setConstant(True)
     a2Vjet.setConstant(True)
+
+    # -------------------------------------------
+    # test to plot the fit
+
+    print "nVjet: ", nVjet.getVal()
+    print "nVV: ", nVV.getVal()
+    print "nTop: ", nTop.getVal()
+    nTotal = nVjet.getVal() + nVV.getVal() + nTop.getVal()
+    print "nTotal: ", nTotal
+
+    nData_SB = setDataSB.sumEntries(SBcut) 
+    print "nData_SB: ", nData_SB
+
+    Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study"
+    test_frame = J_mass.frame(RooFit.Title("test frame"))
+
+#    BkgMass.plotOn(test_frame,RooFit.Normalization( nTotal  , RooAbsReal.NumEvent), RooFit.LineColor(2))
+
+    # data SB
+    cut = ""
+    isData = True
+#    setDataSB.plotOn(test_frame, RooFit.Binning(binsJmass), RooFit.Cut(cut), RooFit.DataError(RooAbsData.Poisson if isData else RooAbsData.SumW2))
+    setDataSB.plotOn(test_frame)
+
+
+    # MC
+    color = 418
+    pre = "model"
+    post = "" 
+
+    frac_VJet_mass   = RooRealVar("frac_VJet_mass",   "", nVjet.getVal()/nTotal , 0.,   1.)
+    frac_VV_mass     = RooRealVar("frac_VV_mass"  ,   "", nVV.getVal()/nTotal   , 0.,   1.)
+
+    Bkg_mass_final_pdf  = RooAddPdf("Bkg_mass_final_pdf", "", RooArgList(VjetMass, VVMass ,TopMass ), RooArgList(frac_VJet_mass,frac_VV_mass ))
+
+
+#    Bkg_mass_final_pdf.plotOn(test_frame,RooFit.Normalization(nTotal, RooAbsReal.NumEvent))
+
+#    BkgMass.plotOn(test_frame,RooFit.Normalization(nTotal, RooAbsReal.NumEvent), RooFit.LineColor(2))
+#    BkgMass.plotOn(test_frame,RooFit.Range("h_reasonable_range"),RooFit.Normalization(nTotal, RooAbsReal.NumEvent), RooFit.LineColor(2))
+
+#    BkgMass.plotOn(test_frame,RooFit.Normalization(1.0, RooAbsReal.RelativeExpected), RooFit.LineColor(2))
+
+#    Bkg_mass_final_pdf.plotOn(test_frame,RooFit.Normalization(nTotal, RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range"))
+#    Bkg_mass_final_pdf.plotOn(test_frame, RooFit.Range("h_reasonable_range") , RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+
+#    BkgMass.plotOn(test_frame,RooFit.Normalization(nTotal, RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range"), RooFit.LineColor(2))
+#    BkgMass.plotOn(test_frame, RooFit.Range("h_reasonable_range") , RooFit.LineColor(color), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+#    BkgMass.plotOn(test_frame, RooFit.Range("h_reasonable_range") , RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+#    BkgMass.plotOn(test_frame, RooFit.Range("h_reasonable_range") ,RooFit.Normalization(1.0, RooAbsReal.RelativeExpected), RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+#    BkgMass.plotOn(test_frame ,RooFit.Normalization(nTotal, RooAbsReal.NumEvent), RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+#model.plotOn(test_frame, RooFit.Normalization(norm, RooAbsReal.NumEvent), RooFit.LineColor(color), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
+
+
+
+#    c_test = TCanvas("test","test draw",800,600)
+#    c_test.cd()
+#    test_frame.Draw()
+#    c_test.SaveAs(Save_Dir+"/"+"test_to_plot_dataSB_and_several_background_new.pdf")
+
+
+    # -------------------------------------------
 
     
     # integrals for global normalization
@@ -644,24 +692,10 @@ def alpha(channel):
 
 
     # -------------------------------------------
-    # test to plot the fit
 
-    print "nVjet: ", nVjet.getVal()
-    print "nVV: ", nVV.getVal()
-    print "nTop: ", nTop.getVal()
-    nTotal = nVjet.getVal() + nVV.getVal() + nTop.getVal()
-    print "nTotal: ", nTotal
-
-    nData_SB = setDataSB.sumEntries(SBcut)
-    print "nData_SB: ", nData_SB
-
-    test_frame = J_mass.frame(RooFit.Title("test frame"))
-
-    # data SB
-    setDataSB.plotOn(test_frame)
-
-    # fit MC
+#    BkgMass.plotOn(test_frame,RooFit.Normalization( nTotal  , RooAbsReal.NumEvent), RooFit.LineColor(2))
     BkgMass.plotOn(test_frame,RooFit.Normalization( SByield.getVal()  , RooAbsReal.NumEvent), RooFit.LineColor(2))
+#    BkgMass.plotOn(test_frame,RooFit.Normalization( SByield.getVal()  , RooAbsReal.NumEvent), RooFit.LineColor(2), RooFit.DrawOption("F"), RooFit.FillColor(color), RooFit.FillStyle(1001))
     BkgMass.plotOn(test_frame,RooFit.Normalization( SByield.getVal()  , RooAbsReal.NumEvent), RooFit.LineColor(6),RooFit.Components("TopMass_ext,VVMass_ext"))
     BkgMass.plotOn(test_frame,RooFit.Normalization( SByield.getVal()  , RooAbsReal.NumEvent), RooFit.LineColor(7),RooFit.Components("VVMass_ext"))
 
@@ -677,52 +711,14 @@ def alpha(channel):
 
     # -------------------------------------------
 
-def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir  ):
 
-    print ""
-    print "start Yu-hsiang Box"
-    print ""
+#def Get_Fit_Sigma( J_mass ,N_SB_events , model_PDF , fit_result , par1 , par1_name, par2, par2_name): 
+def Gen_Fit_BiasPull( J_mass ):
 
-    # ------ check ----------
-    print "channel: ", channel
+    # start Gen_Fit_BiasPull
+    print "start Gen_Fit_BiasPull"
 
-    print ""
-    print "for list_function_name"
-    for i in range(0,len(list_function_name) ):
-	print "   ",list_function_name[i][0], ": ", list_function_name[i][1]
-    print ""
-
-    print ""
-    print "for list_Vjet_pars"
-    for i in range(0,len(list_Vjet_pars) ):
-        print "   ",list_Vjet_pars[i][0], ": ", list_Vjet_pars[i][1]
-    print ""
-
-    print ""
-    print "for list_VV_pars"
-    for i in range(0,len(list_VV_pars) ):
-        print "   ",list_VV_pars[i][0], ": ", list_VV_pars[i][1]
-    print ""
-
-    print ""
-    print "for list_Top_pars"
-    for i in range(0,len(list_Top_pars) ):
-        print "   ",list_Top_pars[i][0], ": ", list_Top_pars[i][1]
-    print ""
-    # ------ plot fit MC ----------
-
-    plot_MC_fit_Vjet_frame = J_masis.frame(RooFit.Title("plot fit Vjet MC"))
-
-
-
-
-
-    # ------
-    print ""
-    print " End Yu_Hsiang_Box"
-    print ""
-
-    # end Yu_Hsiang_Box
+    # end Gen_Fit_BiasPull
     # -------------------------------------------
 
 
