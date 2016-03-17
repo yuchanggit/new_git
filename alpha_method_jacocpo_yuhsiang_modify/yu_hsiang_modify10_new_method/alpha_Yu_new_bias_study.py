@@ -558,7 +558,7 @@ def alpha(channel):
     # -------------------------------------------
     # bias study
 
-    Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study"
+    Save_Dir = "/afs/cern.ch/user/y/yuchang/www/jacopo_plotsAlpha/yu_hsiang_bias_study_new"
 
 
     Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set, Save_Dir  )
@@ -683,7 +683,7 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     print "start Yu-hsiang Box"
     print ""
 
-    # ------ check ----------
+    # ------ 0. check ----------
     print "channel: ", channel
 
     print ""
@@ -709,11 +709,168 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     for i in range(0,len(list_Top_pars) ):
         print "   ",list_Top_pars[i][0], ": ", list_Top_pars[i][1]
     print ""
-    # ------ plot fit MC ----------
+    # ------ 1. plot fit MC ----------
 
-    plot_MC_fit_Vjet_frame = J_masis.frame(RooFit.Title("plot fit Vjet MC"))
+    # Vjet
+    plot_MC_fit_Vjet_frame = J_mass.frame(RooFit.Title("plot fit Vjet MC"))
+
+    print "the used data set is: ", list_of_set[1][0][0]
+    setVjet = list_of_set[1][0][1] 
+    setVjet.plotOn(plot_MC_fit_Vjet_frame) 
 
 
+    constVjet_   = RooRealVar("constVjet_",   "slope of the exp", list_Vjet_pars[0][1]     , -1.,   0.)
+    offsetVjet_  = RooRealVar("offsetVjet_",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+    widthVjet_   = RooRealVar("widthVjet_",   "width of the erf", list_Vjet_pars[2][1]     ,     1., 200.) 
+
+    VjetMass_ = RooErfExpPdf("VjetMass_","", J_mass, constVjet_, offsetVjet_, widthVjet_)
+
+    VjetMass_.plotOn(plot_MC_fit_Vjet_frame, RooFit.Normalization(setVjet.sumEntries() ,RooAbsReal.NumEvent))
+
+    # VV
+    plot_MC_fit_VV_frame = J_mass.frame(RooFit.Title("plot fit VV MC"))
+
+    print "the used data set is: ", list_of_set[2][0][0]
+    setVV = list_of_set[2][0][1]
+    setVV.plotOn(plot_MC_fit_VV_frame)
+
+
+    constVV_  = RooRealVar("constVV_", "slope of the exp", list_VV_pars[0][1] , -0.1, 0.)
+    expoVV_   = RooExponential("baseVV_", "error function for VV jet mass", J_mass, constVV_)
+
+    meanVV_   = RooRealVar("meanVV_",   "mean of the gaussian",   list_VV_pars[3][1]        ,    60., 100.)
+    sigmaVV_  = RooRealVar("sigmaVV_",  "sigma of the gaussian",  list_VV_pars[4][1]        ,     6.,  30.)
+    fracVV_   = RooRealVar("fracVV_",   "fraction of gaussian wrt erfexp",list_VV_pars[5][1] , 0.,   1.)
+    gausVV_   = RooGaussian("gausVV_",  "gaus for VV jet mass", J_mass, meanVV_, sigmaVV_)
+
+    VVMass_   = RooAddPdf("VVMass_", "", RooArgList(gausVV_, expoVV_), RooArgList(fracVV_))
+
+    VVMass_.plotOn(plot_MC_fit_VV_frame, RooFit.Normalization(setVV.sumEntries() ,RooAbsReal.NumEvent))
+
+    # top
+    plot_MC_fit_Top_frame = J_mass.frame(RooFit.Title("plot fit Top MC"))
+
+    print "the used data set is: ", list_of_set[3][0][0]
+    setTop = list_of_set[3][0][1]
+    setTop.plotOn(plot_MC_fit_Top_frame)
+
+
+    offsetTop_ = RooRealVar("offsetTop_", "offset of the erf", list_Top_pars[1][1] ,   50., 250.)
+    widthTop_  = RooRealVar("widthTop_",  "width of the erf" , list_Top_pars[2][1] ,    1., 300.)
+
+    gausTop_   = RooGaussian("baseTop_", "gaus for Top jet mass", J_mass, offsetTop_, widthTop_)
+
+    meanT_     = RooRealVar("meanT_",     "mean of the gaussian",        list_Top_pars[6][1] , 150., 200.)
+    sigmaT_    = RooRealVar("sigmaT_",    "sigma of the gaussian",       list_Top_pars[7][1] ,   5.,  30.)
+    fracT_     = RooRealVar("fracT_", "fraction of gaussian wrt erfexp", list_Top_pars[8][1] , 0., 1.)
+
+    gausT_     = RooGaussian("gausT_", "gaus for T jet mass", J_mass, meanT_, sigmaT_)
+
+    TopMass_   = RooAddPdf("TopMass_", "", RooArgList(gausT_, gausTop_), RooArgList(fracT_))
+
+    TopMass_.plotOn(plot_MC_fit_Top_frame, RooFit.Normalization(setTop.sumEntries() ,RooAbsReal.NumEvent))
+
+    # save plot 
+
+    Save_name = Save_Dir + "/" + "plot_fit_MC.pdf"
+    c1 = TCanvas("c1","",800,600)
+
+    c1.cd()
+    plot_MC_fit_Vjet_frame.Draw()
+    c1.Print(Save_name + "(")
+
+    c1.cd()
+    plot_MC_fit_VV_frame.Draw()
+    c1.Print(Save_name)
+
+    c1.cd()
+    plot_MC_fit_Top_frame.Draw()
+    c1.Print(Save_name + ")" )
+
+    # ------ 2. use the shape and number from MC to generate toy MC ----------
+
+    plot_toy_MC_frame = J_mass.frame(RooFit.Title("plot toy MC"))
+
+    constVjet_.setConstant(True)
+    offsetVjet_.setConstant(True)
+    widthVjet_.setConstant(True)
+
+    constVV_.setConstant(True)
+    meanVV_.setConstant(True)
+    sigmaVV_.setConstant(True)
+    fracVV_.setConstant(True)
+
+    offsetTop_.setConstant(True)
+    widthTop_.setConstant(True)
+    meanT_.setConstant(True)
+    sigmaT_.setConstant(True)
+    fracT_.setConstant(True)
+
+    nTotal_MC = setVjet.sumEntries() + setVV.sumEntries()+  setTop.sumEntries() 
+
+    print ""
+    print "setVjet.sumEntries(): ", setVjet.sumEntries()
+    print "setVV.sumEntries(): ", setVV.sumEntries()
+    print "setTop.sumEntries(): ", setTop.sumEntries()
+    print "nTotal_MC: ", nTotal_MC 
+    print ""
+
+    frac_Vjet_MC   = RooRealVar("frac_Vjet_MC", "", setVjet.sumEntries() / nTotal_MC  , 0., 1.)
+    frac_VV_MC     = RooRealVar("frac_VV_MC", ""  , setVV.sumEntries()   / nTotal_MC  , 0., 1.)
+
+    print ""
+    frac_Vjet_MC.Print()
+    frac_VV_MC.Print()
+    print ""
+
+    frac_Vjet_MC.setConstant(True)
+    frac_VV_MC.setConstant(True)
+
+    # use this PDF of three backgrounds to generate toy MC 
+    Bkg_Mass_MC = RooAddPdf("Bkg_Mass_MC","Vjet + VV + Top", RooArgList( VjetMass_ , VVMass_ , TopMass_ ), RooArgList(frac_Vjet_MC ,frac_VV_MC ))
+
+
+    # generate toy MC
+
+    nPseudo_data_fluc = gRandom.Poisson( nTotal_MC )
+
+#    for i in range(0,10 ):
+#        number_ = gRandom.Poisson( nTotal_MC )
+#        print "number_: ", number_
+
+    pseudo_data_fluc = Bkg_Mass_MC.generate(RooArgSet(J_mass), nPseudo_data_fluc  ) 
+
+    pseudo_data_SB_fluc = RooDataSet("pseudo_data_SB_fluc", "pseudo_data_SB_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135") )
+
+    pseudo_data_SR_fluc = RooDataSet("pseudo_data_SR_fluc", "pseudo_data_SR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135") )
+
+    pseudo_data_VR_fluc = RooDataSet("pseudo_data_VR_fluc", "pseudo_data_VR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>65 && fatjet1_prunedMassCorr<105") )
+
+    print "nPseudo_data_fluc: ", nPseudo_data_fluc
+    print "pseudo_data_SB_fluc: ", pseudo_data_SB_fluc.sumEntries()
+    print "pseudo_data_SR_fluc: ", pseudo_data_SR_fluc.sumEntries()
+    print "pseudo_data_VR_fluc: ", pseudo_data_VR_fluc.sumEntries()
+    print ""
+
+#    pseudo_data_fluc.plotOn(plot_toy_MC_frame) 
+#    pseudo_data_SB_fluc.plotOn(plot_toy_MC_frame)
+#    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent))
+    color1 = 8
+    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+    color1 = 6
+    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("VVMass_,TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+    color1 = 7
+    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+    pseudo_data_SB_fluc.plotOn(plot_toy_MC_frame)
+
+    Save_name = Save_Dir + "/" + "plot_toy_MC.pdf"
+    c2 = TCanvas("c2","",800,600)
+
+    c2.cd()
+    plot_toy_MC_frame.Draw()
+    c2.Print(Save_name)
+
+    # ------ 3. fit the toy MC with ext PDF of background, fixed two secondary backgrounds' shape and normalization ----------
 
 
 
