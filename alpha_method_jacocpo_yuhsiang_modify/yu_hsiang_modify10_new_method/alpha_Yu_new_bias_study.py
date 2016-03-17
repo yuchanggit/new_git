@@ -872,7 +872,124 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
     # ------ 3. fit the toy MC with ext PDF of background, fixed two secondary backgrounds' shape and normalization ----------
 
+    fit_toy_MC_frame = J_mass.frame(RooFit.Title("fit toy MC"))
 
+    # build another three PDF for 3 backgrounds
+
+    # Vjet
+    constVjet_fit   = RooRealVar("constVjet_fit",   "slope of the exp", list_Vjet_pars[0][1]     , -1.,   0.)
+    offsetVjet_fit  = RooRealVar("offsetVjet_fit",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+    widthVjet_fit   = RooRealVar("widthVjet_fit",   "width of the erf", list_Vjet_pars[2][1]     ,     1., 200.)
+
+    VjetMass_fit = RooErfExpPdf("VjetMass_fit","", J_mass, constVjet_fit, offsetVjet_fit, widthVjet_fit)
+
+
+    # VV
+    constVV_fit  = RooRealVar("constVV_fit", "slope of the exp", list_VV_pars[0][1] , -0.1, 0.)
+    expoVV_fit   = RooExponential("baseVV_fit", "error function for VV jet mass", J_mass, constVV_fit)
+
+    meanVV_fit   = RooRealVar("meanVV_fit",   "mean of the gaussian",   list_VV_pars[3][1]        ,    60., 100.)
+    sigmaVV_fit  = RooRealVar("sigmaVV_fit",  "sigma of the gaussian",  list_VV_pars[4][1]        ,     6.,  30.)
+    fracVV_fit   = RooRealVar("fracVV_fit",   "fraction of gaussian wrt erfexp",list_VV_pars[5][1] , 0.,   1.)
+    gausVV_fit   = RooGaussian("gausVV_fit",  "gaus for VV jet mass", J_mass, meanVV_fit, sigmaVV_fit)
+
+    VVMass_fit   = RooAddPdf("VVMass_fit", "", RooArgList(gausVV_fit, expoVV_fit), RooArgList(fracVV_fit))
+
+    # Top
+    offsetTop_fit = RooRealVar("offsetTop_fit", "offset of the erf", list_Top_pars[1][1] ,   50., 250.)
+    widthTop_fit  = RooRealVar("widthTop_fit",  "width of the erf" , list_Top_pars[2][1] ,    1., 300.)
+
+    gausTop_fit   = RooGaussian("baseTop_fit", "gaus for Top jet mass", J_mass, offsetTop_fit, widthTop_fit)
+
+    meanT_fit     = RooRealVar("meanT_fit",     "mean of the gaussian",        list_Top_pars[6][1] , 150., 200.)
+    sigmaT_fit    = RooRealVar("sigmaT_fit",    "sigma of the gaussian",       list_Top_pars[7][1] ,   5.,  30.)
+    fracT_fit     = RooRealVar("fracT_fit", "fraction of gaussian wrt erfexp", list_Top_pars[8][1] , 0., 1.)
+
+    gausT_fit     = RooGaussian("gausT_fit", "gaus for T jet mass", J_mass, meanT_fit, sigmaT_fit)
+
+    TopMass_fit   = RooAddPdf("TopMass_fit", "", RooArgList(gausT_fit, gausTop_fit), RooArgList(fracT_fit))
+
+    # extended PDF
+
+    nVjet_fit = RooRealVar("nVjet_fit","", setVjet.sumEntries(), 0., 2*setVjet.sumEntries() )
+    nVV_fit = RooRealVar("nVV_fit","", setVV.sumEntries(), 0., 2*setVV.sumEntries() )
+    nTop_fit = RooRealVar("nTop_fit","", setTop.sumEntries(), 0., 2*setTop.sumEntries() )
+
+    nVV_fit.setConstant(True)
+    nTop_fit.setConstant(True)
+
+    constVV_fit.setConstant(True)
+    meanVV_fit.setConstant(True)
+    sigmaVV_fit.setConstant(True)
+    fracVV_fit.setConstant(True)
+
+    offsetTop_fit.setConstant(True)
+    widthTop_fit.setConstant(True)
+    meanT_fit.setConstant(True)
+    sigmaT_fit.setConstant(True)
+    fracT_fit.setConstant(True)
+
+    VjetMass_ext_fit = RooExtendPdf("VjetMass_ext_fit",  "", VjetMass_fit,  nVjet_fit)
+    VVMass_ext_fit = RooExtendPdf("VVMass_ext_fit",  "", VVMass_fit,  nVV_fit)
+    TopMass_ext_fit = RooExtendPdf("TopMass_ext_fit",  "", TopMass_fit,  nTop_fit)
+
+    BkgMass_fit = RooAddPdf("BkgMass_fit", "", RooArgList(VjetMass_ext_fit , VVMass_ext_fit, TopMass_ext_fit), RooArgList(nVjet_fit, nVV_fit, nTop_fit)) 
+
+    # fit pseudo data in SB only
+
+    print "before fit"
+    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
+
+    VERBOSE = False
+#    VERBOSE = True
+    frMass_fit = BkgMass_fit.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Extended(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+    print "after fit"
+    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
+
+    jetMassArg = RooArgSet(J_mass)
+    iSBVjet_fit = VjetMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+    iSBVV_fit = VVMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+    iSBTop_fit = TopMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
+
+    print "nVjet*iSB: ", nVjet_fit.getVal() * iSBVjet_fit.getVal()
+    print "nVV*iSB", nVV_fit.getVal()   * iSBVV_fit.getVal()
+    print "nTOP*iSB", nTop_fit.getVal()  * iSBTop_fit.getVal()
+
+    n_fit_MC_SB = nVjet_fit.getVal()*iSBVjet_fit.getVal() + nVV_fit.getVal()*iSBVV_fit.getVal() + nTop_fit.getVal()*iSBTop_fit.getVal()
+    print "nVjet*iSB + nVV*iSB + nTOP*iSB: ", n_fit_MC_SB   
+
+    # plot
+
+    Bkg_Mass_MC.plotOn( fit_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
+    pseudo_data_SB_fluc.plotOn( fit_toy_MC_frame )
+    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.LineColor(2) )
+
+    Save_name = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
+    c3 = TCanvas("c3","",800,600)
+
+    c3.cd()
+    fit_toy_MC_frame.Draw()
+    c3.Print(Save_name)
+
+    # ------ 4. calculate the Signal region yield, bias and pull ----------
+
+    iSRVjet_fit = VjetMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iSRVV_fit = VVMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+    iSRTop_fit = TopMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
+
+    SRyield_fit = RooFormulaVar("SRyield_fit", "extrapolation to SR", "@0*@1 + @2*@3 + @4*@5", RooArgList(iSRVjet_fit, nVjet_fit, iSRVV_fit, nVV_fit, iSRTop_fit, nTop_fit))
+    SRyield_fit_error = SRyield_fit.getPropagatedError( frMass_fit )
+
+
+    Bias = ( SRyield_fit.getVal() - pseudo_data_SR_fluc.sumEntries() )/ pseudo_data_SR_fluc.sumEntries()
+    Pull = ( SRyield_fit.getVal() - pseudo_data_SR_fluc.sumEntries() )/ SRyield_fit_error  
+
+    print "SRyield_fit.getVal(): ", SRyield_fit.getVal() 
+    print "pseudo_data_SR_fluc.sumEntries(): ", pseudo_data_SR_fluc.sumEntries()
+    print "SRyield_fit_error: ", SRyield_fit_error
+    print "Bias: ", Bias
+    print "Pull: ", Pull
 
     # ------
     print ""
