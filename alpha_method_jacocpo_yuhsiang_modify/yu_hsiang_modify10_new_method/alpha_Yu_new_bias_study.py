@@ -790,7 +790,6 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
     # ------ 2. use the shape and number from MC to generate toy MC ----------
 
-    plot_toy_MC_frame = J_mass.frame(RooFit.Title("plot toy MC"))
 
     constVjet_.setConstant(True)
     offsetVjet_.setConstant(True)
@@ -830,6 +829,53 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     # use this PDF of three backgrounds to generate toy MC 
     Bkg_Mass_MC = RooAddPdf("Bkg_Mass_MC","Vjet + VV + Top", RooArgList( VjetMass_ , VVMass_ , TopMass_ ), RooArgList(frac_Vjet_MC ,frac_VV_MC ))
 
+    Save_name1 = Save_Dir + "/" + "plot_toy_MC.pdf"
+    c2 = TCanvas("c2","",800,600)
+
+    Save_name2 = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
+    c3 = TCanvas("c3","",800,600)
+
+    # starts loop
+
+    times_max = 1
+    print ""
+    print "starting loop"
+
+    for times in range(0,times_max):  
+
+	print "times:", times
+
+    	plot_toy_MC_frame,fit_toy_MC_frame = Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC)
+
+
+
+
+
+    # end loop
+
+    # ------
+    print ""
+    print " End Yu_Hsiang_Box"
+    print ""
+
+    # end Yu_Hsiang_Box
+    # -------------------------------------------
+
+
+
+
+
+def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC):
+
+    print ""
+    print "start Bias_and_Pull_Box"
+    print ""
+
+    plot_toy_MC_frame = J_mass.frame(RooFit.Title("plot toy MC"))
+
+    setVjet = list_of_set[1][0][1] 
+    setVV = list_of_set[2][0][1]
+    setTop = list_of_set[3][0][1]
 
     # generate toy MC
 
@@ -844,9 +890,9 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     pseudo_data_VR_fluc = RooDataSet("pseudo_data_VR_fluc", "pseudo_data_VR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>65 && fatjet1_prunedMassCorr<105") )
 
     print "nPseudo_data_fluc: ", nPseudo_data_fluc
-    print "pseudo_data_SB_fluc: ", pseudo_data_SB_fluc.sumEntries()
-    print "pseudo_data_SR_fluc: ", pseudo_data_SR_fluc.sumEntries()
-    print "pseudo_data_VR_fluc: ", pseudo_data_VR_fluc.sumEntries()
+#    print "pseudo_data_SB_fluc: ", pseudo_data_SB_fluc.sumEntries()
+#    print "pseudo_data_SR_fluc: ", pseudo_data_SR_fluc.sumEntries()
+#    print "pseudo_data_VR_fluc: ", pseudo_data_VR_fluc.sumEntries()
     print ""
 
 #    pseudo_data_fluc.plotOn(plot_toy_MC_frame) 
@@ -943,8 +989,8 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
     # fit pseudo data in SB only
 
-    print "before fit"
-    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
+#    print "before fit"
+#    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
 
     VERBOSE = False
 #    VERBOSE = True
@@ -957,8 +1003,8 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     cor_fit = frMass_fit.correlationMatrix()
 #    cor_fit.Print()
 
-    print "after fit"
-    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
+#    print "after fit"
+#    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
 
     print ""
 
@@ -966,15 +1012,12 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     print "for constVjet_fit"
     par_fit = frMass_fit.floatParsFinal().find("constVjet_fit")
     print "constVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
-
     print "for offsetVjet_fit"
     par_fit = frMass_fit.floatParsFinal().find("offsetVjet_fit")
     print "offsetVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
-
     print "for widthVjet_fit"
     par_fit = frMass_fit.floatParsFinal().find("widthVjet_fit")
     print "widthVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
-
     print "nVjet_fit"
     par_fit = frMass_fit.floatParsFinal().find("nVjet_fit")
     print "nVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
@@ -999,6 +1042,7 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     Bkg_Mass_MC.plotOn( fit_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
     pseudo_data_SB_fluc.plotOn( fit_toy_MC_frame )
     BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.LineColor(2) )
+    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.VisualizeError(frMass_fit ,1,False), RooFit.DrawOption("L"),RooFit.LineWidth(2),RooFit.LineColor(6) )
 
     Save_name = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
     c3 = TCanvas("c3","",800,600)
@@ -1028,12 +1072,12 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     print "Bias: ", Bias
     print "Pull: ", Pull
 
-    # ------
-    print ""
-    print " End Yu_Hsiang_Box"
-    print ""
+    return (plot_toy_MC_frame , fit_toy_MC_frame)
 
-    # end Yu_Hsiang_Box
+    print ""
+    print "end Bias_and_Pull_Box"
+    print ""
+    # end Bias_and_Pull_Box
     # -------------------------------------------
 
 
