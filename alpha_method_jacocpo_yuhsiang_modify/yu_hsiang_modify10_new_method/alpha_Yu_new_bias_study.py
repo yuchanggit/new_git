@@ -720,7 +720,8 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
 
     constVjet_   = RooRealVar("constVjet_",   "slope of the exp", list_Vjet_pars[0][1]     , -1.,   0.)
-    offsetVjet_  = RooRealVar("offsetVjet_",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+#    offsetVjet_  = RooRealVar("offsetVjet_",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+    offsetVjet_  = RooRealVar("offsetVjet_",  "offset of the erf",list_Vjet_pars[1][1]     ,   200, 1000.)
     widthVjet_   = RooRealVar("widthVjet_",   "width of the erf", list_Vjet_pars[2][1]     ,     1., 200.) 
 
     VjetMass_ = RooErfExpPdf("VjetMass_","", J_mass, constVjet_, offsetVjet_, widthVjet_)
@@ -878,7 +879,8 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
     # Vjet
     constVjet_fit   = RooRealVar("constVjet_fit",   "slope of the exp", list_Vjet_pars[0][1]     , -1.,   0.)
-    offsetVjet_fit  = RooRealVar("offsetVjet_fit",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+#    offsetVjet_fit  = RooRealVar("offsetVjet_fit",  "offset of the erf",list_Vjet_pars[1][1]     ,   -50., 400.)
+    offsetVjet_fit  = RooRealVar("offsetVjet_fit",  "offset of the erf",list_Vjet_pars[1][1]     ,   200, 1000.)
     widthVjet_fit   = RooRealVar("widthVjet_fit",   "width of the erf", list_Vjet_pars[2][1]     ,     1., 200.)
 
     VjetMass_fit = RooErfExpPdf("VjetMass_fit","", J_mass, constVjet_fit, offsetVjet_fit, widthVjet_fit)
@@ -935,17 +937,41 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
     BkgMass_fit = RooAddPdf("BkgMass_fit", "", RooArgList(VjetMass_ext_fit , VVMass_ext_fit, TopMass_ext_fit), RooArgList(nVjet_fit, nVV_fit, nTop_fit)) 
 
+    BkgMass_fit.fixAddCoefRange("h_reasonable_range")
+
     # fit pseudo data in SB only
 
     print "before fit"
     print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
 
-    VERBOSE = False
-#    VERBOSE = True
+#    VERBOSE = False
+    VERBOSE = True
     frMass_fit = BkgMass_fit.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Extended(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
+
+#    frMass_fit = BkgMass_fit.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
     print "after fit"
     print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
+
+    print ""
+
+    print "for constVjet_fit"
+    par_fit = frMass_fit.floatParsFinal().find("constVjet_fit")
+    print "constVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
+
+    print "for offsetVjet_fit"
+    par_fit = frMass_fit.floatParsFinal().find("offsetVjet_fit")
+    print "offsetVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
+
+    print "for widthVjet_fit"
+    par_fit = frMass_fit.floatParsFinal().find("widthVjet_fit")
+    print "widthVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
+
+    print "nVjet_fit"
+    par_fit = frMass_fit.floatParsFinal().find("nVjet_fit")
+    print "nVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
+
+    print ""
 
     jetMassArg = RooArgSet(J_mass)
     iSBVjet_fit = VjetMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
@@ -979,6 +1005,25 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     iSRTop_fit = TopMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("SRrange"))
 
     SRyield_fit = RooFormulaVar("SRyield_fit", "extrapolation to SR", "@0*@1 + @2*@3 + @4*@5", RooArgList(iSRVjet_fit, nVjet_fit, iSRVV_fit, nVV_fit, iSRTop_fit, nTop_fit))
+
+    print ""
+    print "iSRVjet_fit: ", iSRVjet_fit.getVal(), " nVjet_fit* iSRVjet_fit:  ", nVjet_fit.getVal() * iSRVjet_fit.getVal()
+    print ""
+
+    test_fit = RooFormulaVar("test_fit", "extrapolation to SR", "@0*@1 ", RooArgList(iSRVjet_fit, nVjet_fit) )
+    test_fit_error = test_fit.getPropagatedError( frMass_fit )  
+    print "test_fit: ", test_fit.getVal(), " +/- ", test_fit_error
+
+    test_fit = RooFormulaVar("test_fit", "extrapolation to SR", "@0", RooArgList(iSRVjet_fit) )
+    test_fit_error = test_fit.getPropagatedError( frMass_fit )
+    print "test_fit: ", test_fit.getVal(), " +/- ", test_fit_error
+
+    test_fit = RooFormulaVar("test_fit", "extrapolation to SR", "@0", RooArgList(nVjet_fit) )
+    test_fit_error = test_fit.getPropagatedError( frMass_fit )
+    print "test_fit: ", test_fit.getVal(), " +/- ", test_fit_error
+
+    print ""
+
     SRyield_fit_error = SRyield_fit.getPropagatedError( frMass_fit )
 
 
