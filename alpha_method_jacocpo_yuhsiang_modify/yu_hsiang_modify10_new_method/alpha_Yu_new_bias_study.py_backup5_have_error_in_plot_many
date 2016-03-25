@@ -829,139 +829,70 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
     # use this PDF of three backgrounds to generate toy MC 
     Bkg_Mass_MC = RooAddPdf("Bkg_Mass_MC","Vjet + VV + Top", RooArgList( VjetMass_ , VVMass_ , TopMass_ ), RooArgList(frac_Vjet_MC ,frac_VV_MC ))
 
-    Save_name1 = Save_Dir + "/" + "plot_toy_MC.pdf"
-    c2 = TCanvas("c2","",800,600)
+#    Save_name1 = Save_Dir + "/" + "plot_toy_MC.pdf"
+#    c2 = TCanvas("c2","",800,600)
 
-    Save_name2 = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
-    c3 = TCanvas("c3","",800,600)
-
-    Save_name3 = Save_Dir + "/" + "plot_fit_toy_MC_with_component.pdf"
-    c4 = TCanvas("c4","",800,600)
-
-    list_frame1 = []
-    list_frame2 = []
-    list_frame3 = []
+#    Save_name2 = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
+#    c3 = TCanvas("c3","",800,600)
 
     h_Bias = TH1D("h_Bias","h_Bias ",40,-1,1)
     h_Pull = TH1D("h_Pull","h_Pull ",40,-8,8)
 
-    h_Bias_converged = TH1D("h_Bias_converged","h_Bias ",40,-1,1)
-    h_Pull_converged = TH1D("h_Pull_converged","h_Pull ",40,-8,8)
-
     # starts loop
 
-    times_max = 1000
+    times_max = 10
     print ""
     print "starting loop"
 
-    counter_all = 0
-    counter_converged =0
-
     for times in range(0,times_max):  
 
-#	print "times:", times
+	print "times:", times
 
-	if times % 100 == 0 :
-		print "Processing times:", times+1 ,"of", times_max
+#        plot_toy_MC_frame = J_mass.frame(RooFit.Title("plot toy MC"))
+#        fit_toy_MC_frame = J_mass.frame(RooFit.Title("fit toy MC"))
 
-        plot_toy_MC_frame, fit_toy_MC_frame, fit_toy_MC_component_frame,  Bias, Pull, fit_status = Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC )
 
-        # to avoid to save too many plot in list
-	if times < 20 : 
-		list_frame1.append( plot_toy_MC_frame  )
-                list_frame2.append( fit_toy_MC_frame  )
-                list_frame3.append( fit_toy_MC_component_frame  )
-
-	counter_all = counter_all+1
-        if fit_status ==0: 
-		counter_converged = counter_converged+1 
-		h_Bias_converged.Fill( Bias ) 
-		h_Pull_converged.Fill( Pull )
-
-#        print "ask fit converged?, fit_status: ", fit_status
-#        print "Pull: ", Pull
+#    	plot_toy_MC_frame,fit_toy_MC_frame, Bias, Pull = Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC, plot_toy_MC_frame,fit_toy_MC_frame )
+        Bias, Pull = Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC)
 
         h_Bias.Fill( Bias )
         h_Pull.Fill( Pull )
 
 
+#        c2.cd()
+#        plot_toy_MC_frame.Draw()
+#        if times == 0 :  c2.Print(Save_name1 + "(")
+#        if times == 1 :  c2.Print(Save_name1)
+#        if times == 2 :  c2.Print(Save_name1)
+#        if times == 3 :  c2.Print(Save_name1 + ")")
+#        if : c2.Print(Save_name1 )
+
+#        if times == 0:  c2.Print(Save_name1 + "(")
+#        elif times == (times_max-1) :  c2.Print(Save_name1 + ")")
+#        else : c2.Print(Save_name1 )
+
+#        c3.cd()
+#        fit_toy_MC_frame.Draw()
+#        if times == 0:  c3.Print(Save_name2 + "(")
+#        elif times == (times_max-1) :  c3.Print(Save_name2 + ")")
+#        else : c3.Print(Save_name2 )
+
+
+
+
     # end loop
 
-    converged_rate = float(counter_converged)/counter_all
+    Save_name = Save_Dir + "/" + "Bias.pdf"
+    c4 = TCanvas("c4","",800,600)
+    c4.cd()
+    h_Bias.Draw() 
+    c4.SaveAs(Save_name)
 
-    print "counter_all: ", counter_all, " counter_converged: ", counter_converged, " converged rate: ", converged_rate 
-
-
-    # plot loop
-    for i in range(0, len(list_frame1)  ):
-
-	if i == 0:
-		c2.cd()
-        	list_frame1[i].Draw()
-        	c2.Print(Save_name1 + "(")
-
-                c3.cd()
-                list_frame2[i].Draw()
-                c3.Print(Save_name2 + "(") 
-
-                c4.cd()
-                list_frame3[i].Draw()
-                c4.Print(Save_name3 + "(")
-
-
-        if i == len(list_frame1)-1 :
-                c2.cd()
-                list_frame1[i].Draw()
-                c2.Print(Save_name1 + ")")
-
-                c3.cd()
-                list_frame2[i].Draw()
-                c3.Print(Save_name2 + ")") 
-
-                c4.cd()
-                list_frame3[i].Draw()
-                c4.Print(Save_name3 + ")")
-
-
-        else : 
-                c2.cd()
-                list_frame1[i].Draw()
-                c2.Print(Save_name1)
-
-                c3.cd()
-                list_frame2[i].Draw()
-                c3.Print(Save_name2)		
-
-                c4.cd()
-                list_frame3[i].Draw()
-                c4.Print(Save_name3)
-
-
-    # end plot loop
-
-    Save_name = Save_Dir + "/" + "Bias_and_Pull.pdf"
-    c_1 = TCanvas("c_1","",800,400)
-    c_1.Divide(2)
-
-    c_1.cd(1)
-    h_Bias.Draw()
-
-    c_1.cd(2)
+    Save_name = Save_Dir + "/" + "Pull.pdf"
+    c5 = TCanvas("c5","",800,600)
+    c5.cd()
     h_Pull.Draw()
-    c_1.SaveAs(Save_name)
-
-    # ----------
-    Save_name = Save_Dir + "/" + "Bias_and_Pull_converged.pdf"
-    c_2 = TCanvas("c_1","",800,400)
-    c_2.Divide(2)
-    
-    c_2.cd(1)
-    h_Bias_converged.Draw()
-
-    c_2.cd(2)
-    h_Pull_converged.Draw()
-    c_2.SaveAs(Save_name)
-
+    c5.SaveAs(Save_name)
 
 
     # ------
@@ -978,9 +909,9 @@ def Yu_Hsiang_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_p
 
 def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_VV_pars, list_Top_pars, list_of_set ,Save_Dir, nTotal_MC, Bkg_Mass_MC ):
 
-#    print ""
-#    print "start Bias_and_Pull_Box"
-#    print ""
+    print ""
+    print "start Bias_and_Pull_Box"
+    print ""
 
     plot_toy_MC_frame = J_mass.frame(RooFit.Title("plot toy MC"))
 
@@ -1000,27 +931,33 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
 
     pseudo_data_VR_fluc = RooDataSet("pseudo_data_VR_fluc", "pseudo_data_VR_fluc", RooArgSet(J_mass), RooFit.Import(pseudo_data_fluc), RooFit.Cut("fatjet1_prunedMassCorr>65 && fatjet1_prunedMassCorr<105") )
 
-#    print "nPseudo_data_fluc: ", nPseudo_data_fluc
+    print "nPseudo_data_fluc: ", nPseudo_data_fluc
 #    print "pseudo_data_SB_fluc: ", pseudo_data_SB_fluc.sumEntries()
 #    print "pseudo_data_SR_fluc: ", pseudo_data_SR_fluc.sumEntries()
 #    print "pseudo_data_VR_fluc: ", pseudo_data_VR_fluc.sumEntries()
-#    print ""
+    print ""
 
+#    pseudo_data_fluc.plotOn(plot_toy_MC_frame) 
+#    pseudo_data_SB_fluc.plotOn(plot_toy_MC_frame)
+#    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent))
     color1 = 8
-    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+#    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
     color1 = 6
-    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("VVMass_,TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+#    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("VVMass_,TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
     color1 = 7
-    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
-    pseudo_data_SB_fluc.plotOn(plot_toy_MC_frame)
+#    Bkg_Mass_MC.plotOn(plot_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc ,RooAbsReal.NumEvent),RooFit.Components("TopMass_"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
+#    pseudo_data_SB_fluc.plotOn(plot_toy_MC_frame)
 
-    Bkg_Mass_MC.plotOn( plot_toy_MC_frame , RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
+    Save_name = Save_Dir + "/" + "plot_toy_MC.pdf"
+    c2 = TCanvas("c2","",800,600)
 
+#    c2.cd()
+#    plot_toy_MC_frame.Draw()
+#    c2.Print(Save_name)
 
     # ------ 3. fit the toy MC with ext PDF of background, fixed two secondary backgrounds' shape and normalization ----------
 
     fit_toy_MC_frame = J_mass.frame(RooFit.Title("fit toy MC"))
-    fit_toy_MC_component_frame = J_mass.frame(RooFit.Title("fit toy MC with component"))
 
     # build another three PDF for 3 backgrounds
 
@@ -1079,10 +1016,10 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
     fracT_fit.setConstant(True)
 
     # set intial value to help converge
-#    constVjet_fit.setVal( -5.7000e-02  )
-#    nVjet_fit.setVal(4.8454e+02  )
-#    offsetVjet_fit.setVal( 8.0897e+02 )
-#    widthVjet_fit.setVal( 1.8270e+02 )
+    constVjet_fit.setVal( -5.7000e-02  )
+    nVjet_fit.setVal(4.8454e+02  )
+    offsetVjet_fit.setVal( 8.0897e+02 )
+    widthVjet_fit.setVal( 1.8270e+02 )
 
     VjetMass_ext_fit = RooExtendPdf("VjetMass_ext_fit",  "", VjetMass_fit,  nVjet_fit)
     VVMass_ext_fit = RooExtendPdf("VVMass_ext_fit",  "", VVMass_fit,  nVV_fit)
@@ -1094,14 +1031,7 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
 
     # fit pseudo data in SB only
 
-#    print ""
 #    print "before fit"
-#    print "constVjet_fit: " , constVjet_fit.getVal()
-#    print "offsetVjet_fit: ", offsetVjet_fit.getVal()
-#    print "widthVjet_fit: ", widthVjet_fit.getVal()
-#    print "nVjet_fit: ", nVjet_fit.getVal()
-    
-
 #    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
 
     VERBOSE = False
@@ -1112,20 +1042,13 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
 
 #    frMass_fit = BkgMass_fit.fitTo(pseudo_data_SB_fluc, RooFit.SumW2Error(True), RooFit.Range("LSBrange,HSBrange"), RooFit.Strategy(2), RooFit.Minimizer("Minuit"), RooFit.Save(1), RooFit.PrintLevel(1 if VERBOSE else -1))
 
-#    print ""
-#    print "ask fit converged?"
-#    print "frMass_fit.status(): ", frMass_fit.status() 
-#    print ""
-
-    fit_status = frMass_fit.status()
-
     cor_fit = frMass_fit.correlationMatrix()
 #    cor_fit.Print()
 
 #    print "after fit"
 #    print "nVjet_fit: ", nVjet_fit.getVal(), "nVV_fit: ", nVV_fit.getVal(), "nTop_fit: ", nTop_fit.getVal()
 
-#    print ""
+    print ""
 
     """
     print "for constVjet_fit"
@@ -1142,7 +1065,7 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
     print "nVjet_fit", par_fit.getVal(), " +/-", par_fit.getError()
     """
 
-#    print ""
+    print ""
 
     jetMassArg = RooArgSet(J_mass)
     iSBVjet_fit = VjetMass_fit.createIntegral(jetMassArg, RooFit.NormSet(jetMassArg), RooFit.Range("LSBrange,HSBrange"))
@@ -1158,32 +1081,17 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
 
     # plot
 
-    pseudo_data_SB_fluc.plotOn( fit_toy_MC_frame )
+#    Bkg_Mass_MC.plotOn( fit_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
+#    pseudo_data_SB_fluc.plotOn( fit_toy_MC_frame )
+#    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.LineColor(2) )
+#    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.VisualizeError(frMass_fit ,1,False), RooFit.DrawOption("L"),RooFit.LineWidth(2),RooFit.LineColor(6) )
 
-    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.VisualizeError(frMass_fit ,1),RooFit.FillColor(5) )
-    BkgMass_fit.plotOn( fit_toy_MC_frame, RooFit.Normalization(n_fit_MC_SB  ,RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range") ,RooFit.LineColor(2) )
-    Bkg_Mass_MC.plotOn( fit_toy_MC_frame, RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
-    pseudo_data_SB_fluc.plotOn( fit_toy_MC_frame )
+    Save_name = Save_Dir + "/" + "plot_fit_toy_MC.pdf"
+    c3 = TCanvas("c3","",800,600)
 
-
-    # plot with component
-
-    pseudo_data_SB_fluc.plotOn( fit_toy_MC_component_frame )
-
-    color1 = 8    
-    BkgMass_fit.plotOn( fit_toy_MC_component_frame, RooFit.Normalization( n_fit_MC_SB ,RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range"), RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
-
-    color1 = 6
-    BkgMass_fit.plotOn( fit_toy_MC_component_frame, RooFit.Normalization( n_fit_MC_SB ,RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range"), RooFit.Components("VVMass_ext_fit,TopMass_ext_fit"), RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
-
-    color1 = 7
-    BkgMass_fit.plotOn( fit_toy_MC_component_frame, RooFit.Normalization( n_fit_MC_SB ,RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range"), RooFit.Components("TopMass_ext_fit"),RooFit.LineColor(color1),RooFit.DrawOption("F"), RooFit.FillColor(color1), RooFit.FillStyle(1001))
-
-    pseudo_data_SB_fluc.plotOn( fit_toy_MC_component_frame )
-    Bkg_Mass_MC.plotOn( fit_toy_MC_component_frame , RooFit.Normalization(nPseudo_data_fluc  ,RooAbsReal.NumEvent),RooFit.LineColor(4) )
-
-    BkgMass_fit.plotOn( fit_toy_MC_component_frame , RooFit.Normalization( n_fit_MC_SB ,RooAbsReal.NumEvent),RooFit.Range("h_reasonable_range") ,RooFit.LineColor(2) )
-
+#    c3.cd()
+#    fit_toy_MC_frame.Draw()
+#    c3.Print(Save_name)
 
     # ------ 4. calculate the Signal region yield, bias and pull ----------
 
@@ -1200,17 +1108,17 @@ def Bias_and_Pull_Box(J_mass, channel, list_function_name, list_Vjet_pars, list_
     Bias = ( SRyield_fit.getVal() - pseudo_data_SR_fluc.sumEntries() )/ pseudo_data_SR_fluc.sumEntries()
     Pull = ( SRyield_fit.getVal() - pseudo_data_SR_fluc.sumEntries() )/ SRyield_fit_error  
 
-#    print "SRyield_fit.getVal(): ", SRyield_fit.getVal() 
-#    print "pseudo_data_SR_fluc.sumEntries(): ", pseudo_data_SR_fluc.sumEntries()
-#    print "SRyield_fit_error: ", SRyield_fit_error
-#    print "Bias: ", Bias
-#    print "Pull: ", Pull
+    print "SRyield_fit.getVal(): ", SRyield_fit.getVal() 
+    print "pseudo_data_SR_fluc.sumEntries(): ", pseudo_data_SR_fluc.sumEntries()
+    print "SRyield_fit_error: ", SRyield_fit_error
+    print "Bias: ", Bias
+    print "Pull: ", Pull
 
-    return ( plot_toy_MC_frame , fit_toy_MC_frame , fit_toy_MC_component_frame,  Bias, Pull, fit_status )
+    return ( Bias, Pull )
 
-#    print ""
-#    print "end Bias_and_Pull_Box"
-#    print ""
+    print ""
+    print "end Bias_and_Pull_Box"
+    print ""
     # end Bias_and_Pull_Box
     # -------------------------------------------
 
