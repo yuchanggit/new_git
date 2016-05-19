@@ -1,0 +1,235 @@
+// g++ -Wall -o analyzer `root-config --cflags --glibs` analyzer.cpp
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+
+#include "TROOT.h"
+#include "TSystem.h"
+#include "TKey.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TChain.h"
+#include "TH1F.h"
+#include "TF1.h"
+#include "TH2F.h"
+#include "TString.h"
+#include "TCut.h"
+#include "TMath.h"
+#include "TApplication.h"
+#include "TError.h"
+#include "TCanvas.h"
+#include "TGraphErrors.h"
+#include "TPad.h"
+#include "TStyle.h"
+#include <TString.h>
+#include <TPaveStats.h>
+#include <TLegend.h>
+
+using namespace std;
+
+int analyzer() 
+{
+//  gROOT->Macro("/afs/cern.ch/user/a/amartell/public/setStyle.C");
+  
+  // need to set these configurable from cfg and change into a vector
+  std::string inputFolder = "/store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/recoTrees/";
+  std::string runN = "3772";
+
+  TChain* tree = new TChain("H4treeReco");
+  tree->Add(("root://eoscms/"+inputFolder+"RECO_"+runN+".root").c_str());
+
+  Long64_t nentries = tree->GetEntries();
+  std::cout << " Tree loaded events = " << nentries << std::endl;
+
+  //Tree variables
+  UInt_t nwc;
+  Float_t wc_recox[16], wc_recoy[16];
+  UInt_t maxch;
+  Float_t group[100],ch[100];
+  Float_t pedestal[100], pedestalRMS[100], pedestalSlope[100];
+  Float_t wave_max[100], wave_max_aft[100], wave_aroundmax[100][50], time_aroundmax[100][50];
+  Float_t charge_integ[100], charge_integ_max[100], charge_integ_fix[100];
+  Float_t charge_integ_smallw[100], charge_integ_smallw_noise[100], charge_integ_largew[100], charge_integ_largew_noise[100];
+  Float_t t_max[100], t_max_frac30[100], t_max_frac50[100], t_at_threshold[100], t_over_threshold[100];
+
+  //Read tree
+  tree->SetBranchAddress("nwc",       &nwc);
+  tree->SetBranchAddress("wc_recox",   wc_recox);
+  tree->SetBranchAddress("wc_recoy",   wc_recoy);
+
+  tree->SetBranchAddress("maxch",               &maxch);
+  tree->SetBranchAddress("group",                group);
+  tree->SetBranchAddress("ch",                   ch);
+  tree->SetBranchAddress("pedestal",             pedestal);
+  tree->SetBranchAddress("pedestalRMS",          pedestalRMS);
+  tree->SetBranchAddress("pedestalSlope",        pedestalSlope);
+  tree->SetBranchAddress("wave_max",             wave_max);
+  tree->SetBranchAddress("wave_max_aft",         wave_max_aft);
+  tree->SetBranchAddress("wave_aroundmax",       wave_aroundmax);
+  tree->SetBranchAddress("time_aroundmax",       time_aroundmax);
+
+  tree->SetBranchAddress("charge_integ",         charge_integ);
+  tree->SetBranchAddress("charge_integ_max",     charge_integ_max);
+  tree->SetBranchAddress("charge_integ_fix",     charge_integ_fix);
+  tree->SetBranchAddress("charge_integ_smallw",  charge_integ_smallw);
+  tree->SetBranchAddress("charge_integ_largew",  charge_integ_largew);
+  tree->SetBranchAddress("charge_integ_smallw_noise",  charge_integ_smallw_noise);
+  tree->SetBranchAddress("charge_integ_largew_noise",  charge_integ_largew_noise);
+  tree->SetBranchAddress("t_max",                t_max);
+  tree->SetBranchAddress("t_max_frac30",         t_max_frac30);
+  tree->SetBranchAddress("t_max_frac50",         t_max_frac50);
+  tree->SetBranchAddress("t_at_threshold",       t_at_threshold);
+  tree->SetBranchAddress("t_over_threshold",     t_over_threshold);
+
+  //Histos => needs to expand
+
+  const int N_channel = 8; // maxch = 8
+
+  TH1F* h_wave_max[N_channel];
+  TH1F* h_charge_integ[N_channel];
+  TH2F* h_WaveMax_to_ChargeInteg[N_channel];
+
+
+  for(int channel=0; channel<N_channel; channel++){
+
+     TString h_name1 = Form("h_wave_max_channel_%d",channel );
+     TString h_name2 = Form("h_charge_integ_channel_%d",channel );
+     TString h_name3 = Form("h_WaveMax_to_ChargeInteg_channel_%d",channel );
+
+     int NBins_wave_max = 75    ; double L_wave_max = -50      ; double H_wave_max = 700;
+     int NBins_charge_integ = 55; double L_charge_integ = -1000; double H_charge_integ = 10000;
+
+     h_wave_max[channel]     = new TH1F(h_name1, h_name1, NBins_wave_max     , L_wave_max    , H_wave_max  );
+     h_charge_integ[channel] = new TH1F(h_name2, h_name2, NBins_charge_integ , L_charge_integ,H_charge_integ );
+     h_WaveMax_to_ChargeInteg[channel] = new TH2F(h_name3 ,h_name3,  NBins_wave_max    , L_wave_max    , H_wave_max    , 
+
+								     NBins_charge_integ, L_charge_integ, H_charge_integ);
+
+     if(channel==5){// re-define for 5th channel
+
+     NBins_wave_max     = 160; L_wave_max     = -100 ; H_wave_max     =  100;
+     NBins_charge_integ = 160; L_charge_integ = -2000; H_charge_integ = 2000;   
+
+     h_wave_max[channel]     = new TH1F(h_name1, h_name1, NBins_wave_max     , L_wave_max    , H_wave_max  );
+     h_charge_integ[channel] = new TH1F(h_name2, h_name2, NBins_charge_integ , L_charge_integ,H_charge_integ );
+     h_WaveMax_to_ChargeInteg[channel] = new TH2F(h_name3 ,h_name3,  NBins_wave_max    , L_wave_max    , H_wave_max    ,
+                                                                     NBins_charge_integ, L_charge_integ, H_charge_integ);
+     }
+
+
+  }
+
+  //loop over entries
+  for (Long64_t jentry=0; jentry<nentries; ++jentry){
+
+//    if(jentry> 100) break;
+
+    if (jentry % 5000 == 0)
+         fprintf(stderr, "Processing event %lli of %lli\n", jentry + 1, nentries );
+
+    //readout the event                                                                                                                
+    tree->GetEntry(jentry);
+
+
+    //selection to be in the high acceptance region of both wire chambers
+//    if(abs(wc_recox[0]-wc_recox[1]+3.5) <1 && abs(wc_recoy[0]-wc_recoy[1]+0.8) < 1){
+//    }
+
+
+    // fill histogram
+    for(int channel=0; channel<N_channel; channel++){
+
+    	h_wave_max[channel]     ->Fill( wave_max[channel]      );
+    	h_charge_integ[channel] ->Fill( charge_integ[channel]  );
+
+   	h_WaveMax_to_ChargeInteg[channel] ->Fill( wave_max[channel] , charge_integ[channel] );
+    }
+
+
+
+  }// end event loop
+
+
+  // save 
+
+  TString path_name = "/afs/cern.ch/user/y/yuchang/www/HGCAL_TestBeam/" ;
+  TString save_name = "WaveMax_to_ChargeInteg_correlation";
+  save_name = path_name + save_name + ".pdf";
+
+  TCanvas *c1 = new TCanvas("c1","",200,10,700,500);
+  double newx1 = 0.5;  double newx2 = 0.7;   double newy1 = 0.7;  double newy2 = 0.9;
+
+
+  for(int channel=0; channel<N_channel; channel++){
+
+    c1->cd();
+
+    h_wave_max[channel]              ->GetXaxis()->SetTitle("wave_max");
+    h_charge_integ[channel]          ->GetXaxis()->SetTitle("charge_integ");
+    h_WaveMax_to_ChargeInteg[channel]->GetXaxis()->SetTitle("wave_max");
+    h_WaveMax_to_ChargeInteg[channel]->GetYaxis()->SetTitle("charge_integ");
+    h_WaveMax_to_ChargeInteg[channel]->GetYaxis()->SetTitleOffset(1.3);
+
+    double cor_factor = h_WaveMax_to_ChargeInteg[channel]->GetCorrelationFactor();    
+    TString cor_legend_text = Form("correlation= %.3f" , cor_factor );
+
+
+    if (channel==0 || channel==7) continue;
+
+    if (channel==1){
+    	h_wave_max[channel]     ->Draw();    c1->Print(save_name +"(");
+    	h_charge_integ[channel] ->Draw();    c1->Print(save_name );
+	
+    	h_WaveMax_to_ChargeInteg[channel] ->Draw()      ;   
+        c1->Update();
+        TPaveStats *st =(TPaveStats*) h_WaveMax_to_ChargeInteg[channel]->GetListOfFunctions()->FindObject("stats");
+        st->SetX1NDC(newx1); st->SetX2NDC(newx2); st->SetY1NDC(newy1); st->SetY2NDC(newy2);
+        TLegend *leg = new TLegend(0.1,0.8,0.4,0.9);
+        leg->SetHeader(cor_legend_text);        leg->Draw();
+        c1->Update();        c1->Print(save_name);
+        h_WaveMax_to_ChargeInteg[channel] ->Draw("colz");    
+        leg->Draw();        c1->Update();        c1->Print(save_name);
+    }
+
+    if (channel!=1 && channel!=6){
+        h_wave_max[channel]     ->Draw();    c1->Print(save_name );
+        h_charge_integ[channel] ->Draw();    c1->Print(save_name );
+
+        h_WaveMax_to_ChargeInteg[channel] ->Draw()      ;
+        c1->Update();
+        TPaveStats *st =(TPaveStats*) h_WaveMax_to_ChargeInteg[channel]->GetListOfFunctions()->FindObject("stats");
+        st->SetX1NDC(newx1); st->SetX2NDC(newx2); st->SetY1NDC(newy1); st->SetY2NDC(newy2);
+        TLegend *leg = new TLegend(0.1,0.8,0.4,0.9);
+        leg->SetHeader(cor_legend_text);
+        leg->Draw();
+        c1->Update();        c1->Print(save_name);
+        h_WaveMax_to_ChargeInteg[channel] ->Draw("colz");
+        leg->Draw();        c1->Update();        c1->Print(save_name);
+
+    }
+
+    if (channel==6){
+        h_wave_max[channel]     ->Draw();    c1->Print(save_name );
+        h_charge_integ[channel] ->Draw();    c1->Print(save_name );
+
+        h_WaveMax_to_ChargeInteg[channel] ->Draw()      ;
+        c1->Update();
+        TPaveStats *st =(TPaveStats*) h_WaveMax_to_ChargeInteg[channel]->GetListOfFunctions()->FindObject("stats");
+        st->SetX1NDC(newx1); st->SetX2NDC(newx2); st->SetY1NDC(newy1); st->SetY2NDC(newy2);
+        TLegend *leg = new TLegend(0.1,0.8,0.4,0.9);
+        leg->SetHeader(cor_legend_text);
+        leg->Draw();
+        c1->Update();        c1->Print(save_name);
+        h_WaveMax_to_ChargeInteg[channel] ->Draw("colz");
+        leg->Draw();        c1->Update();        c1->Print(save_name +")");
+    }
+
+  }// end channel
+
+
+  // end
+  return 0;     
+
+}
+
