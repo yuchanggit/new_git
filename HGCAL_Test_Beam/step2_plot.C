@@ -29,7 +29,7 @@
 #include "TGraph.h"
 
 void plot_each_run();
-void plot_SiPad1  ();
+void plot_SiPad(TString SiPad_name ,const int N_SiPad,int N_runs_SiPad[], std::string runN_SiPad[][5] );
 
 void SetStyle_histo (TH1F* h          , TString variable_name );
 void SetStyle_histo2(TH1F* h          , TString variable_name );
@@ -40,26 +40,16 @@ void step2_plot()// main function
 
   cout<<"Hello"<< endl;
 
+  // plot each run individually
 //  plot_each_run();
 
-  plot_SiPad1();
 
+  // ------- for SiPad-1 --------
 
-
-}
-
-// ------------------------------------
-
-void plot_SiPad1(){
-
-  cout<<"hello plot_SiPad"<< endl;
-
-  TString variable_name[3] = {"pedestal","pedestalRMS","wave_max"} ;
+  TString SiPad_name = "SiPad1";  
 
   const int   N_SiPad1 = 3;// number of configrations for SiPad-1
-
-  int         N_runs_SiPad1[N_SiPad1]={0};
-
+  int         N_runs_SiPad1[N_SiPad1]={0};// number of run of that configuration
   std::string runN_SiPad1[N_SiPad1][5];
 
   // run numbers
@@ -84,72 +74,178 @@ void plot_SiPad1(){
   runN_SiPad1[2][3] = "";
   runN_SiPad1[2][4] = "";
 
+  plot_SiPad(SiPad_name, N_SiPad1, N_runs_SiPad1, runN_SiPad1  );
 
-  TH1F* h_variable[N_SiPad1][5][3];// configuration index, runs index, variables index
+  // ------- for SiPad-3 --------
 
-  for(int i=0;i<N_SiPad1;i++){
+  SiPad_name = "SiPad3";
 
-    for(int j=0;j<N_runs_SiPad1[i];j++){
+  const int   N_SiPad3 = 7;// number of configrations for SiPad-3
+  int         N_runs_SiPad3[N_SiPad3]={0};// number of run of that configuration
+  std::string runN_SiPad3[N_SiPad3][5];
 
-      TString path = "root_files/" + runN_SiPad1[i][j] + ".root" ;	
+  // run numbers
+  N_runs_SiPad3[0] = 3;
+  runN_SiPad3[0][0] = "3656";
+  runN_SiPad3[0][1] = "3683";
+  runN_SiPad3[0][2] = "3688";
+  runN_SiPad3[0][3] = "";
+  runN_SiPad3[0][4] = "";
+
+  N_runs_SiPad3[1] = 1;
+  runN_SiPad3[1][0] = "3693";
+  runN_SiPad3[1][1] = "";
+  runN_SiPad3[1][2] = "";
+  runN_SiPad3[1][3] = "";
+  runN_SiPad3[1][4] = "";
+
+  N_runs_SiPad3[2] = 1;
+  runN_SiPad3[2][0] = "3697";
+  runN_SiPad3[2][1] = "";
+  runN_SiPad3[2][2] = "";
+  runN_SiPad3[2][3] = "";
+  runN_SiPad3[2][4] = "";
+
+  N_runs_SiPad3[3] = 1;
+  runN_SiPad3[3][0] = "3666";
+  runN_SiPad3[3][1] = "";
+  runN_SiPad3[3][2] = "";
+  runN_SiPad3[3][3] = "";
+  runN_SiPad3[3][4] = "";
+
+  N_runs_SiPad3[4] = 2;
+  runN_SiPad3[4][0] = "3663";
+  runN_SiPad3[4][1] = "3670";
+  runN_SiPad3[4][2] = "";
+  runN_SiPad3[4][3] = "";
+  runN_SiPad3[4][4] = "";
+
+  N_runs_SiPad3[5] = 1;
+  runN_SiPad3[5][0] = "3675";
+  runN_SiPad3[5][1] = "";
+  runN_SiPad3[5][2] = "";
+  runN_SiPad3[5][3] = "";
+  runN_SiPad3[5][4] = "";
+
+  N_runs_SiPad3[6] = 1;
+  runN_SiPad3[6][0] = "3679";
+  runN_SiPad3[6][1] = "";
+  runN_SiPad3[6][2] = "";
+  runN_SiPad3[6][3] = "";
+  runN_SiPad3[6][4] = "";
+
+  plot_SiPad(SiPad_name, N_SiPad3, N_runs_SiPad3, runN_SiPad3  );
+
+}
+
+// ------------------------------------
+
+void plot_SiPad(TString SiPad_name ,const int N_SiPad,int N_runs_SiPad[], std::string runN_SiPad[][5] ){
+
+  cout<<"hello plot_SiPad: "<< SiPad_name << endl;
+
+  // flag for diodes 
+  int irradiated_flag = -1;// 0 for un-irradiated diodes, 1 for irradiated diodes 
+
+  if( SiPad_name == "SiPad1" || SiPad_name == "SiPad2") { irradiated_flag =0;}
+  if( SiPad_name == "SiPad3" || SiPad_name == "SiPad4" || SiPad_name == "SiPad5" || SiPad_name == "SiPad6" ) {irradiated_flag =1; }
+
+  // variables
+  const int N_variables = 3;
+  TString variable_name[N_variables] = {"pedestal","pedestalRMS","wave_max"} ;
+
+  // ----- open histogram  -----------------
+  TH1F* h_variable[N_SiPad][5][N_variables];// configuration index, runs index, variables index
+
+  for(int i=0;i<N_SiPad;i++){
+
+    for(int j=0;j<N_runs_SiPad[i];j++){
+
+      TString path = "root_files/" + runN_SiPad[i][j] + ".root" ;	
       TFile *f = TFile::Open( path );
 
-      for(int k=0;k<3;k++){
-        TString h_name = "h_" + variable_name[k] + "_SiPad1" ;
+      for(int k=0;k<N_variables;k++){
+        TString h_name = "h_" + variable_name[k] + "_" + SiPad_name ;
         h_variable[i][j][k] = (TH1F*)f->FindObjectAny(h_name);
       }
     }
   }
 
-  // combine histogram
-  TH1F* h_variable_combine[N_SiPad1][3];// config index, variables index
+  // ---- combine histogram ------------------
+  TH1F* h_variable_combine[N_SiPad][N_variables];// config index, variables index
 
-  for(int i=0;i<N_SiPad1;i++){
-    for(int k=0;k<3;k++){
+  for(int i=0;i<N_SiPad;i++){
+    for(int k=0;k<N_variables;k++){
 
       h_variable_combine[i][k] = (TH1F*) h_variable[i][0][k]->Clone("hnew"); 
 
-      for(int j=0;j<N_runs_SiPad1[i];j++){
+      for(int j=0;j<N_runs_SiPad[i];j++){
         if(j==0)continue;
         h_variable_combine[i][k]->Add ( h_variable[i][j][k],1);  
       }
     }
   }
 
-  // draw combine 
-
-  TCanvas *c_[3];
-  c_[0] = new TCanvas("c1","c1",200,10,700,500);
-  c_[1] = new TCanvas("c2","c2",200,10,700,500);
-  c_[2] = new TCanvas("c3","c3",200,10,700,500);
-
 
   // set style 
   gStyle->SetOptStat(0);
 
-  for(int k=0;k<3;k++){
-    for(int i=0;i<N_SiPad1;i++){
+  for(int k=0;k<N_variables;k++){
+    for(int i=0;i<N_SiPad;i++){
       SetStyle_histo2(h_variable_combine[i][k] , variable_name[k]   );
       h_variable_combine[i][k]->SetLineColor(i+1);
     }
   }
 
 
+  // define legend 
+
+  TString leg_name[N_SiPad];// number of configurations 
+  TString header_name;
+
+  if(irradiated_flag == 0){// un-irradiated diodes
+    leg_name[0] = "120 #mu m,600V";
+    leg_name[1] = "200 #mu m,600V";
+    leg_name[2] = "300 #mu m,600V";
+
+    std::string temp = (std::string ) SiPad_name; 
+    char Pad_index = temp[  temp.size() -1 ] ;  TString temp2 = Pad_index;
+    header_name = "SiPad-" + temp2 +", un-irradiated";
+//    cout<< "header_name: "<< header_name << endl;
+  }
+
+  if(irradiated_flag == 1){// irradiated diodes
+    leg_name[0] = "120 #mu m,600V";
+    leg_name[1] = "120 #mu m,700V";
+    leg_name[2] = "120 #mu m,800V";
+    leg_name[3] = "200 #mu m,600V";
+    leg_name[4] = "200 #mu m,800V";
+    leg_name[5] = "300 #mu m,600V";
+    leg_name[6] = "300 #mu m,800V";
+
+    std::string temp = (std::string ) SiPad_name;
+    char Pad_index = temp[  temp.size() -1 ] ;  TString temp2 = Pad_index;
+    header_name = "SiPad-" + temp2 +", irradiated";
+
+  }
+
   // draw
+  TCanvas *c_[N_variables];
+  c_[0] = new TCanvas("c1","c1",200,10,700,500);
+  c_[1] = new TCanvas("c2","c2",200,10,700,500);
+  c_[2] = new TCanvas("c3","c3",200,10,700,500);
 
-  TString leg_name[3]; 
-  leg_name[0] = "120 #mu m,600V";
-  leg_name[1] = "200 #mu m,600V";
-  leg_name[2] = "300 #mu m,600V";
+  for(int k=0;k<N_variables;k++){
 
-  for(int k=0;k<3;k++){
+    TLegend *leg;
+    if(h_variable_combine[0][k]->GetMean()>200){leg = new TLegend(0.15,0.6,0.45,0.9);}
+    else {leg = new TLegend(0.6,0.6,0.9,0.9);}
 
-    TLegend *leg = new TLegend(0.6,0.7,0.9,0.9);
-    leg->SetHeader("SiPad-1, un-irradiated");
+    leg->SetHeader(header_name);
 
     c_[k]->cd();
 
-    for(int i=0;i<N_SiPad1;i++){
+    for(int i=0;i<N_SiPad;i++){
       if(i==0){h_variable_combine[i][k]->Draw()      ;}
       else    {h_variable_combine[i][k]->Draw("same");}
       
@@ -160,7 +256,7 @@ void plot_SiPad1(){
 
   // save pdf
   TString save_path = "/afs/cern.ch/user/y/yuchang/www/HGCAL_TestBeam/noise_study/";
-  TString save_name = save_path + "combine_histo_SiPad1.pdf";
+  TString save_name = save_path + "combine_histo_" + SiPad_name + ".pdf";
 
   c_[0]->Print(save_name +"(");
   c_[1]->Print(save_name     );
@@ -168,26 +264,26 @@ void plot_SiPad1(){
 
   // ----  Now start to plot TGraphError of different run ------
 
-  TGraphErrors* gr_SiPad1[N_SiPad1][3];// number of config, number of variables
+  TGraphErrors* gr_SiPad[N_SiPad][N_variables];// number of config, number of variables
 
-  for(int i=0;i<N_SiPad1;i++){// number of configurations
+  for(int i=0;i<N_SiPad;i++){// number of configurations
 
-    for(int k=0;k<3;k++){// number of variables
+    for(int k=0;k<N_variables;k++){// number of variables
 
-      int N_runs = N_runs_SiPad1[i];
+      int N_runs = N_runs_SiPad[i];
       double mean[N_runs];
       double rms[N_runs];
       double Nentries[N_runs];
       double error_x[N_runs];
 
-      for(int j=0;j<N_runs_SiPad1[i];j++){// numbers of runs
+      for(int j=0;j<N_runs_SiPad[i];j++){// numbers of runs
 
         mean[j] = h_variable[i][j][k]->GetMean();
         rms[j]  = h_variable[i][j][k]->GetRMS();
         Nentries[j] = h_variable[i][j][k]->GetEntries();
         error_x[j] = 0;
       }
-      gr_SiPad1[i][k] = new TGraphErrors( N_runs , Nentries , mean, error_x, rms );
+      gr_SiPad[i][k] = new TGraphErrors( N_runs , Nentries , mean, error_x, rms );
 
     }
   }
@@ -196,48 +292,49 @@ void plot_SiPad1(){
   double x_array[2]={0}; double y_array[2]={0}; double x_err_array[2]={0}; double y_err_array[2]={0};
   x_array[0] = 9000 ; x_array[1] = 24000; y_array[0] = 0 ; y_array[1] = 500;
 
-  TGraphErrors* gr_fake[3];
+  TGraphErrors* gr_fake[N_variables];
 
-  for(int k=0;k<3;k++){  
+  for(int k=0;k<N_variables;k++){  
     gr_fake[k] = new TGraphErrors(2, x_array, y_array, x_err_array, y_err_array );
     gr_fake[k]->GetXaxis()->SetRangeUser(10000 ,23000 );
 
-    if(variable_name[k] == "pedestal")   { gr_fake[k]->GetYaxis()->SetRangeUser(180 , 210); }
+    if(variable_name[k] == "pedestal" && irradiated_flag == 0)   { gr_fake[k]->GetYaxis()->SetRangeUser(180 , 210); }
+    if(variable_name[k] == "pedestal" && irradiated_flag == 1)   { gr_fake[k]->GetYaxis()->SetRangeUser(190 , 230); }
     if(variable_name[k] == "pedestalRMS"){ gr_fake[k]->GetYaxis()->SetRangeUser(0   , 30 ); }
-    if(variable_name[k] == "wave_max")   { gr_fake[k]->GetYaxis()->SetRangeUser(0   , 60); }
+    if(variable_name[k] == "wave_max")   { gr_fake[k]->GetYaxis()->SetRangeUser(0   , 70); }
 
   }
 
   // set style
 
-  for(int k=0;k<3;k++){
-    for(int i=0;i<N_SiPad1;i++){ 
+  for(int k=0;k<N_variables;k++){
+    for(int i=0;i<N_SiPad;i++){ 
       SetStyle_gr ( gr_fake[k] , variable_name[k] );
-      SetStyle_gr ( gr_SiPad1[i][k] , variable_name[k] );
-      gr_SiPad1[i][k]->SetMarkerColor(i+1);
+      SetStyle_gr ( gr_SiPad[i][k] , variable_name[k] );
+      gr_SiPad[i][k]->SetMarkerColor(i+1);
     } 
   }
 
   // draw
-  TCanvas *c__[3];
+  TCanvas *c__[N_variables];
   c__[0] = new TCanvas("c4","c4",200,10,700,500);
   c__[1] = new TCanvas("c5","c5",200,10,700,500);
   c__[2] = new TCanvas("c6","c6",200,10,700,500);
 
 
-  for(int k=0;k<3;k++){
+  for(int k=0;k<N_variables;k++){
 
-    TLegend *leg = new TLegend(0.5,0.7,0.8,0.9);
-    leg->SetHeader("SiPad-1, un-irradiated");
+    TLegend *leg = new TLegend(0.5,0.6,0.8,0.9);
+    leg->SetHeader(header_name);
 
     c__[k]->SetGrid();
     c__[k]->cd();
 
     gr_fake[k]->Draw("AP");
 
-    for(int i=0;i<N_SiPad1;i++){
-      gr_SiPad1[i][k]->Draw("P");
-      leg->AddEntry(gr_SiPad1[i][k]  ,leg_name[i]  ,"pl");
+    for(int i=0;i<N_SiPad;i++){
+      gr_SiPad[i][k]->Draw("P");
+      leg->AddEntry(gr_SiPad[i][k]  ,leg_name[i]  ,"pl");
     }    
     leg->Draw();
 
@@ -245,17 +342,17 @@ void plot_SiPad1(){
 
   // save pdf
 
-  save_name = save_path + "different_run_SiPad1.pdf";
+  save_name = save_path + "different_run_"+ SiPad_name + ".pdf";
 
   c__[0]->Print(save_name +"(");
   c__[1]->Print(save_name     );
   c__[2]->Print(save_name +")");
 
 
-}// end plot_SiPad1()
-
+}// end plot_SiPad()
 
 // -----------------------------------------
+
 
 void SetStyle_gr ( TGraphErrors* gr, TString variable_name ){
 
