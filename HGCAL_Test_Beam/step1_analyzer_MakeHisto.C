@@ -34,7 +34,8 @@ void Read_Tree(std::string runN);
 
 // -----------------------------------------------------
 
-void analyzer_step1_MakeHisto()
+//void analyzer_step1_MakeHisto()
+void step1_analyzer_MakeHisto()
 {
 
 
@@ -119,6 +120,7 @@ void Read_Tree(std::string runN ){
   TH1F* h_wave_max[7];
   TH1F* h_pedestal[7];
   TH1F* h_pedestalRMS[7];
+  TH2F* h_wave_max_vs_pedestalRMS[7];
 
   for(int i=0;i<7;i++){
 
@@ -130,6 +132,9 @@ void Read_Tree(std::string runN ){
 
     h_name = "h_pedestalRMS_" + Pad_name[i];
     h_pedestalRMS[i] = new TH1F(h_name, h_name, 60  , 0 , 60   );
+
+    h_name = "h_wave_max_vs_pedestalRMS_" + Pad_name[i];
+    h_wave_max_vs_pedestalRMS[i] = new TH2F(h_name, h_name, 300  , 0 , 300, 60  , 0 , 60   );
 
   }
 
@@ -150,13 +155,14 @@ void Read_Tree(std::string runN ){
         h_wave_max[i]   ->Fill( wave_max[i]   );
         h_pedestal[i]   ->Fill( pedestal[i]   );
         h_pedestalRMS[i]->Fill( pedestalRMS[i]);
+	h_wave_max_vs_pedestalRMS[i]->Fill( wave_max[i] , pedestalRMS[i]);
     }
     
 
   }// end event loop
 
 
-
+  
 
   // save histogram
   TString root_name = "root_files/"+ runN + ".root";
@@ -164,10 +170,13 @@ void Read_Tree(std::string runN ){
 
   for(int i=1;i<7;i++){
 
+    h_wave_max_vs_pedestalRMS[i]->GetYaxis()->SetTitle("wave_max [ADC]");
+    h_wave_max_vs_pedestalRMS[i]->GetXaxis()->SetTitle("pedestalRMS [ADC]");
+
     h_wave_max[i]   ->Write();
     h_pedestal[i]   ->Write();
     h_pedestalRMS[i]->Write();
-
+    h_wave_max_vs_pedestalRMS[i]->Write();
   }
 
 
@@ -180,7 +189,7 @@ void Read_Tree(std::string runN ){
     delete h_wave_max[i];
     delete h_pedestal[i];
     delete h_pedestalRMS[i];
-
+    delete h_wave_max_vs_pedestalRMS[i];
   }
 
 }// end Read_Tree

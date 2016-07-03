@@ -30,6 +30,7 @@
 
 void plot_each_run();
 void plot_SiPad(TString SiPad_name ,const int N_SiPad,int N_runs_SiPad[], std::string runN_SiPad[][5] );
+void check_two_run();
 
 void SetStyle_histo (TH1F* h          , TString variable_name );
 void SetStyle_histo2(TH1F* h          , TString variable_name );
@@ -40,9 +41,10 @@ void step2_plot()// main function
 
   cout<<"Hello"<< endl;
 
-  // plot each run individually
-//  plot_each_run();
+//  check_two_run();
 
+  // plot each run individually
+  plot_each_run();
 
   // ------- for SiPad-1 --------
 
@@ -74,7 +76,7 @@ void step2_plot()// main function
   runN_SiPad1[2][3] = "";
   runN_SiPad1[2][4] = "";
 
-  plot_SiPad(SiPad_name, N_SiPad1, N_runs_SiPad1, runN_SiPad1  );
+//  plot_SiPad(SiPad_name, N_SiPad1, N_runs_SiPad1, runN_SiPad1  );
 
   // ------- for SiPad-3 --------
 
@@ -134,7 +136,7 @@ void step2_plot()// main function
   runN_SiPad3[6][3] = "";
   runN_SiPad3[6][4] = "";
 
-  plot_SiPad(SiPad_name, N_SiPad3, N_runs_SiPad3, runN_SiPad3  );
+//  plot_SiPad(SiPad_name, N_SiPad3, N_runs_SiPad3, runN_SiPad3  );
 
 }
 
@@ -261,6 +263,31 @@ void plot_SiPad(TString SiPad_name ,const int N_SiPad,int N_runs_SiPad[], std::s
   c_[0]->Print(save_name +"(");
   c_[1]->Print(save_name     );
   c_[2]->Print(save_name +")");
+
+
+  // cout SiPad-x, configurations, variables, mean, RMS, factor
+
+  cout<<endl;
+  cout<<"which SiPad: "<< header_name << endl;
+
+  for(int i=0;i<N_SiPad;i++){
+
+    cout<<endl;
+    cout<<"configurations"<< leg_name[i] << endl;
+
+    cout<<"pedestalRMS"<<endl;
+    cout<<"mean: "<< h_variable_combine[i][1]->GetMean()<<" RMS: "<< h_variable_combine[i][1]->GetRMS()<< endl;
+
+    cout<<"wave_max"<<endl;
+    cout<<"mean: "<< h_variable_combine[i][2]->GetMean()<<" RMS: "<< h_variable_combine[i][2]->GetRMS()<< endl;
+
+    double factor1 = h_variable_combine[i][2]->GetMean() / h_variable_combine[i][1]->GetMean();  
+    cout<<" wave_max mean/ ped_RMS mean= "<< factor1 << endl;
+
+    double factor2 = h_variable_combine[i][2]->GetRMS() / h_variable_combine[i][1]->GetRMS();
+    cout<<" wave_max RMS/ ped_RMS RMS= "<< factor2 << endl;
+    cout<<endl;
+  }
 
   // ----  Now start to plot TGraphError of different run ------
 
@@ -474,6 +501,46 @@ void plot_each_run(){
 
   }// end loop run
 
+
+  // ------ open and save 2D plot for wave_max vs pedestalRMS ---------
+
+  TCanvas *c2 = new TCanvas("c2","c2",200,10,700,500);
+  save_name = save_path + "each_run_2D.pdf";
+
+  for (int i=0;i<N_runs;i++){
+
+    TString path = "root_files/" + runN[i] + ".root" ;
+    TFile *f = TFile::Open( path );
+
+    for(int j=1;j<7;j++){// loop on SiPad
+
+        TString h_name = "h_wave_max_vs_pedestalRMS_"  + pad_name[j];
+        TH2F *h = (TH2F*)f->FindObjectAny(h_name);
+
+        TString title = "run= " + runN[i] + "," + pad_name[j] ;
+        h->SetTitle( title );
+
+        gStyle->SetOptStat(0);
+
+        double cor_factor = h->GetCorrelationFactor();    
+        TString cor_legend_text = Form("correlation= %.3f" , cor_factor );
+
+
+        c2->cd();
+        h->Draw("colz");
+
+        TLegend *leg = new TLegend(0.1,0.8,0.4,0.9);
+        leg->SetHeader(cor_legend_text);        leg->Draw();
+
+        if     (i==0 && j==1 )         {c2->Print(save_name +"(");}
+        else if(i==N_runs-1 && j==6 )  {c2->Print(save_name +")");}
+        else {c2->Print(save_name     );}
+
+    }
+
+  }
+
+
 }// end plot_each_run
 
 // -----------------------------------------
@@ -499,6 +566,120 @@ void SetStyle_histo(TH1F* h, TString variable_name ){
 
 }
 
+
+
+void check_two_run(){
+
+  cout<<"hello check two run"<< endl;
+
+  TString variable_name[3] = {"pedestal","pedestalRMS","wave_max"} ;
+
+  std::string runN[2];
+
+  runN[0]= "3663";
+  runN[1]= "3670";
+
+  TH1F *h_variable[2][3];// runs, variables (check SiPad3) 
+
+  // find histogram
+
+  for(int i=0;i<2;i++){// runs
+
+    TString path = "root_files/" + runN[i] + ".root" ; 
+    TFile *f = TFile::Open( path );
+
+    for(int k=0;k<3;k++){// variables
+
+      TString h_name = "h_" + variable_name[k] + "_SiPad3";
+      h_variable[i][k] = (TH1F*)f->FindObjectAny(h_name); 
+
+    }
+  }
+  // combine histogram
+
+  TH1F *h_combine[3];  
+
+  for(int k=0;k<3;k++){
+
+    h_combine[k] = (TH1F*) h_variable[0][k]->Clone("hnew"); 
+    h_combine[k] -> Add( h_variable[1][k] );
+  }
+
+  // set style
+
+  gStyle->SetOptStat(0);
+
+    // pedestalRMS
+  h_combine[1]->SetTitle("compare two runs");
+
+  h_combine[1]->SetLineColor(kYellow+2);
+  h_variable[0][1]->SetLineColor(2);
+  h_variable[1][1]->SetLineColor(4);
+
+  h_combine[1]->SetLineWidth(3);
+  h_variable[0][1]->SetLineWidth(3);
+  h_variable[1][1]->SetLineWidth(3);
+
+  h_combine[1]->GetXaxis()->SetTitle("pedestalRMS [ADC]");
+  h_combine[1]->GetYaxis()->SetTitle("number of events");
+  h_combine[1]->GetYaxis()->SetTitleOffset(1.3);
+
+    // wave_max
+  h_combine[2]->SetTitle("compare two runs");
+
+  h_combine[2]->SetLineColor(kYellow+2);
+  h_variable[0][2]->SetLineColor(2);
+  h_variable[1][2]->SetLineColor(4);
+
+  h_combine[2]->SetLineWidth(3);
+  h_variable[0][2]->SetLineWidth(3);
+  h_variable[1][2]->SetLineWidth(3);
+
+  h_combine[2]->GetXaxis()->SetTitle("wave_max [ADC]");
+  h_combine[2]->GetYaxis()->SetTitle("number of events");
+  h_combine[2]->GetYaxis()->SetTitleOffset(1.3);
+
+  h_combine[2]->GetXaxis()->SetRangeUser(-10 , 100);
+
+  // draw
+
+    // pedestalRMS
+  TCanvas *c1 = new TCanvas("c1","c1",200,10,700,500);
+  c1->cd();
+  h_combine[1]->Draw();
+  h_variable[0][1]->Draw("same");
+  h_variable[1][1]->Draw("same");
+  h_combine[1]->Draw("same");
+
+  TLegend *leg = new TLegend(0.6,0.7,0.9,0.9) ;
+  leg->AddEntry( h_combine[1] , "add two runs" ,"l");
+  leg->AddEntry( h_variable[0][1], "run=3663" ,"l");
+  leg->AddEntry( h_variable[1][1], "run=3670" ,"l");
+  leg->Draw();
+
+    // wave_max
+  TCanvas *c2 = new TCanvas("c2","c2",200,10,700,500);
+  c2->cd();
+  h_combine[2]->Draw();
+  h_variable[0][2]->Draw("same");
+  h_variable[1][2]->Draw("same");
+  h_combine[2]->Draw("same");
+
+  TLegend *leg2 = new TLegend(0.6,0.7,0.9,0.9) ;
+  leg2->AddEntry( h_combine[2] , "add two runs" ,"l");
+  leg2->AddEntry( h_variable[0][2], "run=3663" ,"l");
+  leg2->AddEntry( h_variable[1][2], "run=3670" ,"l");
+  leg2->Draw();
+
+  // save
+
+  TString save_path = "/afs/cern.ch/user/y/yuchang/www/HGCAL_TestBeam/noise_study/";
+  TString save_name = save_path + "check_two_runs.pdf";
+
+  c1->Print( save_name +"(");
+  c2->Print( save_name +")");
+
+}
 
 
 
