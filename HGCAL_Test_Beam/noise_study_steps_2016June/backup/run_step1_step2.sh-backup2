@@ -1,0 +1,11 @@
+#!/bin/sh
+
+#num=15
+#root -q -b -l step2_plot.C+\($num\)
+root -q -b -l step2_plot.C+\(\"recoTrees_vSlope0\"\)
+
+#recoTrees_vSlope0
+
+
+
+
