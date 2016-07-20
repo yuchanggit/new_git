@@ -145,8 +145,6 @@ void eleZVariable(){
 
       TLorentzVector* myEle = (TLorentzVector*)eleP4->At(ie);
 
-      if(ie==0) h_1stEle_pt_1->Fill( myEle->Pt() );
-
       if( !(fabs(eleScEta[ie]) < 1.4442 || fabs(eleScEta[ie]) > 1.566) ) continue;
       if( fabs(eleScEta[ie]) > 2.5 ) continue;
       if( myEle->Pt() < 35 ) continue;
