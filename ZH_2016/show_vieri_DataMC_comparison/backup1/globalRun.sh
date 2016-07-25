@@ -4,8 +4,8 @@ flag_MC=false
 flag_DATA=false
 
 # -- decide run MC or data here ---- 
-flag_MC=true
-#flag_DATA=true
+#flag_MC=true
+flag_DATA=true
 
 # -- decide run electron or muon variable here ---- 
 macro=eleZVariable
@@ -59,8 +59,6 @@ if [ $flag_MC == true  ];then
      save_name=DYJetsToLL_M-50_HT-600toInf_13TeV
      Macro $macro $sample_name $save_name
 
-#<<cc
-
   # TT
      sample_name=TT_TuneCUETP8M1_13TeV-powheg-pythia8
      save_name=TT_TuneCUETP8M1_13TeV
@@ -86,7 +84,6 @@ if [ $flag_MC == true  ];then
      save_name=ZZ_TuneCUETP8M1_13TeV
      Macro $macro $sample_name $save_name
 
-#cc
 
 fi
 

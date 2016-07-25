@@ -7,82 +7,17 @@
 #include <TChain.h>
 #include <TClonesArray.h>
 #include <TLorentzVector.h>
-#include "interface/untuplizer.h"
-#include "interface/isPassZee.h"
-#include "interface/readSample.h"
+#include "../interface/untuplizer.h"
+#include "../interface/isPassZee.h"
+#include "../interface/readSample.h"
 
-Float_t pileupWeight(Int_t puntrueint){
-
-  if ( puntrueint <0  ){ return 1; } // for data, the puntrueint is a big negative value
-
-  Float_t puweight[200]= {1.};
-
-  puweight[0]   =  1.;
-  puweight[1]   =  162.405;
-  puweight[2]   =  123.505;
-  puweight[3]   =  30.4728;
-  puweight[4]   =  17.0003;
-  puweight[5]   =  3.16955;
-  puweight[6]   =  1.67983;
-  puweight[7]   =  2.00222;
-  puweight[8]   =  2.70321;
-  puweight[9]   =  2.72198;
-  puweight[10]  =  2.66497;
-  puweight[11]  =  2.61761;
-  puweight[12]  =  2.3039;
-  puweight[13]  =  1.73163;
-  puweight[14]  =  1.09124;
-  puweight[15]  =  0.572786;
-  puweight[16]  =  0.25889;
-  puweight[17]  =  0.110005;
-  puweight[18]  =  0.0524568;
-  puweight[19]  =  0.0299666;
-  puweight[20]  =  0.0176408;
-  puweight[21]  =  0.00921793;
-  puweight[22]  =  0.00407931;
-  puweight[23]  =  0.00156008;
-  puweight[24]  =  0.000561605;
-  puweight[25]  =  0.000223715;
-  puweight[26]  =  0.000111408;
-  puweight[27]  =  6.9408e-05;
-  puweight[28]  =  5.01042e-05;
-  puweight[29]  =  3.8732e-05;
-  puweight[30]  =  2.89728e-05;
-  puweight[31]  =  1.87439e-05;
-  puweight[32]  =  9.51068e-06;
-  puweight[33]  =  4.2903e-06;
-  puweight[34]  =  1.69486e-06;
-  puweight[35]  =  6.29131e-07;
-  puweight[36]  =  2.21324e-07;
-  puweight[37]  =  7.49491e-08;
-  puweight[38]  =  2.42443e-08;
-  puweight[39]  =  7.36554e-09;
-  puweight[40]  =  2.22336e-09;
-  puweight[41]  =  6.25637e-10;
-  puweight[42]  =  1.77453e-10;
-  puweight[43]  =  4.67515e-11;
-  puweight[44]  =  1.14411e-11;
-  puweight[45]  =  2.96267e-12;
-  puweight[46]  =  2.13236e-12;
-  puweight[47]  =  7.14993e-13;
-  puweight[48]  =  4.02716e-13;
-  puweight[49]  =  3.10075e-13;
-
-  if( puntrueint >= 50 ) puweight[puntrueint] = 0;
-  return puweight[puntrueint];
-
-//  if ( puntrueint >=0 ){      
-//	 if( puntrueint >= 50 ) puweight[puntrueint] = 0;
-//         return puweight[puntrueint];
-//  }
-
-//  if ( puntrueint <0  ){ return 1; } // for data, the puntrueint is a big negative value
-
-}
 
 
 
 void eleZVariable(std::string inputFile, std::string outputFile){
+//void eleZVariable(){
+
+//  std::string inputFile = "/data7/yuchang/NCUGlobalTuples_80X/SingleElectron";
 
   // read the ntuples (in pcncu) and combine TTree
 
@@ -95,8 +30,11 @@ void eleZVariable(std::string inputFile, std::string outputFile){
   std::string open_root;
 
   for(unsigned int i=0 ; i<infiles.size() ; i++ ){
-//    cout<<"infiles[i]: "<< infiles[i]<< endl;
-    open_root="root://" + infiles[0] ; tree->Add( open_root.c_str()  );
+//  for(unsigned int i=0 ; i<5 ; i++ ){
+//    open_root="root://" + infiles[0] ;
+    open_root="root://" + infiles[i] ;
+//    cout<<"open_root: "<< open_root<< endl;
+    tree->Add( open_root.c_str()  );
   }
 
   cout<<"tree->GetEntries(): "<< tree->GetEntries() << endl;
@@ -108,142 +46,324 @@ void eleZVariable(std::string inputFile, std::string outputFile){
   // Declare the histogram
      
   TFile* f = new TFile(inputFile.data());
-//  TH1D* h_totalEvents = (TH1D*)f->Get("h_totalEv");
-  TH1D* h_totalEvents   = new TH1D("h_totalEv"      , "h_totalEv",     10 ,0,     10);
+  TH1D* h_totalEvents   = new TH1D("h_totalEv"      , "totalEvents",     10 ,0,     10);
 
-//  TH1D* h_ele1_pt_Nocut = new TH1D("h_ele1_pt_Nocut", ""     ,         50, 0,  1000);
 
-  TH1D* h_Zmass         = new TH1D("h_Zmass",         "Zmass",         30, 60,  120);
-  TH1D* h_Zpt           = new TH1D("h_Zpt",           "Zpt",           50,  0, 1000);
-  TH1D* h_Zeta          = new TH1D("h_Zeta",          "Zeta",          40, -4,    4);
-  TH1D* h_ZRapidity     = new TH1D("h_ZRapidity",     "ZRapidity",     40, -4,    4);
-  TH1D* h_leadElePt     = new TH1D("h_leadElePt",     "leadElePt",     16,  0,  800);
-  TH1D* h_leadEleEta    = new TH1D("h_leadEleEta",    "leadEleEta",    40, -4,    4);
-  TH1D* h_subleadElePt  = new TH1D("h_subleadElePt",  "subleadElePt",  25,  0,  500);
-  TH1D* h_subleadEleEta = new TH1D("h_subleadEleEta", "subleadEleEta", 40, -4,    4);
+  TH1D* h_1stEle_pt_1           = new TH1D("h_1stEle_pt_1",           "Leading_pt_stage1",           30,  0, 300);
+  TH1D* h_1stEle_pt_2           = new TH1D("h_1stEle_pt_2",           "Leading_pt_stage2",           30,  0, 300);
+  TH1D* h_1stEle_pt_3           = new TH1D("h_1stEle_pt_3",           "Leading_pt_stage3",           30,  0, 300);
 
-  h_Zmass        ->Sumw2();
-  h_Zpt          ->Sumw2();
-  h_Zeta         ->Sumw2();
-  h_ZRapidity    ->Sumw2();
-  h_leadElePt    ->Sumw2();
-  h_leadEleEta   ->Sumw2();
-  h_subleadElePt ->Sumw2();
-  h_subleadEleEta->Sumw2(); 
-  
-  h_Zmass        ->GetXaxis()->SetTitle("Zmass"); 
-  h_Zpt          ->GetXaxis()->SetTitle("Zpt");   
-  h_Zeta         ->GetXaxis()->SetTitle("Zeta");    
-  h_ZRapidity    ->GetXaxis()->SetTitle("ZRapidity");
-  h_leadElePt    ->GetXaxis()->SetTitle("leadElePt");  
-  h_leadEleEta   ->GetXaxis()->SetTitle("leadEleEta");
-  h_subleadElePt ->GetXaxis()->SetTitle("subleadElePt");   
-  h_subleadEleEta->GetXaxis()->SetTitle("subleadEleEta"); 
-    
+  TH1D* h_2ndEle_pt_2           = new TH1D("h_2ndEle_pt_2",           "SubLeading_pt_stage2",        30,  0, 300);
+
+  TH1D* h_1stEle_eta_2           = new TH1D("h_1stEle_eta_2",         "Leading_eta_stage2",          60 , -3 , 3);
+  TH1D* h_2ndEle_eta_2           = new TH1D("h_2ndEle_eta_2",         "SubLeading_eta_stage2",       60 , -3 , 3);
+
+
+  TH1D* h_Zpt_1           = new TH1D("h_Zpt_1",           "Zpt",           60,  0, 600);
+  TH1D* h_Zpt_2           = new TH1D("h_Zpt_2",           "Zpt_stage2",           60,  0, 600);
+  TH1D* h_Zpt_3           = new TH1D("h_Zpt_3",           "Zpt_stage3",           60,  0, 600);
+
+  TH1D* h_Zmass_1         = new TH1D("h_Zmass_1",         "Zmass",         30, 60,  120);
+  TH1D* h_Zmass_2         = new TH1D("h_Zmass_2",         "Zmass_stage2",         30, 60,  120);
+  TH1D* h_Zmass_3         = new TH1D("h_Zmass_3",         "Zmass_stage3",         30, 60,  120);
+
+
+  h_1stEle_pt_2->Sumw2();
+  h_1stEle_pt_3->Sumw2();
+
+  h_2ndEle_pt_2->Sumw2();
+
+  h_1stEle_eta_2->Sumw2();
+  h_2ndEle_eta_2->Sumw2();
+
+  h_Zpt_2->Sumw2();
+  h_Zpt_3->Sumw2();
+  h_Zmass_2->Sumw2();
+  h_Zmass_3->Sumw2();
+
+  h_1stEle_pt_2->GetXaxis()->SetTitle("leadElePt");
+  h_1stEle_pt_3->GetXaxis()->SetTitle("leadElePt");
+
+  h_2ndEle_pt_2->GetXaxis()->SetTitle("subleadElePt");  
+
+  h_1stEle_eta_2->GetXaxis()->SetTitle("leadEleEta");  
+  h_2ndEle_eta_2->GetXaxis()->SetTitle("subleadEleEta");  
+
+  h_Zpt_2->GetXaxis()->SetTitle("Zpt");  
+  h_Zpt_3->GetXaxis()->SetTitle("Zpt");
+
+  h_Zmass_2->GetXaxis()->SetTitle("Zmass");  
+  h_Zmass_3->GetXaxis()->SetTitle("Zmass");
+
+  // counter 
+
+  int counter_0=0;
+  int counter_1=0;
+  int counter_2=0;    
+  int counter_3=0;
+
+
   // begin of event loop
+
+//  int Number_to_print    =  100000;
+  int Number_to_print    =  100000;
+
+  int Max_number_to_read = 1000000;
+//  int Max_number_to_read = 1000;
+//  int Max_number_to_read = 100;
 
   for( Long64_t ev = 0; ev < data.GetEntriesFast(); ev++ ){
 
-//    if( ev % 1000000 == 0 )
-    if( ev %   100000 == 0 )
-//    if( ev %   5000 == 0 )
+    if( ev %   Number_to_print == 0 )
       fprintf(stderr, "Processing event %lli of %lli\n", ev + 1, data.GetEntriesFast());
 
-    if( ev > 1000000)break;
-//    if( ev > 20000)break;
-//    if( ev > 50)break;
-
+    if( ev > Max_number_to_read) break;
 
     data.GetEntry(ev);
 
-    Float_t pu_nTrueInt = data.GetFloat("pu_nTrueInt");
-    Int_t puntrueint = pu_nTrueInt;
-    float pu_weight =  pileupWeight( puntrueint);
+    h_totalEvents->Fill(1,1);
+
+    // ------ counter0  --------
+
+    unsigned long eventId            = data.GetLong64("eventId");
+    unsigned long runId              = data.GetLong64("runId"); 
+    unsigned long lumiSection        = data.GetLong64("lumiSection");
 
     Bool_t   isData                  = data.GetBool("isData");
+    Int_t    nVtx                    = data.GetInt("nVtx");
 
-//    Float_t eventWeight = data.GetFloat("ev_weight");
+    std::string* trigName    = data.GetPtrString("hlt_trigName");
+    vector<bool>& trigResult = *((vector<bool>*) data.GetPtr("hlt_trigResult"));
 
-    float new_eventWeight = 1;
+    bool triggerStat = false;
+    std::string TRIGGERNAME = "HLT_Ele105";// HLT_Ele105_CaloIdVT_GsfTrkIdT_v3
+
+    if (isData){ // apply HLT on data   
+
+    for(int it = 0; it < data.GetPtrStringSize(); it++){
+
+      std::string thisTrig = trigName[it];
+      bool results = trigResult[it];
+
+      if( thisTrig.find(TRIGGERNAME) != std::string::npos && results ){
+        triggerStat = true;
+
+        break;
+
+      }
+    }
+
+    }// if isData
+    else triggerStat = true; // don't apply HLT on MC temporarily  
 
 
-//    if( isData) {new_eventWeight = eventWeight; }//  for data, eventWeight = 1 already
-//    if(!isData) {new_eventWeight = eventWeight * pu_weight; }
+    if( nVtx < 1 ) continue;
+//    if( !triggerStat ) continue;
 
-    h_totalEvents->Fill(1,1); 
+    counter_0++;
+//    cout<<"isData: "<< isData << endl;
 
-
-    TClonesArray* eleP4 = (TClonesArray*) data.GetPtrTObject("eleP4");
-
-    // test
+    // ------ counter1  --------
+    
+    
     const Int_t    nEle       = data.GetInt("nEle");
+    const Int_t*   eleCharge  = data.GetPtrInt("eleCharge");
+    const Float_t* eleScEta   = data.GetPtrFloat("eleScEta");
+    const Float_t* eleMiniIsoEA = data.GetPtrFloat("eleMiniIsoEA");
+    const vector<bool>& eleIsPassHEEPNoIso = *((vector<bool>*) data.GetPtr("eleIsPassHEEPNoIso"));
+    const vector<bool>& eleIsPassLoose = *((vector<bool>*) data.GetPtr("eleIsPassLoose"));
+    const TClonesArray* eleP4 = (TClonesArray*) data.GetPtrTObject("eleP4");
+
+
+    if (nEle >1){
+
+      counter_1++;
+
+      TLorentzVector* Ele1 = (TLorentzVector*)eleP4->At(0);
+      TLorentzVector* Ele2 = (TLorentzVector*)eleP4->At(1);
+      if ( Ele1->Pt() < Ele2->Pt()    ){cout<<" ele[1] pt > ele[0]     "<<endl; }
+      
+      TLorentzVector Z_boson = (*Ele1+*Ele2);
+      
+      h_1stEle_pt_1->Fill( Ele1->Pt() );
+
+      h_Zpt_1      ->Fill( Z_boson.Pt()  );
+      h_Zmass_1    ->Fill( Z_boson.M() );
+
+    }
+
+
+    // ------ counter2  --------
+
+    // select good electrons 
+    std::vector<Int_t> goodElectrons;
+    goodElectrons.clear();
     for(Int_t ie = 0; ie < nEle; ie++){
 
       TLorentzVector* myEle = (TLorentzVector*)eleP4->At(ie);
-//      h_ele1_pt_Nocut ->Fill( myEle->Pt()   );
 
+      if( !(fabs(eleScEta[ie]) < 1.4442 || fabs(eleScEta[ie]) > 1.566) ) continue;
+      if( fabs(eleScEta[ie]) > 2.5 ) continue;
+      if( myEle->Pt() < 35 ) continue;
+
+      if( !eleIsPassLoose[ie] ) continue;       
+
+      goodElectrons.push_back(ie);
     }
 
-    // select good electrons
+    if ( goodElectrons.size() >1 ){
+      counter_2++;
+      TLorentzVector* Ele1 = (TLorentzVector*)eleP4->At( goodElectrons[0] );
+      TLorentzVector* Ele2 = (TLorentzVector*)eleP4->At( goodElectrons[1] );
 
+      TLorentzVector Z_boson = (*Ele1+*Ele2);
+
+      h_1stEle_pt_2->Fill( Ele1->Pt() );
+      h_2ndEle_pt_2->Fill( Ele2->Pt() );
+
+      h_1stEle_eta_2->Fill( eleScEta[ goodElectrons[0]   ] );
+      h_2ndEle_eta_2->Fill( eleScEta[ goodElectrons[1]   ] );
+
+      h_Zpt_2      ->Fill( Z_boson.Pt()  );
+      h_Zmass_2    ->Fill( Z_boson.M() );
+
+    }
+    
+    // ------ counter3  --------
+
+
+    // select good Z boson
     vector<Int_t> goodEleID;
-    if( !isPassZee(data, goodEleID) ) continue;
+    goodEleID.clear();
 
-    TLorentzVector* thisEle = (TLorentzVector*)eleP4->At(goodEleID[0]);
-    TLorentzVector* thatEle = (TLorentzVector*)eleP4->At(goodEleID[1]);
+    bool findEPair = false;
+    TLorentzVector* thisEle = NULL;
+    TLorentzVector* thatEle = NULL;
+    
+//    std::cout<<" goodElectrons.size = "<<goodElectrons.size()<<std::endl;
+    for(unsigned int i = 0; i < goodElectrons.size(); i++){
 
-    TLorentzVector l4_Z = (*thisEle+*thatEle);
+      Int_t ie = goodElectrons[i];
+      thisEle = (TLorentzVector*)eleP4->At(ie);
 
-    cout<<"l4_Z.M(): "<< l4_Z.M() << endl;
+      for(unsigned int j = 0; j < i; j++){
 
-    h_Zmass    ->Fill(l4_Z.M(),new_eventWeight);
-    h_Zpt      ->Fill(l4_Z.Pt(),new_eventWeight);
-    h_Zeta     ->Fill(l4_Z.Eta(),new_eventWeight);
-    h_ZRapidity->Fill(l4_Z.Rapidity(),new_eventWeight);
+        Int_t je = goodElectrons[j];
+        thatEle = (TLorentzVector*)eleP4->At(je);
 
-    if( thisEle->Pt() > thatEle->Pt() ){
+        Float_t pt1 = thisEle->Pt();
+        Float_t pt2 = thatEle->Pt();
+        Float_t mll = (*thisEle+*thatEle).M();
+        Float_t ptll = (*thisEle+*thatEle).Pt();
 
-      h_leadElePt    ->Fill(thisEle->Pt(),new_eventWeight);
-      h_leadEleEta   ->Fill(thisEle->Eta(),new_eventWeight);
-      h_subleadElePt ->Fill(thatEle->Pt(),new_eventWeight);
-      h_subleadEleEta->Fill(thatEle->Eta(),new_eventWeight);
+        if( eleCharge[ie]*eleCharge[je] > 0 ) continue;   
+        if( TMath::Max(pt1,pt2) < 115 ) continue;
+        if( mll < 70 || mll > 110 ) continue;
+        if( ptll < 200 ) continue;
+	
+        if( !findEPair ){
 
-    }else{
+	  goodEleID.push_back( (pt1 > pt2) ? ie : je );
+	  goodEleID.push_back( (pt1 > pt2) ? je : ie );
 
-      h_leadElePt    ->Fill(thatEle->Pt(),new_eventWeight);
-      h_leadEleEta   ->Fill(thatEle->Eta(),new_eventWeight);
-      h_subleadElePt ->Fill(thisEle->Pt(),new_eventWeight);
-      h_subleadEleEta->Fill(thisEle->Eta(),new_eventWeight);
+        }// end if
+
+        findEPair = true;
+        break;
+
+      }// loop j
+    }// loop i
+
+    if ( goodEleID.size() >1 ){
+//      std::cout<<" goodEleID.size = "<<goodEleID.size()<<std::endl;
+      counter_3++;
+      TLorentzVector* Ele1 = (TLorentzVector*)eleP4->At( goodEleID[0] );
+      TLorentzVector* Ele2 = (TLorentzVector*)eleP4->At( goodEleID[1] );
+
+      TLorentzVector Z_boson = (*Ele1+*Ele2);
+
+/*      
+      cout<<"eventId:     "<< eventId << endl;
+      cout<<"runId:       "<< runId << endl;
+      cout<<"lumiSection: "<< lumiSection << endl;
+
+      std::cout<<" px = "<<Ele1->Px()
+	       <<" py = "<<Ele1->Py()
+	       <<" pz = "<<Ele1->Pz()
+	       <<" E = "<<Ele1->E()
+	       <<std::endl;
+      std::cout<<" Z pt = "<< Z_boson.Pt()
+	       <<" Z mass = "<<Z_boson.M()
+	       <<std::endl;
+*/      
+
+      h_1stEle_pt_3->Fill( Ele1->Pt() );
+      h_Zpt_3      ->Fill( Z_boson.Pt()  );
+      h_Zmass_3    ->Fill( Z_boson.M() );
+
+//      cout<<endl;
+//      cout<<"ev: "<< ev <<endl;
+
+//      cout<<"Ele1->Pt(): "  << Ele1->Pt()   << endl;
+//      cout<<"Z_boson.Pt(): "<< Z_boson.Pt() << endl;
+//      cout<<"Z_boson.M(): " << Z_boson.M()  << endl;
 
     }
+
+
+
 
   } // end of event loop
 
+  cout<<"counter_0: "<< counter_0 << endl;
+  cout<<"counter_1: "<< counter_1 << endl;
+  cout<<"counter_2: "<< counter_2 << endl;
+  cout<<"counter_3: "<< counter_3 << endl;
 
 
   fprintf(stderr, "Processed all events\n");
 
-  TFile* outFile = new TFile(Form("%s_ZeeVariable.root",outputFile.c_str()), "recreate");
 
-//  h_ele1_pt_Nocut->Write("test_ele0_pt");
-      
-  h_Zmass        ->Write("Zmass");
-  h_Zpt          ->Write("Zpt");
-  h_Zeta         ->Write("Zeta");
-  h_ZRapidity    ->Write("ZRapidity");
-  h_leadElePt    ->Write("leadElePt");
-  h_leadEleEta   ->Write("leadEleEta");
-  h_subleadElePt ->Write("subleadElePt");
-  h_subleadEleEta->Write("subleadEleEta");
-  h_totalEvents  ->Write("totalEvents");
-  
+//  TFile* outFile = new TFile("test_Ele_data.root", "recreate");
+  TFile* outFile = new TFile(Form("%s_NoCut.root",outputFile.c_str()), "recreate");
+
+
+
+//  h_1stEle_pt_1  ->Write();
+//  h_1stEle_pt_2  ->Write();
+  h_1stEle_pt_3  ->Write("Leading_pt_stage3");
+
+//  h_Zpt_1        ->Write();
+//  h_Zpt_2        ->Write();
+  h_Zpt_3        ->Write("Zpt_stage3");
+
+//  h_Zmass_1      ->Write();
+//  h_Zmass_2      ->Write();
+  h_Zmass_3      ->Write("Zmass_stage3");
+
+/*
+  h_1stEle_pt_2  ->Write("Leading_pt_stage2");
+
+  h_2ndEle_pt_2  ->Write("SubLeading_pt_stage2");
+
+  h_1stEle_eta_2  ->Write("Leading_eta_stage2");
+  h_2ndEle_eta_2  ->Write("SubLeading_eta_stage2");
+
+  h_Zpt_2        ->Write("Zpt_stage2");
+
+  h_Zmass_2      ->Write("Zmass_stage2");
+*/
+
+  h_totalEvents ->Write("totalEvents");
+
   outFile->Write();
   
   delete f;
   delete outFile;
 
 
-
-
 }
+
+
+
 

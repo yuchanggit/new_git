@@ -3,13 +3,9 @@
 
 #    root -l dataMCplots.C+\(\"Electron\"\,\"output\"\,\"ZeeVariable\"\)
 
-#    root  -l dataMCplots.C+\(\"Electron\"\,\"output\"\,\"NoCut\"\)
-    root -q -b -l dataMCplots.C+\(\"Electron\"\,\"output\"\,\"NoCut\"\)
-#    root -q -b -l dataMCplots.C+\(\"Electron\"\,\"output\"\,\"ZeeVariable\"\)
+    root -q -b -l dataMCplots.C+\(\"Electron\"\,\"output\"\,\"ZeeVariable\"\)
 #    root -q -b -l dataMCplots.C+\(\"Electron\"\,\"output_ele${processEle[$j]}Variable\"\,\"ele${processEle[$j]}Variable\"\)
 
-   
-    rm -f *.pcm *.d *.so
     mv *.pdf /afs/cern.ch/user/y/yuchang/www/ZH_2016/MC_Data_comparison/  
 
 

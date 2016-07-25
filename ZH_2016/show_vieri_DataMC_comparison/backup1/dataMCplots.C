@@ -12,17 +12,14 @@
 #include <TTree.h>
 #include <TKey.h>
 #include <TSystemDirectory.h>
-#include "../interface/setNCUStyle.h"
-#include "../interface/readHists.h"
+#include "interface/setNCUStyle.h"
+#include "interface/readHists.h"
 
 void myPlot(TH1D* h_Zjets100, TH1D* h_Zjets200,/* TH1D* h_Zjets400,*/ TH1D* h_Zjets600, 
 	    TH1D* h_TT, TH1D* h_WW, TH1D* h_WZ, TH1D* h_ZZ, TH1D* h_ZH,
             TH1D* h_data0 ,// TH1D* h_data1,
 	    TH1D* h_data, TH1D* h_bkg){
 
-
-//  cout<<"4-2-1"<<endl;
-  
   h_data->Reset();
   h_data->Add(h_data0);
 //  h_data->Add(h_data1);
@@ -213,7 +210,7 @@ void dataMCplots(std::string channel, std::string outputFolder, std::string pdfN
   readHist ww      (Form("%s/WW_TuneCUETP8M1_13TeV_%s.root",             outputFolder.data(), pdfName.data()));
   readHist wz      (Form("%s/WZ_TuneCUETP8M1_13TeV_%s.root",             outputFolder.data(), pdfName.data()));
   readHist zz      (Form("%s/ZZ_TuneCUETP8M1_13TeV_%s.root",             outputFolder.data(), pdfName.data()));
-  readHist zh      (Form("%s/ZH_HToBB_ZToLL_M125_13TeV_amcatnlo_%s.root",outputFolder.data(), pdfName.data()));
+  readHist zh      (Form("%s/ZH_HToBB_ZToLL_M125_13TeV_amcatnlo_%s.root",         outputFolder.data(), pdfName.data()));
 
 
 
@@ -260,20 +257,16 @@ void dataMCplots(std::string channel, std::string outputFolder, std::string pdfN
 
 
 
-//  for(unsigned int i = 0; i < h_name.size(); ++i){
+//  for(unsigned int i = 0; i < h_name.size()-1; ++i){
 //     cout<<"i: "<< i<<endl;
 //     cout<<"h_name[i]: "<< h_name[i]<< endl;
 //  }
 
-//  return;
-
 //  TH1D* h_Zjets600 = zjets600.getHist(h_name[0].data() ) ;
-//  TH1D* h_Zjets100 = zjets100.getHist(h_name[0].data() ) ;
 //  TH1D* h_data0 = data1.getHist(h_name[0].data() ) ;
 
 //  TCanvas* c1 = new TCanvas("c1","c1",200,10,700,500);
 //  c1->cd();
-//  h_Zjets100->Draw();
 //  h_Zjets600->Draw();
 //  h_data0->Draw();
 
@@ -302,11 +295,6 @@ void dataMCplots(std::string channel, std::string outputFolder, std::string pdfN
     
     TH1D *h_data = (TH1D*)(data1.getHist(h_name[i].data()))->Clone("h_data");
     TH1D *h_bkg  = (TH1D*)(data1.getHist(h_name[i].data()))->Clone("h_bkg");
-
-//    double num=  ( (TH1D*)  zjets100.getHist(h_name[i].data()) )->GetEntries();
-//    cout<<"num: "<< num << endl;
-
-
 
 //  cout<<"hello 4-2"<< endl;
 
@@ -338,7 +326,7 @@ void dataMCplots(std::string channel, std::string outputFolder, std::string pdfN
  
     if( i == 0 ){ 
       c.Print(Form("%s.pdf(", pdfName.data()), "pdf");
-//      cout<<"hello 4-6"<< endl;
+      cout<<"hello 4-6"<< endl;
     }
     else if( i == h_name.size()-2 ){ 
       c.Print(Form("%s.pdf)", pdfName.data()), "pdf");

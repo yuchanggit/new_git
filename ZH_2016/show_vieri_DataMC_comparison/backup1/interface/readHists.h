@@ -52,17 +52,12 @@ TH1D* readHist::getHist(string hname){
 //  cout<<"here is readHist::getHist"<< endl;
 //  cout<<"thisFileName: "<< thisFileName << endl;
 
-//  cout<<"histo open name: "<<Form( "%s", hname.c_str()  ) ;
-  
-
 //  cout<<"crossSection(thisFileName.data()): "<< crossSection(thisFileName.data()) << endl;
 //  cout<<"(TH1D*)(thisFile->Get(totalEvents)))->Integral(): "<< ((TH1D*)(thisFile->Get("totalEvents")))->Integral()<< endl;
 
 //  thisHist->Scale(thisFileName.find("Run2016") != string::npos ? 1 : 2512.*crossSection(thisFileName.data())/((TH1D*)(thisFile->Get("totalEvents")))->Integral());
 
-//double lumi = 4327.13;
-//double lumi = 1/178*4327.13;// approx for 1M events
-double lumi = 432.713;
+double lumi = 4327.13;
 
   thisHist->Scale(thisFileName.find("Run2016") != string::npos ? 1 : lumi*crossSection(thisFileName.data())/((TH1D*)(thisFile->Get("totalEvents")))->Integral());
 
