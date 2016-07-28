@@ -1,0 +1,35 @@
+#!/bin/sh
+
+number=`cat file_list_save.txt | wc -l`
+
+echo $number
+
+string_comapre=NCUGlobalTuples_636.root
+#string_comapre=NCUGlobalTuples_777.root
+
+for (( i=1; i<=${number}; i=i+1 ))
+do
+
+
+   string=`head -$i file_list_save.txt | tail -1`
+
+
+   if [ $string == $string_comapre  ]; then
+      echo "find the same string $string_comapre"
+
+   else
+      echo "cannot find the same string $string_comapre"
+   fi 
+
+
+
+#   echo $string
+#   head -$i file_list_save.txt | tail -1 
+#  echo $i
+#	s=$((${s}+${i}))
+done
+
+
+
+
+

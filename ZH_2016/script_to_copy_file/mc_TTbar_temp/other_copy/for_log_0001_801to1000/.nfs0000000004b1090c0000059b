@@ -1,0 +1,51 @@
+66
+process 1/66
+NCUGlobalTuples_94.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_94.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 2/66
+NCUGlobalTuples_940.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_940.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 3/66
+NCUGlobalTuples_941.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_941.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 4/66
+NCUGlobalTuples_942.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_942.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 5/66
+NCUGlobalTuples_943.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_943.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 6/66
+NCUGlobalTuples_944.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_944.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] OS Error: File exists
+process 7/66
+NCUGlobalTuples_945.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_945.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[16MB/170.8MB][  9%][====>                                             ][1.231MB/s]  [32MB/170.8MB][ 18%][=========>                                        ][2.133MB/s]  [48MB/170.8MB][ 28%][==============>                                   ][2.526MB/s]  [64MB/170.8MB][ 37%][==================>                               ][3.048MB/s]  [80MB/170.8MB][ 46%][=======================>                          ][3.333MB/s]  [96MB/170.8MB][ 56%][============================>                     ][3.692MB/s]  66
+process 1/66
+NCUGlobalTuples_94.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_94.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[16MB/104.9MB][ 15%][=======>                                          ][1.143MB/s]  [32MB/104.9MB][ 30%][===============>                                  ][2MB/s]  [48MB/104.9MB][ 45%][======================>                           ][2.4MB/s]  [64MB/104.9MB][ 61%][==============================>                   ][2.56MB/s]  [80MB/104.9MB][ 76%][======================================>           ][2.667MB/s]  [96MB/104.9MB][ 91%][=============================================>    ][2.667MB/s]  [104.9MB/104.9MB][100%][==================================================][2.69MB/s]  [104.9MB/104.9MB][100%][==================================================][2.622MB/s]  
+process 2/66
+NCUGlobalTuples_940.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_940.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[16MB/180.9MB][  8%][====>                                             ][1.143MB/s]  [32MB/180.9MB][ 17%][========>                                         ][1.778MB/s]  [48MB/180.9MB][ 26%][=============>                                    ][2.286MB/s]  [64MB/180.9MB][ 35%][=================>                                ][2.462MB/s]  [80MB/180.9MB][ 44%][======================>                           ][2.581MB/s]  [96MB/180.9MB][ 53%][==========================>                       ][2.667MB/s]  [112MB/180.9MB][ 61%][==============================>                   ][2.8MB/s]  [128MB/180.9MB][ 70%][===================================>              ][2.977MB/s]  [144MB/180.9MB][ 79%][=======================================>          ][3.2MB/s]  [160MB/180.9MB][ 88%][============================================>     ][3.404MB/s]  [176MB/180.9MB][ 97%][================================================> ][3.667MB/s]  [180.9MB/180.9MB][100%][==================================================][3.692MB/s]  [180.9MB/180.9MB][100%][==================================================][3.692MB/s]  
+process 3/66
+NCUGlobalTuples_941.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_941.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[16MB/180.3MB][  8%][====>                                             ][1.067MB/s]  [32MB/180.3MB][ 17%][========>                                         ][1.6MB/s]  [48MB/180.3MB][ 26%][=============>                                    ][1.92MB/s]  [64MB/180.3MB][ 35%][=================>                                ][2.207MB/s]  [80MB/180.3MB][ 44%][======================>                           ][2.5MB/s]  [96MB/180.3MB][ 53%][==========================>                       ][2.743MB/s]  [112MB/180.3MB][ 62%][===============================>                  ][2.947MB/s]  [128MB/180.3MB][ 70%][===================================>              ][3.122MB/s]  [144MB/180.3MB][ 79%][=======================================>          ][3.273MB/s]  [160MB/180.3MB][ 88%][============================================>     ][3.404MB/s]  [176MB/180.3MB][ 97%][================================================> ][3.52MB/s]  [180.3MB/180.3MB][100%][==================================================][3.606MB/s]  [180.3MB/180.3MB][100%][==================================================][3.535MB/s]  
+process 4/66
+NCUGlobalTuples_942.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/SingleMuon/crab_SingleMuon-Run2016B-PromptReco-v2/160706_120755/0000/NCUGlobalTuples_942.root /data7/yuchang/NCUGlobalTuples_80X/data_mu_temp/other_copy/0000/
+[16MB/178.9MB][  8%][====>                                             ][1.231MB/s]  [32MB/178.9MB][ 17%][========>                                         ][2MB/s]  [48MB/178.9MB][ 26%][=============>                                    ][2.286MB/s]  [64MB/178.9MB][ 35%][=================>                                ][2.56MB/s]  [80MB/178.9MB][ 44%][======================>                           ][2.759MB/s]  [96MB/178.9MB][ 53%][==========================>                       ][2.909MB/s]  [112MB/178.9MB][ 62%][===============================>                  ][3.027MB/s]  [128MB/178.9MB][ 71%][===================================>              ][3.122MB/s]  

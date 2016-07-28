@@ -1,0 +1,85 @@
+884
+process 1/200
+NCUGlobalTuples_202.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_202.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 2/200
+NCUGlobalTuples_203.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_203.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 3/200
+NCUGlobalTuples_204.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_204.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 4/200
+NCUGlobalTuples_205.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_205.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 5/200
+NCUGlobalTuples_206.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_206.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 6/200
+NCUGlobalTuples_207.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_207.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 7/200
+NCUGlobalTuples_208.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_208.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 8/200
+NCUGlobalTuples_209.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_209.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 9/200
+NCUGlobalTuples_21.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_21.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 10/200
+NCUGlobalTuples_210.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_210.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 11/200
+NCUGlobalTuples_211.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_211.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 12/200
+NCUGlobalTuples_212.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_212.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 13/200
+NCUGlobalTuples_213.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_213.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
+process 14/200
+NCUGlobalTuples_214.root
+xrdcp -r root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/TT_TuneCUETP8M1_13TeV-powheg-pythia8/crab_TT_TuneCUETP8M1_13TeV-powheg-pythia8/160705_165659/0001/NCUGlobalTuples_214.root /data7/yuchang/NCUGlobalTuples_80X/mc_TTbar_temp/other_copy/0001/
+[0B/0B][100%][==================================================][0B/s]  
+Run: [ERROR] Server responded with an error: [3011] No such file or directory
+
