@@ -1,0 +1,101 @@
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <TString.h>
+#include <TH1D.h>
+#include <TFile.h>
+#include <TLorentzVector.h>
+#include <string>
+#include "TCanvas.h"
+#include <TClonesArray.h>
+
+#include "untuplizer.h"
+
+using namespace std;
+
+void xAna_TestBeamData(){
+
+  // use untuplizer.h to read samples 
+
+  TreeReader data("recoTrees/RECO_3770.root");
+//  TreeReader data("RECO_3774.root");
+
+  data.Print();
+  cout<<data.GetPtrFloat("wave_aroundmax")[0][0];
+  
+  // Event loop
+  for(Long64_t jEntry=0; jEntry<data.GetEntriesFast() ;jEntry++){
+
+    if (jEntry % 1000 == 0)
+         fprintf(stderr, "Processing event %lli of %lli\n", jEntry + 1, data.GetEntriesFast());
+
+    data.GetEntry(jEntry);
+
+    // get variables that used later
+
+    Int_t nwc          = data.GetInt("nwc");
+    Float_t*  wc_recox = data.GetPtrFloat("wc_recox");
+    Float_t*  wc_recoy = data.GetPtrFloat("wc_recoy");
+
+    Int_t maxch        = data.GetInt("maxch");
+    Float_t*  pedestal      = data.GetPtrFloat("pedestal");
+    Float_t*  pedestalRMS   = data.GetPtrFloat("pedestalRMS");
+//    Float_t*  pedestalSlope = data.GetPtrFloat("pedestalSlope");
+//    Float_t*  wave_max = data.GetPtrFloat("wave_max");
+//    Float_t*  wave_max_aft  = data.GetPtrFloat("wave_max_aft");
+
+//    Int_t size_aroundmax = 50;
+//    vector<float>   *wave_aroundmax =  data.GetPtrVectorFloat("wave_aroundmax");
+//    vector<float>   *wave_aroundmax =  data.GetPtrVectorFloat("wave_aroundmax", size_aroundmax);
+//float** wave_aroundmax =data.GetPtr("wave_aroundmax", kArrArrFloat);
+
+//    Float_t*  wave_aroundmax  = data.GetPtrFloat("wave_aroundmax");
+
+    // used those variable to analyze
+
+    cout<<"jEntry: "<< jEntry << endl;
+
+    cout<<"maxch: "<< maxch << endl;
+
+    for(int channel=0;channel<maxch;channel++){
+
+	cout<<"channel: "<< channel << endl;
+	cout<<"pedestalRMS[channel]: "<< pedestalRMS[channel] << endl;
+
+//	cout<<"wave_aroundmax[channel][0]:"<< wave_aroundmax[channel][0] << endl;
+//        cout<<"wave_aroundmax[channel][1]:"<< wave_aroundmax[channel][1] << endl;
+//        cout<<"wave_aroundmax[channel][2]:"<< wave_aroundmax[channel][2] << endl;
+
+    }
+
+    // for test only 10 events
+    if(jEntry>10 ) break;
+
+/*
+    Float_t        mcWeight            = data.GetFloat("mcWeight");
+    std::string* trigName = data.GetPtrString("hlt_trigName");
+    vector<bool> &trigResult = *((vector<bool>*) data.GetPtr("hlt_trigResult"));
+    const Int_t nsize = data.GetPtrStringSize();
+    Int_t event        = data.GetInt("eventId");
+    TClonesArray* eleP4 = (TClonesArray*) data.GetPtrTObject("eleP4");
+
+    Int_t nJet         = data.GetInt("FATnJet");
+    TClonesArray* jetP4 = (TClonesArray*) data.GetPtrTObject("FATjetP4");
+    Float_t*  jetSDmass = data.GetPtrFloat("FATjetSDmass");
+    Float_t*  jetPRmass = data.GetPtrFloat("FATjetPRmass");
+
+    Int_t*   nSubSoftDropJet = data.GetPtrInt("FATnSubSDJet");
+    vector<float>   *subjetSDCSV =  data.GetPtrVectorFloat("FATsubjetSDCSV", nJet);
+*/
+
+
+  }
+
+
+
+
+
+
+
+
+}

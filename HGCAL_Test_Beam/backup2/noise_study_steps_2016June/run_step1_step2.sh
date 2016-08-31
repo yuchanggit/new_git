@@ -7,7 +7,7 @@ echo "execute run_step1_step2.sh"
 #v_recoTree=recoTrees_v2  
 #v_recoTree=recoTrees_vSlope0
 #v_recoTree=recoTrees_vSlope0_in5_145
-v_recoTree=recoTrees_vSlope_in5_145
+#v_recoTree=recoTrees_vSlope_in5_145
 
 
 # event to load in ntuples 

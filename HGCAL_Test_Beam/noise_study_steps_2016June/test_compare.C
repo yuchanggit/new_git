@@ -48,9 +48,13 @@ void SetStyle_histo (TH1F* h          , TString variable_name );
 
 // main function
 //void step2_plot()
-void step2_plot( TString v_recoTree_temp )
+//void step2_plot( TString v_recoTree_temp )
+void test_compare()
 {
 
+  compare_two_variable();
+
+/*
   cout<<"Hello, step2_plot"<< endl;
   
   v_recoTree = v_recoTree_temp;
@@ -64,7 +68,7 @@ void step2_plot( TString v_recoTree_temp )
   compare_two_variable();
 
 
-
+*/
 }
 
 
@@ -161,6 +165,8 @@ void plot_variables(){
 
 void compare_two_variable(){
 
+/*
+
   const int N_variables = 4;  
   TString variable_name[N_variables] = {"mean_from_aroundPed","RMS_from_aroundPed","pedestal","pedestalRMS"} ;
 
@@ -235,22 +241,23 @@ void compare_two_variable(){
     else {c1->Print( save_name );c2->Print( save_name );}
   }
 
+*/
 
   // compare vSlope0_in5_145 and vSlope_in5_145
-/*
+
 
 //#v_recoTree=recoTrees_vSlope0_in5_145
 //v_recoTree=recoTrees_vSlope_in5_145
  
   TString v_recoTree_compare;   TString path_compare ;
 
-  v_recoTree_compare = "recoTrees_vSlope0_in5_145" 
+  v_recoTree_compare = "recoTrees_vSlope0_in5_145";
   path_compare = root_dir + "Pion_300um_combine_" + v_recoTree_compare + ".root" ;  
 
   TFile *f1 = TFile::Open( path_compare );
   TH1F* h1 = (TH1F*)f1->FindObjectAny("h_mean_from_aroundPed_SiPad1");
 
-  v_recoTree_compare = "recoTrees_vSlope_in5_145"
+  v_recoTree_compare = "recoTrees_vSlope_in5_145";
   path_compare = root_dir + "Pion_300um_combine_" + v_recoTree_compare + ".root" ;
 
   TFile *f2 = TFile::Open( path_compare );
@@ -258,9 +265,19 @@ void compare_two_variable(){
 
   TCanvas *c3 = new TCanvas("c3","c3",200,10,700,500);
 
+  SetStyle_histo(h1, "mean_from_aroundPed");
+  SetStyle_histo(h2, "mean_from_aroundPed");
+
+  h1->SetLineColor(2);// red  , recoTrees_vSlope0_in5_145
+  h2->SetLineColor(4);// blue , recoTrees_vSlope_in5_145
+
+  h1->SetStats(0);
+  h2->SetStats(0);
+
+  c3->cd();
   h1->Draw();
   h2->Draw("same");
-*/
+
 
 
 }

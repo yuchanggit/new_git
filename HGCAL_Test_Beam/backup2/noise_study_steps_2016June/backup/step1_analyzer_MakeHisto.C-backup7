@@ -53,11 +53,7 @@ void Read_Tree(std::string runN[]);
 //void step1_analyzer_MakeHisto()
 void step1_analyzer_MakeHisto( std::string v_recoTree_temp, int max_event_temp )
 {
-cout<<"Hello, step1_analyzer_MakeHisto"<< endl;
-
 v_recoTree = v_recoTree_temp;
-
-cout<<"v_recoTree: "<<   v_recoTree << endl;
 
 root_name = "Pion_300um_combine_" + v_recoTree + ".root";
 root_save_path = "root_files/" + root_name;
@@ -227,7 +223,7 @@ void Read_Tree(std::string runN[] ){
     h_mean_subtract_min_from_aroundPed[i] = new TH1F(h_name, h_name, 1000  , 0 ,1000   );
 
     h_name = "h_pedestalSlope_"    + Pad_name[i];
-    h_pedestalSlope[i] = new TH1F(h_name, h_name, 80  , -1 ,1   );
+    h_pedestalSlope[i] = new TH1F(h_name, h_name, 80  , -10 ,10   );
 
   }
 
