@@ -1,0 +1,247 @@
+start
+五  8月 12 06:53:18 CEST 2016
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit100Ele/",-1)...
+Info in <TUnixSystem::ACLiC>: creating shared library /afs/cern.ch/work/y/yuchang/HGCAL_TestBeam/noise_study_Pad1P1d3Triger/./step1_analyzer_MakeHisto_C.so
+folder_name: /SiPad1Trigger/recoTrees_vSlope0_in5_145_fit100Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit100Ele/
+i: 0 runN[i]: 4174
+i: 1 runN[i]: 4175
+i: 2 runN[i]: 4176
+i: 3 runN[i]: 4178
+i: 4 runN[i]: 4179
+i: 5 runN[i]: 4180
+i: 6 runN[i]: 4181
+i: 7 runN[i]: 4182
+i: 8 runN[i]: 4183
+i: 9 runN[i]: 4184
+ Tree loaded events = 1250793
+Processing event 1 of 1250793
+Processing event 50001 of 1250793
+Processing event 100001 of 1250793
+Processing event 150001 of 1250793
+Processing event 200001 of 1250793
+Processing event 250001 of 1250793
+Processing event 300001 of 1250793
+Processing event 350001 of 1250793
+Processing event 400001 of 1250793
+Processing event 450001 of 1250793
+Processing event 500001 of 1250793
+Processing event 550001 of 1250793
+Processing event 600001 of 1250793
+Processing event 650001 of 1250793
+Processing event 700001 of 1250793
+Processing event 750001 of 1250793
+Processing event 800001 of 1250793
+Processing event 850001 of 1250793
+Processing event 900001 of 1250793
+Processing event 950001 of 1250793
+Processing event 1000001 of 1250793
+Processing event 1050001 of 1250793
+Processing event 1100001 of 1250793
+Processing event 1150001 of 1250793
+Processing event 1200001 of 1250793
+Processing event 1250001 of 1250793
+
+ *** Break *** segmentation violation
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit200Ele/",-1)...
+folder_name: /SiPad1Trigger/recoTrees_vSlope0_in5_145_fit200Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit200Ele/
+i: 0 runN[i]: 4187
+i: 1 runN[i]: 4195
+i: 2 runN[i]: 4196
+i: 3 runN[i]: 4197
+i: 4 runN[i]: 4199
+i: 5 runN[i]: 4200
+i: 6 runN[i]: 4202
+ Tree loaded events = 1193249
+Processing event 1 of 1193249
+Processing event 50001 of 1193249
+Processing event 100001 of 1193249
+Processing event 150001 of 1193249
+Processing event 200001 of 1193249
+Processing event 250001 of 1193249
+Processing event 300001 of 1193249
+Processing event 350001 of 1193249
+Processing event 400001 of 1193249
+Processing event 450001 of 1193249
+Processing event 500001 of 1193249
+Processing event 550001 of 1193249
+Processing event 600001 of 1193249
+Processing event 650001 of 1193249
+Processing event 700001 of 1193249
+Processing event 750001 of 1193249
+Processing event 800001 of 1193249
+Processing event 850001 of 1193249
+Processing event 900001 of 1193249
+Processing event 950001 of 1193249
+Processing event 1000001 of 1193249
+Processing event 1050001 of 1193249
+Processing event 1100001 of 1193249
+Processing event 1150001 of 1193249
+
+ *** Break *** segmentation violation
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit300Ele/",-1)...
+folder_name: /SiPad1Trigger/recoTrees_vSlope0_in5_145_fit300Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit300Ele/
+i: 0 runN[i]: 4203
+i: 1 runN[i]: 4204
+i: 2 runN[i]: 4205
+i: 3 runN[i]: 4206
+i: 4 runN[i]: 4207
+i: 5 runN[i]: 4208
+i: 6 runN[i]: 4209
+i: 7 runN[i]: 4210
+i: 8 runN[i]: 4211
+ Tree loaded events = 997400
+Processing event 1 of 997400
+Processing event 50001 of 997400
+Processing event 100001 of 997400
+Processing event 150001 of 997400
+Processing event 200001 of 997400
+Processing event 250001 of 997400
+Processing event 300001 of 997400
+Processing event 350001 of 997400
+Processing event 400001 of 997400
+Processing event 450001 of 997400
+Processing event 500001 of 997400
+Processing event 550001 of 997400
+Processing event 600001 of 997400
+Processing event 650001 of 997400
+Processing event 700001 of 997400
+Processing event 750001 of 997400
+Processing event 800001 of 997400
+Processing event 850001 of 997400
+Processing event 900001 of 997400
+Processing event 950001 of 997400
+
+ *** Break *** segmentation violation
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit100Ele/",-1)...
+folder_name: /SiPad3Trigger/recoTrees_vSlope0_in5_145_fit100Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit100Ele/
+i: 0 runN[i]: 4174
+i: 1 runN[i]: 4175
+i: 2 runN[i]: 4176
+i: 3 runN[i]: 4178
+i: 4 runN[i]: 4179
+i: 5 runN[i]: 4180
+i: 6 runN[i]: 4181
+i: 7 runN[i]: 4182
+i: 8 runN[i]: 4183
+i: 9 runN[i]: 4184
+ Tree loaded events = 1250793
+Processing event 1 of 1250793
+Processing event 50001 of 1250793
+Processing event 100001 of 1250793
+Processing event 150001 of 1250793
+Processing event 200001 of 1250793
+Processing event 250001 of 1250793
+Processing event 300001 of 1250793
+Processing event 350001 of 1250793
+Processing event 400001 of 1250793
+Processing event 450001 of 1250793
+Processing event 500001 of 1250793
+Processing event 550001 of 1250793
+Processing event 600001 of 1250793
+Processing event 650001 of 1250793
+Processing event 700001 of 1250793
+Processing event 750001 of 1250793
+Processing event 800001 of 1250793
+Processing event 850001 of 1250793
+Processing event 900001 of 1250793
+Processing event 950001 of 1250793
+Processing event 1000001 of 1250793
+Processing event 1050001 of 1250793
+Processing event 1100001 of 1250793
+Processing event 1150001 of 1250793
+Processing event 1200001 of 1250793
+Processing event 1250001 of 1250793
+
+ *** Break *** segmentation violation
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit200Ele/",-1)...
+Info in <TUnixSystem::ACLiC>: creating shared library /afs/cern.ch/work/y/yuchang/HGCAL_TestBeam/noise_study_Pad1P1d3Triger/./step1_analyzer_MakeHisto_C.so
+folder_name: /SiPad3Trigger/recoTrees_vSlope0_in5_145_fit200Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit200Ele/
+i: 0 runN[i]: 4187
+i: 1 runN[i]: 4195
+i: 2 runN[i]: 4196
+i: 3 runN[i]: 4197
+i: 4 runN[i]: 4199
+i: 5 runN[i]: 4200
+i: 6 runN[i]: 4202
+ Tree loaded events = 1193249
+Processing event 1 of 1193249
+Processing event 50001 of 1193249
+Processing event 100001 of 1193249
+Processing event 150001 of 1193249
+Processing event 200001 of 1193249
+Processing event 250001 of 1193249
+Processing event 300001 of 1193249
+Processing event 350001 of 1193249
+Processing event 400001 of 1193249
+Processing event 450001 of 1193249
+Processing event 500001 of 1193249
+Processing event 550001 of 1193249
+Processing event 600001 of 1193249
+Processing event 650001 of 1193249
+Processing event 700001 of 1193249
+Processing event 750001 of 1193249
+Processing event 800001 of 1193249
+Processing event 850001 of 1193249
+Processing event 900001 of 1193249
+Processing event 950001 of 1193249
+Processing event 1000001 of 1193249
+Processing event 1050001 of 1193249
+Processing event 1100001 of 1193249
+Processing event 1150001 of 1193249
+
+ *** Break *** segmentation violation
+
+Processing step1_analyzer_MakeHisto.C+("/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit300Ele/",-1)...
+Info in <TUnixSystem::ACLiC>: creating shared library /afs/cern.ch/work/y/yuchang/HGCAL_TestBeam/noise_study_Pad1P1d3Triger/./step1_analyzer_MakeHisto_C.so
+folder_name: /SiPad3Trigger/recoTrees_vSlope0_in5_145_fit300Ele/
+max_event_to_read(-1 mean full statistics): -1
+inputFolder: /store/group/upgrade/HGCAL/TimingTB_H2_Apr2016/June2016/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit300Ele/
+i: 0 runN[i]: 4203
+i: 1 runN[i]: 4204
+i: 2 runN[i]: 4205
+i: 3 runN[i]: 4206
+i: 4 runN[i]: 4207
+i: 5 runN[i]: 4208
+i: 6 runN[i]: 4209
+i: 7 runN[i]: 4210
+i: 8 runN[i]: 4211
+ Tree loaded events = 997400
+Processing event 1 of 997400
+Processing event 50001 of 997400
+Processing event 100001 of 997400
+Processing event 150001 of 997400
+Processing event 200001 of 997400
+Processing event 250001 of 997400
+Processing event 300001 of 997400
+Processing event 350001 of 997400
+Processing event 400001 of 997400
+Processing event 450001 of 997400
+Processing event 500001 of 997400
+Processing event 550001 of 997400
+Processing event 600001 of 997400
+Processing event 650001 of 997400
+Processing event 700001 of 997400
+Processing event 750001 of 997400
+Processing event 800001 of 997400
+Processing event 850001 of 997400
+Processing event 900001 of 997400
+Processing event 950001 of 997400
+
+ *** Break *** segmentation violation
+finish
+五  8月 12 07:25:48 CEST 2016

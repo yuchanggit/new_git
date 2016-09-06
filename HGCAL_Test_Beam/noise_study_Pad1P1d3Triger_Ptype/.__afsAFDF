@@ -1,0 +1,22 @@
+#!/bin/sh
+
+echo "start"
+date
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit100Ele/\"\)
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit200Ele/\"\)
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad1Trigger/recoTrees_vSlope0_in5_145_fit300Ele/\"\)
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit100Ele/\"\)
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit200Ele/\"\)
+
+root -l -q -b step1_analyzer_MakeHisto.C+\(\"/SiPad3Trigger/recoTrees_vSlope0_in5_145_fit300Ele/\"\)
+
+
+rm *.d *.so
+
+echo "finish"
+date
