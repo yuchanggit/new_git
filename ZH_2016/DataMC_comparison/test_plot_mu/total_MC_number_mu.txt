@@ -1,0 +1,22 @@
+name            total_number     total_number_after_PU_weight
+
+DYht100to200    1.11721e+07      1.11713e+07
+DYht200to400    9.62818e+06      9.63043e+06   
+DYht400to600    1.07045e+06      1.07089e+06
+DYht600toInf    5.15041e+06      5.15008e+06
+
+TTbar           9.29259e+07      9.29293e+07 
+
+WW              993214           993159 
+
+WZ              1.00000e+06      999665
+
+ZZ              989312           989111 
+
+ZH (madgraph)   2.15548e+06      2.15546e+06
+ZH (powheg)     2.93576e+06      2.93570e+06
+
+
+
+
+
