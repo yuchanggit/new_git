@@ -1,0 +1,151 @@
+#include <vector>
+#include <string>
+#include <iostream>
+#include <math.h>
+#include <deque>
+#include <list>
+
+#include <TPaveStats.h>
+#include <TH1D.h>
+#include <TFile.h>
+#include <TF1.h>
+#include <TPad.h>
+#include <TFile.h>
+#include <TLatex.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TTree.h>
+#include "TObject.h"
+#include "TColor.h"
+#include "TFile.h"
+#include "TMarker.h"
+#include "TH2F.h"
+#include "TProfile.h"
+#include "TString.h"
+#include "TMath.h"
+
+double Xmin1= 30;
+
+//double Xmax1= 65; 
+double Xmax1=105;
+
+double Xmin2=135; double Xmax2=200;
+
+
+void make_histogram(std::string sample_path, std::string save_name){
+
+  bool isData = false; // false for MC
+
+  // ------ define histogram --------
+
+  const int NXbins4 = 11;// used for ratio
+
+  double xbins4[NXbins4+1]={30, 40, 49, 57, 65, 75, 85, 95, 105,
+                            135 ,152,200 };
+
+  TH1F* h_passDoubleBTagger_Jmass = new TH1F("h_passDoubleBTagger_Jmass" ,"passDoubleBTagger Jmass ",200,0,1000);
+  TH1F* h_failDoubleBTagger_Jmass = new TH1F("h_failDoubleBTagger_Jmass" ,"failDoubleBTagger Jmass ",200,0,1000);
+
+
+  TH1F* h_passDoubleBTagger_Jmass_wideBinning = new TH1F("h_passDoubleBTagger_Jmass_wideBinning" ,"passDoubleBTagger Jmass wideBinning ",NXbins4, xbins4);
+
+
+  TH1F* h_failDoubleBTagger_Jmass_wideBinning = new TH1F("h_failDoubleBTagger_Jmass_wideBinning" ,"failDoubleBTagger Jmass wideBinning ",NXbins4, xbins4);
+
+  // Sumw2
+
+
+  h_passDoubleBTagger_Jmass             ->Sumw2();
+  h_failDoubleBTagger_Jmass             ->Sumw2();
+
+  h_passDoubleBTagger_Jmass_wideBinning ->Sumw2();
+  h_failDoubleBTagger_Jmass_wideBinning ->Sumw2();
+
+
+  // ------ open root file ---------- 
+
+  cout<<"sample_name: "<< sample_path << endl;
+  if( sample_path.find("DY") != std::string::npos ) cout<<"find DY" << endl;
+  cout<<"save_name: "<< save_name << endl;
+
+//     if( thisTrig.find(TRIGGERNAME) != std::string::npos )
+
+  TString path = sample_path;
+//  TString path = "../test_ele_with_PUweight_NoMassCut/DY/output_ele/DYJetsToLL_M-50_HT-600toInf_13TeV.root";
+  TFile* file   = TFile::Open( path );
+
+  TH1F* h_totalEv = (TH1F*)file->FindObjectAny("totalEvents");
+
+  TTree* tree = (TTree*) file->Get("new_tree");
+
+  double Event_Weight;
+  double PRmass, PRmass_L2L3Corrected, SDmass, SDmass_TheaCorrected;
+  double Double_bTagger;
+  double Tau21;
+  double ZHmass;
+
+  tree->SetBranchAddress("Event_Weight",         &Event_Weight);
+  tree->SetBranchAddress("PRmass",               &PRmass);
+  tree->SetBranchAddress("PRmass_L2L3Corrected", &PRmass_L2L3Corrected);
+  tree->SetBranchAddress("SDmass",               &SDmass);
+  tree->SetBranchAddress("SDmass_TheaCorrected", &SDmass_TheaCorrected);
+  tree->SetBranchAddress("Double_bTagger",       &Double_bTagger);
+  tree->SetBranchAddress("Tau21",                &Tau21);
+  tree->SetBranchAddress("ZHmass",               &ZHmass);
+
+  // ----- event loop on Mini TTree -----------
+
+  int Number_to_print    =  10000;
+
+  for( Long64_t ev = 0; ev < tree->GetEntriesFast(); ev++ ){
+
+    if( ev %   Number_to_print == 0 )
+      fprintf(stderr, "Processing event %lli of %lli\n", ev + 1, tree->GetEntriesFast());
+
+    tree->GetEntry(ev);
+
+    // blind data in the signal region (no blind in MC)
+    if ( isData && PRmass_L2L3Corrected> Xmax1 && PRmass_L2L3Corrected< Xmin2 && Double_bTagger >0.6 )continue;
+
+    if ( PRmass_L2L3Corrected< Xmin1 )  continue;// remove low mass peak in Jet Mass
+    if ( PRmass_L2L3Corrected> Xmax2 )  continue;// remove high mass spikes
+
+
+    double DoubleBTaggerCut = 0.3;
+
+    if( Double_bTagger > DoubleBTaggerCut){
+
+      if( isData && PRmass_L2L3Corrected> Xmax1 && PRmass_L2L3Corrected< Xmin2 ) continue;
+ 
+      h_passDoubleBTagger_Jmass             ->Fill( PRmass_L2L3Corrected , Event_Weight);
+      h_passDoubleBTagger_Jmass_wideBinning ->Fill( PRmass_L2L3Corrected , Event_Weight);
+    }
+    else                                  {
+
+      if( isData && PRmass_L2L3Corrected>Xmax1  && PRmass_L2L3Corrected< Xmin2 ) continue;
+
+      h_failDoubleBTagger_Jmass             ->Fill( PRmass_L2L3Corrected , Event_Weight);
+      h_failDoubleBTagger_Jmass_wideBinning ->Fill( PRmass_L2L3Corrected , Event_Weight);
+
+    }
+
+  }// ------ end event loop -------------
+
+  TFile* outFile = new TFile("output_root/DYHt600toInf.root", "recreate");
+
+  h_passDoubleBTagger_Jmass                  ->Write();
+  h_passDoubleBTagger_Jmass_wideBinning      ->Write();
+
+  h_failDoubleBTagger_Jmass                  ->Write();
+  h_failDoubleBTagger_Jmass_wideBinning      ->Write();
+
+  outFile->Write();
+  delete outFile;
+
+
+
+
+
+
+}

@@ -1,0 +1,517 @@
+start
+Thu Oct 27 11:54:11 CEST 2016
+channel= ele
+which sample are used?
+flag_DATA_ele_runB: 0 ,flag_DATA_ele_runC: 0 ,flag_DATA_ele_runD: 0
+flag_DATA_mu_runB: 0,flag_DATA_mu_runC: 0,flag_DATA_mu_runD: 0,
+flag_MC_DY_100: 0 , flag_MC_DY_200: 0 , flag_MC_DY_400: 0 , flag_MC_DY_600: 0 , flag_MC_TT: 0 , flag_MC_diboson: 1 
+root -q -b -l xAna_ele.C+\("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8"\,"output_ele"\,"ZH_HToBB_ZToLL_M125_13TeV_amcatnlo"\) 
+
+Processing xAna_ele.C+("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8","output_ele","ZH_HToBB_ZToLL_M125_13TeV_amcatnlo")...
+Info in <TUnixSystem::ACLiC>: creating shared library /afs/cern.ch/work/y/yuchang/ZH_analysis_with_2016_data/CMSSW_8_0_8/src/ALPHABET/test_ele_with_PUweight_NoMassCut/diboson/./xAna_ele_C.so
+finish compiling and start to run macro
+infiles.size():51
+tree->GetEntries(): 2155478
+finish TreeReader data( tree );
+finish define Histogram
+Will use Pile Up weight
+staring loop events
+Processing event 1 of 2155478
+Processing event 100001 of 2155478
+Processing event 200001 of 2155478
+Processing event 300001 of 2155478
+Processing event 400001 of 2155478
+Processing event 500001 of 2155478
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=3988
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=3988
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=3989
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=3989
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=3990
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=3990
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=3990
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=3990
+Processing event 600001 of 2155478
+Processing event 700001 of 2155478
+Processing event 800001 of 2155478
+Processing event 900001 of 2155478
+Processing event 1000001 of 2155478
+Processing event 1100001 of 2155478
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=7976
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=7976
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=7978
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=7978
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=7980
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=7980
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=7980
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=7980
+Processing event 1200001 of 2155478
+Processing event 1300001 of 2155478
+Processing event 1400001 of 2155478
+Processing event 1500001 of 2155478
+Processing event 1600001 of 2155478
+Processing event 1700001 of 2155478
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=11964
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=11964
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=11967
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=11967
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=11970
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=11970
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=11970
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=11970
+Processing event 1800001 of 2155478
+Processing event 1900001 of 2155478
+Processing event 2000001 of 2155478
+Processing event 2100001 of 2155478
+counter_0: 2155478
+counter_1: 2155469
+counter_2: 24413
+counter_3: 15034
+Processed all events
+root -q -b -l xAna_ele.C+\("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8"\,"output_ele"\,"ZH_HToBB_ZToLL_M125_13TeV_powheg"\) 
+
+Processing xAna_ele.C+("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8","output_ele","ZH_HToBB_ZToLL_M125_13TeV_powheg")...
+finish compiling and start to run macro
+infiles.size():68
+tree->GetEntries(): 2935760
+finish TreeReader data( tree );
+finish define Histogram
+Will use Pile Up weight
+staring loop events
+Processing event 1 of 2935760
+Processing event 100001 of 2935760
+Processing event 200001 of 2935760
+Processing event 300001 of 2935760
+Processing event 400001 of 2935760
+Processing event 500001 of 2935760
+Processing event 600001 of 2935760
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=3988
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=3988
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=3989
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=3989
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=3990
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=3990
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=3990
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=3990
+Processing event 700001 of 2935760
+Processing event 800001 of 2935760
+Processing event 900001 of 2935760
+Processing event 1000001 of 2935760
+Processing event 1100001 of 2935760
+Processing event 1200001 of 2935760
+Processing event 1300001 of 2935760
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=7976
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=7976
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=7978
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=7978
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=7980
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=7980
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=7980
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=7980
+Processing event 1400001 of 2935760
+Processing event 1500001 of 2935760
+Processing event 1600001 of 2935760
+Processing event 1700001 of 2935760
+Processing event 1800001 of 2935760
+Processing event 1900001 of 2935760
+Processing event 2000001 of 2935760
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=11964
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=11964
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=11967
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=11967
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=11970
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=11970
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=11970
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=11970
+Processing event 2100001 of 2935760
+Processing event 2200001 of 2935760
+Processing event 2300001 of 2935760
+Processing event 2400001 of 2935760
+Processing event 2500001 of 2935760
+Processing event 2600001 of 2935760
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass_L2L3Corrected, nbytes=-1, entry=15952
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass_TheaCorrected, nbytes=-1, entry=15952
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Processing event 2700001 of 2935760
+Error in <TTree::Fill>: Failed filling branch:new_tree.Event_Weight, nbytes=-1, entry=15956
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Double_bTagger, nbytes=-1, entry=15956
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.PRmass, nbytes=-1, entry=15960
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.SDmass, nbytes=-1, entry=15960
+ This error is symptomatic of a Tree created as a memory-resident Tree
+ Instead of doing:
+    TTree *T = new TTree(...)
+    TFile *f = new TFile(...)
+ you should do:
+    TFile *f = new TFile(...)
+    TTree *T = new TTree(...)
+Error in <TTree::Fill>: Failed filling branch:new_tree.Tau21, nbytes=-1, entry=15960
+Error in <TTree::Fill>: Failed filling branch:new_tree.ZHmass, nbytes=-1, entry=15960
+Processing event 2800001 of 2935760
+Processing event 2900001 of 2935760
+counter_0: 2935760
+counter_1: 2935748
+counter_2: 28667
+counter_3: 17332
+Processed all events
+root -q -b -l xAna_ele.C+\("/data7/yuchang/NCUGlobalTuples_80X_20160821/WW_TuneCUETP8M1_13TeV-pythia8"\,"output_ele"\,"WW_TuneCUETP8M1_13TeV"\) 
+
+Processing xAna_ele.C+("/data7/yuchang/NCUGlobalTuples_80X_20160821/WW_TuneCUETP8M1_13TeV-pythia8","output_ele","WW_TuneCUETP8M1_13TeV")...
+finish compiling and start to run macro
+infiles.size():24
+tree->GetEntries(): 993214
+finish TreeReader data( tree );
+finish define Histogram
+Will use Pile Up weight
+staring loop events
+Processing event 1 of 993214
+Processing event 100001 of 993214
+Processing event 200001 of 993214
+Processing event 300001 of 993214
+Processing event 400001 of 993214
+Processing event 500001 of 993214
+Processing event 600001 of 993214
+Processing event 700001 of 993214
+Processing event 800001 of 993214
+Processing event 900001 of 993214
+counter_0: 993214
+counter_1: 993203
+counter_2: 3
+counter_3: 2
+Processed all events
+root -q -b -l xAna_ele.C+\("/data7/yuchang/NCUGlobalTuples_80X_20160821/WZ_TuneCUETP8M1_13TeV-pythia8"\,"output_ele"\,"WZ_TuneCUETP8M1_13TeV"\) 
+
+Processing xAna_ele.C+("/data7/yuchang/NCUGlobalTuples_80X_20160821/WZ_TuneCUETP8M1_13TeV-pythia8","output_ele","WZ_TuneCUETP8M1_13TeV")...
+finish compiling and start to run macro
+infiles.size():24
+tree->GetEntries(): 1000000
+finish TreeReader data( tree );
+finish define Histogram
+Will use Pile Up weight
+staring loop events
+Processing event 1 of 1000000
+Processing event 100001 of 1000000
+Processing event 200001 of 1000000
+Processing event 300001 of 1000000
+Processing event 400001 of 1000000
+Processing event 500001 of 1000000
+Processing event 600001 of 1000000
+Processing event 700001 of 1000000
+Processing event 800001 of 1000000
+Processing event 900001 of 1000000
+counter_0: 1000000
+counter_1: 999994
+counter_2: 356
+counter_3: 218
+Processed all events
+root -q -b -l xAna_ele.C+\("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZZ_TuneCUETP8M1_13TeV-pythia8"\,"output_ele"\,"ZZ_TuneCUETP8M1_13TeV"\) 
+
+Processing xAna_ele.C+("/data7/yuchang/NCUGlobalTuples_80X_20160821/ZZ_TuneCUETP8M1_13TeV-pythia8","output_ele","ZZ_TuneCUETP8M1_13TeV")...
+finish compiling and start to run macro
+infiles.size():25
+tree->GetEntries(): 989312
+finish TreeReader data( tree );
+finish define Histogram
+Will use Pile Up weight
+staring loop events
+Processing event 1 of 989312
+Processing event 100001 of 989312
+Processing event 200001 of 989312
+Processing event 300001 of 989312
+Processing event 400001 of 989312
+Processing event 500001 of 989312
+Processing event 600001 of 989312
+Processing event 700001 of 989312
+Processing event 800001 of 989312
+Processing event 900001 of 989312
+counter_0: 989312
+counter_1: 989304
+counter_2: 639
+counter_3: 365
+Processed all events
+finish
+Thu Oct 27 12:05:58 CEST 2016

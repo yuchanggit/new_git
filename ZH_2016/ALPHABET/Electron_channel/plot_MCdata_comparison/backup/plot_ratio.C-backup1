@@ -1,0 +1,153 @@
+#include <vector>
+#include <string>
+#include <iostream>
+#include <math.h>
+#include <deque>
+#include <list>
+
+#include <TPaveStats.h>
+#include <TH1D.h>
+#include <TFile.h>
+#include <TF1.h>
+#include <TPad.h>
+#include <TFile.h>
+#include <TLatex.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TTree.h>
+#include "TObject.h"
+#include "TColor.h"
+#include "TFile.h"
+#include "TMarker.h"
+#include "TH2F.h"
+#include "TProfile.h"
+#include "TString.h"
+#include "TMath.h"
+
+const int nHisto =8;
+
+void plot_ratio(){
+
+  // open histogram
+
+  TString histo_name[nHisto];
+
+  histo_name[0] = "h_passDoubleBTagger_Jmass";
+  histo_name[1] = "h_passDoubleBTagger_Jmass_wideBinning";
+  histo_name[2] = "h_passDoubleBTagger_Jmass_wideBinning_diff";
+  histo_name[3] = "h_failDoubleBTagger_Jmass";
+  histo_name[4] = "h_failDoubleBTagger_Jmass_wideBinning";
+  histo_name[5] = "h_failDoubleBTagger_Jmass_wideBinning_diff";
+  histo_name[6] = "h_Ratio";
+  histo_name[7] = "h_Ratio_wideBinning";
+
+
+  TFile* file_data = TFile::Open("../output_root/SingleElectron-combine_histogram.root");
+  TFile* file_mc   = TFile::Open("../output_root/MC_combine_histogram.root");
+
+  TH1F* h_data[nHisto];  TH1F* h_mc[nHisto];
+
+  for(int i=0; i<nHisto; i++){
+    h_data[i]  = (TH1F*) file_data ->FindObjectAny( histo_name[i] );
+    h_mc[i]    = (TH1F*) file_mc   ->FindObjectAny( histo_name[i] );
+
+    h_data[i] -> Sumw2();
+    h_mc[i]   -> Sumw2();
+  }
+
+
+  // Normalize histogram except ratio plot 
+
+  for(int i=0; i<nHisto; i++){
+    if(i==6 || i==7) continue;
+    h_data[i] ->Scale( 1/h_data[i]->Integral() );
+    h_mc[i]   ->Scale( 1/h_mc[i]  ->Integral() );
+  }
+
+
+  // Set Style
+
+  for(int i=0; i<nHisto; i++){
+
+    h_data[i] ->GetXaxis() ->SetRangeUser(30, 200);
+    h_mc[i]   ->GetXaxis() ->SetRangeUser(30, 200);
+
+    h_data[i] ->SetLineColor(632);
+    h_mc[i]   ->SetLineColor(600);
+
+    h_data[i] ->SetStats(0);
+    h_mc[i]   ->SetStats(0);        
+
+    TString y_label; 
+    if(i!=6 && i!=7) y_label = "Arbitary Unit"; 
+    else y_label = "Pass / Fail Ratio";
+
+    h_data[i] ->GetYaxis() ->SetTitle(y_label);
+    h_mc[i]   ->GetYaxis() ->SetTitle(y_label);
+
+    TString x_label ="Corrected Pruned Jet Mass";
+    h_data[i] ->GetXaxis() ->SetTitle(x_label);
+    h_mc[i]   ->GetXaxis() ->SetTitle(x_label);
+
+    h_data[i] ->GetYaxis() ->SetTitleOffset(1.2);
+    h_mc[i]   ->GetYaxis() ->SetTitleOffset(1.2);
+
+    if(i==6 || i==7){    
+          h_data[i] ->GetYaxis() ->SetRangeUser(0, 0.4);  
+          h_mc[i]   ->GetYaxis() ->SetRangeUser(0, 0.4);
+    }
+  }
+
+
+
+  // Draw
+
+  TCanvas* c_[nHisto];
+  TLegend* leg[nHisto];
+
+  for(int i=0; i<nHisto; i++){
+    TString c_name = Form("c_%i",i);
+    c_[i] = new TCanvas(c_name,c_name,10,10,800,600);
+
+    c_[i]    ->cd(); 
+    h_data[i]->Draw();
+    h_mc[i]  ->Draw("same");
+
+    leg[i] = new TLegend(0.7, 0.8, 0.9, 0.9);
+    leg[i] ->AddEntry(h_data[i],"data","l");
+    leg[i] ->AddEntry(h_mc[i]  ,"MC(DY only)","l");
+    leg[i] ->Draw();
+
+  }
+
+
+  // Save
+
+  TString save_path = "compare_ratio.pdf";
+
+  for(int i=0; i<nHisto; i++){
+    if      (i==0)        c_[i]->Print(save_path + "(");
+    else if (i==nHisto-1) c_[i]->Print(save_path + ")");
+    else                  c_[i]->Print(save_path      );
+
+  }
+
+
+/*
+  TCanvas *c_test = new TCanvas("c_test","c_test",10,10,800,600);
+  c_test->cd();
+  h_data[0] ->Draw(); 
+  h_mc[3]   ->Draw();
+*/
+
+
+
+
+}
+
+
+
+
+
+

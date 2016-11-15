@@ -1,0 +1,150 @@
+#include <vector>
+#include <string>
+#include <iostream>
+#include <math.h>
+#include <deque>
+#include <list>
+
+#include <TPaveStats.h>
+#include <TH1D.h>
+#include <TFile.h>
+#include <TF1.h>
+#include <TPad.h>
+#include <TFile.h>
+#include <TLatex.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TTree.h>
+#include "TObject.h"
+#include "TColor.h"
+#include "TFile.h"
+#include "TMarker.h"
+#include "TH2F.h"
+#include "TProfile.h"
+#include "TString.h"
+#include "TMath.h"
+
+//double Xmin1= 30;
+
+//double Xmax1= 65; 
+//double Xmax1=105;
+
+//double Xmin2=135; double Xmax2=200;
+
+const int nDY =4;
+
+void predict_ZH_mass(){
+
+  cout<<"hello "<< endl;
+
+
+
+  // ------ define histogram --------
+
+  TH1F* h_ZH_mass_pass = new TH1F("h_ZH_mass_pass" ,"h_ZH_mass_pass",200,0,1000);
+  TH1F* h_ZH_mass_fail = new TH1F("h_ZH_mass_fail" ,"h_ZH_mass_fail",200,0,1000);
+
+  h_ZH_mass_pass ->Sumw2();
+  h_ZH_mass_fail ->Sumw2();
+
+
+
+
+  // ------ open DY Mini tree ROOT file ---------
+
+  std::string sample_path[nDY];
+
+  sample_path[0] = "../test_ele_with_PUweight_NoMassCut/DY/output_ele/DYJetsToLL_M-50_HT-100to200_13TeV.root";
+  sample_path[1] = "../test_ele_with_PUweight_NoMassCut/DY/output_ele/DYJetsToLL_M-50_HT-200to400_13TeV.root";
+  sample_path[2] = "../test_ele_with_PUweight_NoMassCut/DY/output_ele/DYJetsToLL_M-50_HT-400to600_13TeV.root";
+  sample_path[3] = "../test_ele_with_PUweight_NoMassCut/DY/output_ele/DYJetsToLL_M-50_HT-600toInf_13TeV.root";
+
+  TFile* file_DY[nDY]; TTree* tree_DY[nDY]; 
+  TH1F* h_totalEv[nDY];
+
+  double Xsec[nDY], nTotal[nDY], Weight[nDY];
+
+  Xsec[0] = 147.40 *1.23;// DYHt100to200  
+  Xsec[1] =  41    *1.23;// DYHt200to400
+  Xsec[2] =   5.678*1.23;// DYHt400to600
+  Xsec[3] =   2.198*1.23;// DYHt600toInf
+
+
+
+
+  for(int iDY=0; iDY< nDY; iDY++){
+
+    // open TTree
+    file_DY[iDY] = TFile::Open( sample_path[iDY].c_str() );
+    tree_DY[iDY] = (TTree*) file_DY[iDY]->Get("new_tree");
+
+    double Event_Weight;                 
+    double PRmass_L2L3Corrected;
+    double Double_bTagger;
+    double ZHmass;   
+
+    tree_DY[iDY] ->SetBranchAddress("Event_Weight",         &Event_Weight);
+    tree_DY[iDY] ->SetBranchAddress("PRmass_L2L3Corrected", &PRmass_L2L3Corrected);
+    tree_DY[iDY] ->SetBranchAddress("ZHmass",               &ZHmass);
+    tree_DY[iDY] ->SetBranchAddress("Double_bTagger",       &Double_bTagger);
+
+    // set event weight 
+    double Lumi = 12700;// 12.7/fb
+    h_totalEv[iDY] = (TH1F*)file_DY[iDY]->FindObjectAny("totalEvents");
+    nTotal[iDY] = h_totalEv[iDY]->Integral();
+    Weight[iDY] = Lumi * Xsec[iDY] / nTotal[iDY] ;   
+
+ 
+    // Event loop
+    int Number_to_print    =  10000;
+//    cout<<"iDY: "<< iDY << endl;
+    for( Long64_t ev = 0; ev < tree_DY[iDY]->GetEntriesFast(); ev++ ){
+
+      if( ev %   Number_to_print == 0 )
+        fprintf(stderr, "Processing event %lli of %lli\n", ev + 1, tree_DY[iDY]->GetEntriesFast());
+
+      tree_DY[iDY]->GetEntry(ev);
+
+//      cout<<"PRmass_L2L3Corrected: "<< PRmass_L2L3Corrected << endl; 
+      
+      // Jet mass signal region 
+      if(PRmass_L2L3Corrected <105 || PRmass_L2L3Corrected>135)continue;
+
+      // pass
+      if(Double_bTagger >0.3){
+        h_ZH_mass_pass->Fill(ZHmass, Weight[iDY] ) ;
+
+      }
+
+      // fail
+      else{
+        h_ZH_mass_fail->Fill(ZHmass, Weight[iDY] ) ;
+
+      }
+
+
+    }// end event loop
+
+  }// end DY loop
+
+
+
+
+
+  // ------- Draw and Save ----------
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
