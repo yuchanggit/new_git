@@ -1,0 +1,2 @@
+ALL_SUBSYSTEMS+=DataFormats
+subdirs_src_DataFormats = src_DataFormats_JetReco
