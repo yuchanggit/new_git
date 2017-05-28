@@ -1,0 +1,854 @@
+[yuchang@lxplus053 src]$ cmsRun Demo/DemoAnalyzer/python/ConfFile_cfg.py
+28-May-2017 14:55:51 CEST  Initiating request to open file file:/afs/cern.ch/cms/Tutorials/TWIKI_DATA/TTJets_8TeV_53X.root
+28-May-2017 14:55:55 CEST  Successfully opened file file:/afs/cern.ch/cms/Tutorials/TWIKI_DATA/TTJets_8TeV_53X.root
+Begin processing the 1st record. Run 1, Event 19279309, LumiSection 64278 at 28-May-2017 14:55:58.156 CEST
+%MSG-i Demo:  DemoAnalyzer:demo 28-May-2017 14:55:58 CEST Run: 1 Event: 19279309
+number of tracks 1051
+%MSG
+my tracks: 1051
+
+++Event     1 contains 383 products with friendlyClassName, moduleLabel, productInstanceName and processName:
+++BeamSpotOnlines "scalersRawToDigi" "" "RECO" (productId = 4:1)
+++CaloTowersSorted "towerMaker" "" "RECO" (productId = 4:15)
+++CastorRecHitsSorted "castorreco" "" "RECO" (productId = 4:19)
+++ClusterSummary "clusterSummaryProducer" "" "RECO" (productId = 4:21)
+++DcsStatuss "scalersRawToDigi" "" "RECO" (productId = 4:28)
+++EBDigiCollection "selectDigi" "selectedEcalEBDigiCollection" "RECO" (productId = 4:51)
+++EEDigiCollection "selectDigi" "selectedEcalEEDigiCollection" "RECO" (productId = 4:58)
+++EcalRecHitsSorted "reducedEcalRecHitsEB" "" "RECO" (productId = 4:76)
+++EcalRecHitsSorted "reducedEcalRecHitsEE" "" "RECO" (productId = 4:77)
+++EcalRecHitsSorted "reducedEcalRecHitsES" "" "RECO" (productId = 4:78)
+++GenEventInfoProduct "generator" "" "SIM" (productId = 2:1)
+++HBHERecHitsSorted "reducedHcalRecHits" "hbhereco" "RECO" (productId = 4:89)
+++HFRecHitsSorted "reducedHcalRecHits" "hfreco" "RECO" (productId = 4:92)
+++HORecHitsSorted "reducedHcalRecHits" "horeco" "RECO" (productId = 4:95)
+++HcalNoiseSummary "hcalnoise" "" "RECO" (productId = 4:98)
+++HcalUnpackerReport "castorDigis" "" "RECO" (productId = 4:102)
+++HcalUnpackerReport "hcalDigis" "" "RECO" (productId = 4:103)
+++L1AcceptBunchCrossings "scalersRawToDigi" "" "RECO" (productId = 4:104)
+++L1GlobalTriggerObjectMaps "l1L1GtObjectMap" "" "RECO" (productId = 4:126)
+++L1GlobalTriggerReadoutRecord "gtDigis" "" "RECO" (productId = 4:127)
+++L1TriggerScalerss "scalersRawToDigi" "" "RECO" (productId = 4:138)
+++LHEEventProduct "source" "" "LHE" (productId = 1:1)
+++Level1TriggerScalerss "scalersRawToDigi" "" "RECO" (productId = 4:139)
+++LumiScalerss "scalersRawToDigi" "" "RECO" (productId = 4:141)
+++PileupSummaryInfos "addPileupInfo" "" "HLT" (productId = 3:272)
+++TrackingRecHitsOwned "refittedStandAloneMuons" "" "RECO" (productId = 4:230)
+++TrackingRecHitsOwned "standAloneMuons" "" "RECO" (productId = 4:232)
+++booledmValueMap "PhotonIDProd" "PhotonCutBasedIDLoose" "RECO" (productId = 4:327)
+++booledmValueMap "PhotonIDProd" "PhotonCutBasedIDLooseEM" "RECO" (productId = 4:328)
+++booledmValueMap "PhotonIDProd" "PhotonCutBasedIDTight" "RECO" (productId = 4:329)
+++booledmValueMap "muons" "muidAllArbitrated" "RECO" (productId = 4:348)
+++booledmValueMap "muons" "muidGMStaChiCompatibility" "RECO" (productId = 4:349)
+++booledmValueMap "muons" "muidGMTkChiCompatibility" "RECO" (productId = 4:350)
+++booledmValueMap "muons" "muidGMTkKinkTight" "RECO" (productId = 4:351)
+++booledmValueMap "muons" "muidGlobalMuonPromptTight" "RECO" (productId = 4:352)
+++booledmValueMap "muons" "muidTM2DCompatibilityLoose" "RECO" (productId = 4:353)
+++booledmValueMap "muons" "muidTM2DCompatibilityTight" "RECO" (productId = 4:354)
+++booledmValueMap "muons" "muidTMLastStationAngLoose" "RECO" (productId = 4:355)
+++booledmValueMap "muons" "muidTMLastStationAngTight" "RECO" (productId = 4:356)
+++booledmValueMap "muons" "muidTMLastStationLoose" "RECO" (productId = 4:357)
+++booledmValueMap "muons" "muidTMLastStationOptimizedLowPtLoose" "RECO" (productId = 4:358)
+++booledmValueMap "muons" "muidTMLastStationOptimizedLowPtTight" "RECO" (productId = 4:359)
+++booledmValueMap "muons" "muidTMLastStationTight" "RECO" (productId = 4:360)
+++booledmValueMap "muons" "muidTMOneStationAngLoose" "RECO" (productId = 4:361)
+++booledmValueMap "muons" "muidTMOneStationAngTight" "RECO" (productId = 4:362)
+++booledmValueMap "muons" "muidTMOneStationLoose" "RECO" (productId = 4:363)
+++booledmValueMap "muons" "muidTMOneStationTight" "RECO" (productId = 4:364)
+++booledmValueMap "muons" "muidTrackerMuonArbitrated" "RECO" (productId = 4:365)
+++double "ak5CaloJets" "rho" "RECO" (productId = 4:368)
+++double "ak5CaloJets" "sigma" "RECO" (productId = 4:369)
+++double "ak5PFJets" "rho" "RECO" (productId = 4:370)
+++double "ak5PFJets" "sigma" "RECO" (productId = 4:371)
+++double "ak5TrackJets" "rho" "RECO" (productId = 4:372)
+++double "ak5TrackJets" "sigma" "RECO" (productId = 4:373)
+++double "ak7BasicJets" "rho" "RECO" (productId = 4:374)
+++double "ak7BasicJets" "sigma" "RECO" (productId = 4:375)
+++double "ak7CaloJets" "rho" "RECO" (productId = 4:376)
+++double "ak7CaloJets" "sigma" "RECO" (productId = 4:377)
+++double "ak7PFJets" "rho" "RECO" (productId = 4:378)
+++double "ak7PFJets" "sigma" "RECO" (productId = 4:379)
+++double "fixedGridRhoAll" "" "RECO" (productId = 4:380)
+++double "fixedGridRhoFastjetAll" "" "RECO" (productId = 4:381)
+++double "kt4CaloJets" "rho" "RECO" (productId = 4:386)
+++double "kt4CaloJets" "sigma" "RECO" (productId = 4:387)
+++double "kt4PFJets" "rho" "RECO" (productId = 4:388)
+++double "kt4PFJets" "sigma" "RECO" (productId = 4:389)
+++double "kt6CaloJets" "rho" "RECO" (productId = 4:392)
+++double "kt6CaloJets" "sigma" "RECO" (productId = 4:393)
+++double "kt6CaloJetsCentral" "rho" "RECO" (productId = 4:394)
+++double "kt6CaloJetsCentral" "sigma" "RECO" (productId = 4:395)
+++double "kt6PFJets" "rho" "RECO" (productId = 4:396)
+++double "kt6PFJets" "sigma" "RECO" (productId = 4:397)
+++double "kt6PFJetsCentralChargedPileUp" "rho" "RECO" (productId = 4:398)
+++double "kt6PFJetsCentralChargedPileUp" "sigma" "RECO" (productId = 4:399)
+++double "kt6PFJetsCentralNeutral" "rho" "RECO" (productId = 4:400)
+++double "kt6PFJetsCentralNeutral" "sigma" "RECO" (productId = 4:401)
+++double "kt6PFJetsCentralNeutralTight" "rho" "RECO" (productId = 4:402)
+++double "kt6PFJetsCentralNeutralTight" "sigma" "RECO" (productId = 4:403)
+++doubleedmValueMap "muons" "muPFIsoValueCharged03" "RECO" (productId = 4:438)
+++doubleedmValueMap "muons" "muPFIsoValueCharged04" "RECO" (productId = 4:439)
+++doubleedmValueMap "muons" "muPFIsoValueChargedAll03" "RECO" (productId = 4:440)
+++doubleedmValueMap "muons" "muPFIsoValueChargedAll04" "RECO" (productId = 4:441)
+++doubleedmValueMap "muons" "muPFIsoValueGamma03" "RECO" (productId = 4:442)
+++doubleedmValueMap "muons" "muPFIsoValueGamma04" "RECO" (productId = 4:443)
+++doubleedmValueMap "muons" "muPFIsoValueNeutral03" "RECO" (productId = 4:444)
+++doubleedmValueMap "muons" "muPFIsoValueNeutral04" "RECO" (productId = 4:445)
+++doubleedmValueMap "muons" "muPFIsoValuePU03" "RECO" (productId = 4:446)
+++doubleedmValueMap "muons" "muPFIsoValuePU04" "RECO" (productId = 4:447)
+++doubles "ak5CaloJets" "rhos" "RECO" (productId = 4:458)
+++doubles "ak5CaloJets" "sigmas" "RECO" (productId = 4:459)
+++doubles "ak5PFJets" "rhos" "RECO" (productId = 4:460)
+++doubles "ak5PFJets" "sigmas" "RECO" (productId = 4:461)
+++doubles "ak5TrackJets" "rhos" "RECO" (productId = 4:462)
+++doubles "ak5TrackJets" "sigmas" "RECO" (productId = 4:463)
+++doubles "ak7BasicJets" "rhos" "RECO" (productId = 4:464)
+++doubles "ak7BasicJets" "sigmas" "RECO" (productId = 4:465)
+++doubles "ak7CaloJets" "rhos" "RECO" (productId = 4:466)
+++doubles "ak7CaloJets" "sigmas" "RECO" (productId = 4:467)
+++doubles "ak7PFJets" "rhos" "RECO" (productId = 4:468)
+++doubles "ak7PFJets" "sigmas" "RECO" (productId = 4:469)
+++doubles "kt4CaloJets" "rhos" "RECO" (productId = 4:474)
+++doubles "kt4CaloJets" "sigmas" "RECO" (productId = 4:475)
+++doubles "kt4PFJets" "rhos" "RECO" (productId = 4:476)
+++doubles "kt4PFJets" "sigmas" "RECO" (productId = 4:477)
+++doubles "kt6CaloJets" "rhos" "RECO" (productId = 4:480)
+++doubles "kt6CaloJets" "sigmas" "RECO" (productId = 4:481)
+++doubles "kt6PFJets" "rhos" "RECO" (productId = 4:484)
+++doubles "kt6PFJets" "sigmas" "RECO" (productId = 4:485)
+++edmConditionsInEventBlock "conditionsInEdm" "" "RECO" (productId = 4:492)
+++edmErrorSummaryEntrys "logErrorHarvester" "" "RECO" (productId = 4:493)
+++edmTriggerResults "TriggerResults" "" "HLT" (productId = 3:723)
+++edmTriggerResults "TriggerResults" "" "RECO" (productId = 4:494)
+++edmTriggerResults "TriggerResults" "" "SIM" (productId = 2:63)
+++floatedmValueMap "eidLoose" "" "RECO" (productId = 4:496)
+++floatedmValueMap "eidRobustHighEnergy" "" "RECO" (productId = 4:497)
+++floatedmValueMap "eidRobustLoose" "" "RECO" (productId = 4:498)
+++floatedmValueMap "eidRobustTight" "" "RECO" (productId = 4:499)
+++floatedmValueMap "eidTight" "" "RECO" (productId = 4:500)
+++ints "genParticles" "" "SIM" (productId = 2:64)
+++l1extraL1EmParticles "l1extraParticles" "Isolated" "RECO" (productId = 4:536)
+++l1extraL1EmParticles "l1extraParticles" "NonIsolated" "RECO" (productId = 4:537)
+++l1extraL1EtMissParticles "l1extraParticles" "MET" "RECO" (productId = 4:538)
+++l1extraL1EtMissParticles "l1extraParticles" "MHT" "RECO" (productId = 4:539)
+++l1extraL1HFRingss "l1extraParticles" "" "RECO" (productId = 4:540)
+++l1extraL1JetParticles "l1extraParticles" "Central" "RECO" (productId = 4:541)
+++l1extraL1JetParticles "l1extraParticles" "Forward" "RECO" (productId = 4:542)
+++l1extraL1JetParticles "l1extraParticles" "Tau" "RECO" (productId = 4:543)
+++l1extraL1MuonParticles "l1extraParticles" "" "RECO" (productId = 4:544)
+++recoBasicJets "ak7BasicJets" "" "RECO" (productId = 4:545)
+++recoBeamHaloSummary "BeamHaloSummary" "" "RECO" (productId = 4:546)
+++recoBeamSpot "offlineBeamSpot" "" "RECO" (productId = 4:547)
+++recoCaloClusters "hfEMClusters" "" "RECO" (productId = 4:558)
+++recoCaloClusters "hybridSuperClusters" "hybridBarrelBasicClusters" "RECO" (productId = 4:559)
+++recoCaloClusters "hybridSuperClusters" "uncleanOnlyHybridBarrelBasicClusters" "RECO" (productId = 4:560)
+++recoCaloClusters "multi5x5SuperClusters" "multi5x5EndcapBasicClusters" "RECO" (productId = 4:565)
+++recoCaloClusters "pfElectronTranslator" "pf" "RECO" (productId = 4:567)
+++recoCaloClusters "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:568)
+++recoCaloJets "ak5CaloJets" "" "RECO" (productId = 4:570)
+++recoCaloJets "ak7CaloJets" "" "RECO" (productId = 4:571)
+++recoCaloJets "kt4CaloJets" "" "RECO" (productId = 4:573)
+++recoCaloJets "kt6CaloJets" "" "RECO" (productId = 4:574)
+++recoCaloMETs "corMetGlobalMuons" "" "RECO" (productId = 4:576)
+++recoCaloMETs "met" "" "RECO" (productId = 4:577)
+++recoCaloMETs "metHO" "" "RECO" (productId = 4:578)
+++recoCaloMETs "metNoHF" "" "RECO" (productId = 4:579)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationAgainstElectron" "" "RECO" (productId = 4:589)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationAgainstMuon" "" "RECO" (productId = 4:590)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationByECALIsolation" "" "RECO" (productId = 4:591)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationByIsolation" "" "RECO" (productId = 4:592)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationByLeadingTrackFinding" "" "RECO" (productId = 4:593)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationByLeadingTrackPtCut" "" "RECO" (productId = 4:594)
+++recoCaloTauDiscriminator "caloRecoTauDiscriminationByTrackIsolation" "" "RECO" (productId = 4:595)
+++recoCaloTauTagInfos "caloRecoTauTagInfoProducer" "" "RECO" (productId = 4:596)
+++recoCaloTaus "caloRecoTauProducer" "" "RECO" (productId = 4:598)
+++recoCastorJetIDedmValueMap "ak7CastorJetID" "" "RECO" (productId = 4:599)
+++recoCastorTowers "CastorTowerReco" "" "RECO" (productId = 4:600)
+++recoConversions "allConversions" "" "RECO" (productId = 4:617)
+++recoConversions "conversions" "" "RECO" (productId = 4:618)
+++recoConversions "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:620)
+++recoConversions "uncleanedOnlyAllConversions" "" "RECO" (productId = 4:621)
+++recoDeDxDataedmValueMap "dedxDiscrimASmi" "" "RECO" (productId = 4:622)
+++recoDeDxDataedmValueMap "dedxHarmonic2" "" "RECO" (productId = 4:623)
+++recoGenJets "ak5GenJets" "" "SIM" (productId = 2:65)
+++recoGenJets "ak7GenJets" "" "SIM" (productId = 2:66)
+++recoGenJets "kt4GenJets" "" "SIM" (productId = 2:68)
+++recoGenJets "kt6GenJets" "" "SIM" (productId = 2:69)
+++recoGenMETs "genMetCalo" "" "SIM" (productId = 2:70)
+++recoGenMETs "genMetCaloAndNonPrompt" "" "SIM" (productId = 2:71)
+++recoGenMETs "genMetTrue" "" "SIM" (productId = 2:72)
+++recoGenParticles "genParticles" "" "SIM" (productId = 2:73)
+++recoGlobalHaloData "GlobalHaloData" "" "RECO" (productId = 4:630)
+++recoGsfElectronCores "gsfElectronCores" "" "RECO" (productId = 4:632)
+++recoGsfElectronCores "uncleanedOnlyGsfElectronCores" "" "RECO" (productId = 4:634)
+++recoGsfElectrons "gsfElectrons" "" "RECO" (productId = 4:637)
+++recoGsfElectrons "uncleanedOnlyGsfElectrons" "" "RECO" (productId = 4:640)
+++recoGsfTracks "electronGsfTracks" "" "RECO" (productId = 4:647)
+++recoHFEMClusterShapes "hfEMClusters" "" "RECO" (productId = 4:649)
+++recoIsoDepositedmValueMap "muIsoDepositCalByAssociatorTowers" "ecal" "RECO" (productId = 4:657)
+++recoIsoDepositedmValueMap "muIsoDepositCalByAssociatorTowers" "hcal" "RECO" (productId = 4:658)
+++recoIsoDepositedmValueMap "muIsoDepositCalByAssociatorTowers" "ho" "RECO" (productId = 4:659)
+++recoIsoDepositedmValueMap "muIsoDepositJets" "" "RECO" (productId = 4:660)
+++recoIsoDepositedmValueMap "muIsoDepositTk" "" "RECO" (productId = 4:661)
+++recoIsoDepositedmValueMap "muons" "ecal" "RECO" (productId = 4:667)
+++recoIsoDepositedmValueMap "muons" "hcal" "RECO" (productId = 4:668)
+++recoIsoDepositedmValueMap "muons" "ho" "RECO" (productId = 4:669)
+++recoIsoDepositedmValueMap "muons" "muIsoDepositJets" "RECO" (productId = 4:670)
+++recoIsoDepositedmValueMap "muons" "muIsoDepositTk" "RECO" (productId = 4:671)
+++recoJPTJets "JetPlusTrackZSPCorJetAntiKt5" "" "RECO" (productId = 4:682)
+++recoJPTJets "TCTauJetPlusTrackZSPCorJetAntiKt5" "" "RECO" (productId = 4:683)
+++recoJetIDedmValueMap "ak5JetID" "" "RECO" (productId = 4:684)
+++recoJetIDedmValueMap "ak7JetID" "" "RECO" (productId = 4:685)
+++recoJetIDedmValueMap "kt4JetID" "" "RECO" (productId = 4:687)
+++recoJetIDedmValueMap "kt6JetID" "" "RECO" (productId = 4:688)
+++recoJetPiZeroAssociation "ak5PFJetsRecoTauPiZeros" "" "RECO" (productId = 4:690)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "combinedSecondaryVertexBJetTags" "" "RECO" (productId = 4:691)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "combinedSecondaryVertexMVABJetTags" "" "RECO" (productId = 4:692)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "ghostTrackBJetTags" "" "RECO" (productId = 4:693)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "jetBProbabilityBJetTags" "" "RECO" (productId = 4:694)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "jetProbabilityBJetTags" "" "RECO" (productId = 4:695)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "simpleSecondaryVertexHighEffBJetTags" "" "RECO" (productId = 4:696)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "simpleSecondaryVertexHighPurBJetTags" "" "RECO" (productId = 4:697)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "softElectronByIP3dBJetTags" "" "RECO" (productId = 4:698)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "softElectronByPtBJetTags" "" "RECO" (productId = 4:699)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "softMuonBJetTags" "" "RECO" (productId = 4:700)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "softMuonByIP3dBJetTags" "" "RECO" (productId = 4:701)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "softMuonByPtBJetTags" "" "RECO" (productId = 4:702)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "trackCountingHighEffBJetTags" "" "RECO" (productId = 4:703)
+++recoJetedmRefToBaseProdTofloatsAssociationVector "trackCountingHighPurBJetTags" "" "RECO" (productId = 4:704)
+++recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector "ak5JetExtender" "" "RECO" (productId = 4:705)
+++recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector "ak7JetExtender" "" "RECO" (productId = 4:706)
+++recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector "kt4JetExtender" "" "RECO" (productId = 4:708)
+++recoJetedmRefToBaseProdrecoTracksrecoTrackrecoTracksTorecoTrackedmrefhelperFindUsingAdvanceedmRefVectorsAssociationVector "ak5JetTracksAssociatorAtVertex" "" "RECO" (productId = 4:711)
+++recoJetedmRefToBaseProdrecoTracksrecoTrackrecoTracksTorecoTrackedmrefhelperFindUsingAdvanceedmRefVectorsAssociationVector "ak7JetTracksAssociatorAtVertex" "" "RECO" (productId = 4:714)
+++recoMETs "htMetAK5" "" "RECO" (productId = 4:720)
+++recoMETs "htMetAK7" "" "RECO" (productId = 4:721)
+++recoMETs "htMetIC5" "" "RECO" (productId = 4:722)
+++recoMETs "htMetKT4" "" "RECO" (productId = 4:723)
+++recoMETs "htMetKT6" "" "RECO" (productId = 4:724)
+++recoMETs "tcMet" "" "RECO" (productId = 4:725)
+++recoMETs "tcMetWithPFclusters" "" "RECO" (productId = 4:726)
+++recoMuonCosmicCompatibilityedmValueMap "muons" "cosmicsVeto" "RECO" (productId = 4:728)
+++recoMuonMETCorrectionDataedmValueMap "muonMETValueMapProducer" "muCorrData" "RECO" (productId = 4:729)
+++recoMuonMETCorrectionDataedmValueMap "muonTCMETValueMapProducer" "muCorrData" "RECO" (productId = 4:730)
+++recoMuonShoweredmValueMap "muons" "muonShowerInformation" "RECO" (productId = 4:733)
+++recoMuonTimeExtraedmValueMap "muons" "combined" "RECO" (productId = 4:734)
+++recoMuonTimeExtraedmValueMap "muons" "csc" "RECO" (productId = 4:735)
+++recoMuonTimeExtraedmValueMap "muons" "dt" "RECO" (productId = 4:736)
+++recoMuons "muons" "" "RECO" (productId = 4:750)
+++recoMuons "muonsFromCosmics" "" "RECO" (productId = 4:752)
+++recoMuons "muonsFromCosmics1Leg" "" "RECO" (productId = 4:753)
+++recoPFCandidateedmPtredmValueMap "particleFlow" "electrons" "RECO" (productId = 4:759)
+++recoPFCandidateedmPtredmValueMap "particleFlow" "muons" "RECO" (productId = 4:760)
+++recoPFCandidateedmPtredmValueMap "particleFlow" "photons" "RECO" (productId = 4:761)
+++recoPFCandidates "particleFlow" "" "RECO" (productId = 4:762)
+++recoPFCandidates "particleFlowTmp" "AddedMuonsAndHadrons" "RECO" (productId = 4:764)
+++recoPFCandidates "particleFlowTmp" "CleanedCosmicsMuons" "RECO" (productId = 4:765)
+++recoPFCandidates "particleFlowTmp" "CleanedFakeMuons" "RECO" (productId = 4:766)
+++recoPFCandidates "particleFlowTmp" "CleanedHF" "RECO" (productId = 4:767)
+++recoPFCandidates "particleFlowTmp" "CleanedPunchThroughMuons" "RECO" (productId = 4:768)
+++recoPFCandidates "particleFlowTmp" "CleanedPunchThroughNeutralHadrons" "RECO" (productId = 4:769)
+++recoPFCandidates "particleFlowTmp" "CleanedTrackerAndGlobalMuons" "RECO" (productId = 4:770)
+++recoPFCandidates "particleFlowTmp" "electrons" "RECO" (productId = 4:771)
+++recoPFJets "ak5PFJets" "" "RECO" (productId = 4:793)
+++recoPFJets "ak7PFJets" "" "RECO" (productId = 4:794)
+++recoPFJets "kt4PFJets" "" "RECO" (productId = 4:796)
+++recoPFJets "kt6PFJets" "" "RECO" (productId = 4:797)
+++recoPFMETs "pfMet" "" "RECO" (productId = 4:803)
+++recoPFRecHits "particleFlowClusterECAL" "Cleaned" "RECO" (productId = 4:804)
+++recoPFRecHits "particleFlowClusterHCAL" "Cleaned" "RECO" (productId = 4:805)
+++recoPFRecHits "particleFlowClusterHFEM" "Cleaned" "RECO" (productId = 4:806)
+++recoPFRecHits "particleFlowClusterHFHAD" "Cleaned" "RECO" (productId = 4:807)
+++recoPFRecHits "particleFlowClusterHO" "Cleaned" "RECO" (productId = 4:808)
+++recoPFRecHits "particleFlowClusterPS" "Cleaned" "RECO" (productId = 4:809)
+++recoPFRecHits "particleFlowRecHitECAL" "Cleaned" "RECO" (productId = 4:811)
+++recoPFRecHits "particleFlowRecHitHCAL" "Cleaned" "RECO" (productId = 4:813)
+++recoPFRecHits "particleFlowRecHitHO" "Cleaned" "RECO" (productId = 4:817)
+++recoPFRecHits "particleFlowRecHitPS" "Cleaned" "RECO" (productId = 4:819)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByDecayModeFinding" "" "RECO" (productId = 4:828)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseChargedIsolation" "" "RECO" (productId = 4:829)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseCombinedIsolationDBSumPtCorr" "" "RECO" (productId = 4:830)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseElectronRejection" "" "RECO" (productId = 4:831)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseIsolation" "" "RECO" (productId = 4:832)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseIsolationDBSumPtCorr" "" "RECO" (productId = 4:833)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByLooseMuonRejection" "" "RECO" (productId = 4:834)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMVAElectronRejection" "" "RECO" (productId = 4:835)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumChargedIsolation" "" "RECO" (productId = 4:836)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumCombinedIsolationDBSumPtCorr" "" "RECO" (productId = 4:837)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumElectronRejection" "" "RECO" (productId = 4:838)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumIsolation" "" "RECO" (productId = 4:839)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumIsolationDBSumPtCorr" "" "RECO" (productId = 4:840)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByMediumMuonRejection" "" "RECO" (productId = 4:841)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByRawChargedIsolationDBSumPtCorr" "" "RECO" (productId = 4:842)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByRawCombinedIsolationDBSumPtCorr" "" "RECO" (productId = 4:843)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByRawGammaIsolationDBSumPtCorr" "" "RECO" (productId = 4:844)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightChargedIsolation" "" "RECO" (productId = 4:845)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightCombinedIsolationDBSumPtCorr" "" "RECO" (productId = 4:846)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightElectronRejection" "" "RECO" (productId = 4:847)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightIsolation" "" "RECO" (productId = 4:848)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightIsolationDBSumPtCorr" "" "RECO" (productId = 4:849)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByTightMuonRejection" "" "RECO" (productId = 4:850)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByVLooseChargedIsolation" "" "RECO" (productId = 4:851)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByVLooseCombinedIsolationDBSumPtCorr" "" "RECO" (productId = 4:852)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByVLooseIsolation" "" "RECO" (productId = 4:853)
+++recoPFTauDiscriminator "hpsPFTauDiscriminationByVLooseIsolationDBSumPtCorr" "" "RECO" (productId = 4:854)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByDecayModeSelection" "" "RECO" (productId = 4:856)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLeadingPionPtCut" "" "RECO" (productId = 4:857)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLeadingTrackFinding" "" "RECO" (productId = 4:858)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLeadingTrackPtCut" "" "RECO" (productId = 4:859)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLooseElectronRejection" "" "RECO" (productId = 4:860)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLooseIsolation" "" "RECO" (productId = 4:861)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByLooseMuonRejection" "" "RECO" (productId = 4:862)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByMediumElectronRejection" "" "RECO" (productId = 4:863)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByMediumIsolation" "" "RECO" (productId = 4:864)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTanc" "" "RECO" (productId = 4:865)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTancLoose" "" "RECO" (productId = 4:866)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTancMedium" "" "RECO" (productId = 4:867)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTancRaw" "" "RECO" (productId = 4:868)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTancTight" "" "RECO" (productId = 4:869)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTancVLoose" "" "RECO" (productId = 4:870)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTightElectronRejection" "" "RECO" (productId = 4:871)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTightIsolation" "" "RECO" (productId = 4:872)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByTightMuonRejection" "" "RECO" (productId = 4:873)
+++recoPFTauDiscriminator "hpsTancTausDiscriminationByVLooseIsolation" "" "RECO" (productId = 4:874)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationAgainstElectron" "" "RECO" (productId = 4:875)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationAgainstMuon" "" "RECO" (productId = 4:876)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByECALIsolation" "" "RECO" (productId = 4:877)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByECALIsolationUsingLeadingPion" "" "RECO" (productId = 4:878)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByIsolation" "" "RECO" (productId = 4:879)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByIsolationUsingLeadingPion" "" "RECO" (productId = 4:880)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByLeadingPionPtCut" "" "RECO" (productId = 4:881)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByLeadingTrackFinding" "" "RECO" (productId = 4:882)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByLeadingTrackPtCut" "" "RECO" (productId = 4:883)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTaNC" "" "RECO" (productId = 4:884)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTaNCfrHalfPercent" "" "RECO" (productId = 4:885)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTaNCfrOnePercent" "" "RECO" (productId = 4:886)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTaNCfrQuarterPercent" "" "RECO" (productId = 4:887)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTaNCfrTenthPercent" "" "RECO" (productId = 4:888)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTrackIsolation" "" "RECO" (productId = 4:889)
+++recoPFTauDiscriminator "shrinkingConePFTauDiscriminationByTrackIsolationUsingLeadingPion" "" "RECO" (productId = 4:890)
+++recoPFTaus "hpsPFTauProducer" "" "RECO" (productId = 4:893)
+++recoPFTaus "hpsTancTaus" "" "RECO" (productId = 4:895)
+++recoPFTaus "shrinkingConePFTauProducer" "" "RECO" (productId = 4:897)
+++recoPhotonCores "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:900)
+++recoPhotonCores "photonCore" "" "RECO" (productId = 4:901)
+++recoPhotons "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:902)
+++recoPhotons "photons" "" "RECO" (productId = 4:903)
+++recoPreshowerClusterShapes "multi5x5PreshowerClusterShape" "multi5x5PreshowerXClustersShape" "RECO" (productId = 4:906)
+++recoPreshowerClusterShapes "multi5x5PreshowerClusterShape" "multi5x5PreshowerYClustersShape" "RECO" (productId = 4:907)
+++recoPreshowerClusters "multi5x5SuperClustersWithPreshower" "preshowerXClusters" "RECO" (productId = 4:908)
+++recoPreshowerClusters "multi5x5SuperClustersWithPreshower" "preshowerYClusters" "RECO" (productId = 4:909)
+++recoPreshowerClusters "pfElectronTranslator" "pf" "RECO" (productId = 4:910)
+++recoPreshowerClusters "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:911)
+++recoRecoChargedRefCandidates "trackRefsForJets" "" "RECO" (productId = 4:914)
+++recoRecoEcalCandidates "hfRecoEcalCandidate" "" "RECO" (productId = 4:915)
+++recoRecoTauPiZeros "hpsPFTauProducer" "pizeros" "RECO" (productId = 4:916)
+++recoRecoTauPiZeros "hpsTancTaus" "pizeros" "RECO" (productId = 4:917)
+++recoRecoTauPiZeros "shrinkingConePFTauProducer" "pizeros" "RECO" (productId = 4:918)
+++recoSuperClusters "correctedHybridSuperClusters" "" "RECO" (productId = 4:924)
+++recoSuperClusters "correctedMulti5x5SuperClustersWithPreshower" "" "RECO" (productId = 4:925)
+++recoSuperClusters "hfEMClusters" "" "RECO" (productId = 4:926)
+++recoSuperClusters "hybridSuperClusters" "uncleanOnlyHybridSuperClusters" "RECO" (productId = 4:928)
+++recoSuperClusters "pfElectronTranslator" "pf" "RECO" (productId = 4:936)
+++recoSuperClusters "pfPhotonTranslator" "pfphot" "RECO" (productId = 4:937)
+++recoSuperClustersToOnerecoHFEMClusterShapesAssociation "hfEMClusters" "" "RECO" (productId = 4:942)
+++recoTrackExtrapolations "trackExtrapolator" "" "RECO" (productId = 4:944)
+++recoTrackExtras "globalMuons" "" "RECO" (productId = 4:958)
+++recoTrackExtras "refittedStandAloneMuons" "" "RECO" (productId = 4:966)
+++recoTrackExtras "standAloneMuons" "" "RECO" (productId = 4:968)
+++recoTrackExtras "tevMuons" "default" "RECO" (productId = 4:970)
+++recoTrackExtras "tevMuons" "dyt" "RECO" (productId = 4:971)
+++recoTrackExtras "tevMuons" "firstHit" "RECO" (productId = 4:972)
+++recoTrackExtras "tevMuons" "picky" "RECO" (productId = 4:973)
+++recoTrackJets "ak5TrackJets" "" "RECO" (productId = 4:979)
+++recoTracks "ckfInOutTracksFromConversions" "" "RECO" (productId = 4:981)
+++recoTracks "ckfOutInTracksFromConversions" "" "RECO" (productId = 4:982)
+++recoTracks "conversionStepTracks" "" "RECO" (productId = 4:984)
+++recoTracks "cosmicMuons" "" "RECO" (productId = 4:985)
+++recoTracks "cosmicMuons1Leg" "" "RECO" (productId = 4:986)
+++recoTracks "generalTracks" "" "RECO" (productId = 4:990)
+++recoTracks "globalCosmicMuons" "" "RECO" (productId = 4:991)
+++recoTracks "globalCosmicMuons1Leg" "" "RECO" (productId = 4:992)
+++recoTracks "globalMuons" "" "RECO" (productId = 4:993)
+++recoTracks "refittedStandAloneMuons" "" "RECO" (productId = 4:1002)
+++recoTracks "refittedStandAloneMuons" "UpdatedAtVtx" "RECO" (productId = 4:1003)
+++recoTracks "regionalCosmicTracks" "" "RECO" (productId = 4:1004)
+++recoTracks "standAloneMuons" "" "RECO" (productId = 4:1005)
+++recoTracks "standAloneMuons" "UpdatedAtVtx" "RECO" (productId = 4:1006)
+++recoTracks "tevMuons" "default" "RECO" (productId = 4:1009)
+++recoTracks "tevMuons" "dyt" "RECO" (productId = 4:1010)
+++recoTracks "tevMuons" "firstHit" "RECO" (productId = 4:1011)
+++recoTracks "tevMuons" "picky" "RECO" (productId = 4:1012)
+++recoTracks "uncleanedOnlyCkfInOutTracksFromConversions" "" "RECO" (productId = 4:1014)
+++recoTracks "uncleanedOnlyCkfOutInTracksFromConversions" "" "RECO" (productId = 4:1015)
+++recoTracksToOnerecoTracksAssociation "tevMuons" "default" "RECO" (productId = 4:1020)
+++recoTracksToOnerecoTracksAssociation "tevMuons" "dyt" "RECO" (productId = 4:1021)
+++recoTracksToOnerecoTracksAssociation "tevMuons" "firstHit" "RECO" (productId = 4:1022)
+++recoTracksToOnerecoTracksAssociation "tevMuons" "picky" "RECO" (productId = 4:1023)
+++recoVertexCompositeCandidates "generalV0Candidates" "Kshort" "RECO" (productId = 4:1024)
+++recoVertexCompositeCandidates "generalV0Candidates" "Lambda" "RECO" (productId = 4:1025)
+++recoVertexs "offlinePrimaryVertices" "" "RECO" (productId = 4:1026)
+++recoVertexs "offlinePrimaryVerticesWithBS" "" "RECO" (productId = 4:1028)
+++triggerTriggerEvent "hltTriggerSummaryAOD" "" "HLT" (productId = 3:1414)
+++uintedmValueMap "muons" "cosmicsVeto" "RECO" (productId = 4:1032)
+28-May-2017 14:55:58 CEST  Closed file file:/afs/cern.ch/cms/Tutorials/TWIKI_DATA/TTJets_8TeV_53X.root
+
+Summary for key being the concatenation of friendlyClassName, moduleLabel, productInstanceName and processName
+     1 occurrences of key BeamSpotOnlines + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key CaloTowersSorted + "towerMaker" + "" "RECO"
+     1 occurrences of key CastorRecHitsSorted + "castorreco" + "" "RECO"
+     1 occurrences of key ClusterSummary + "clusterSummaryProducer" + "" "RECO"
+     1 occurrences of key DcsStatuss + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key EBDigiCollection + "selectDigi" + "selectedEcalEBDigiCollection" "RECO"
+     1 occurrences of key EEDigiCollection + "selectDigi" + "selectedEcalEEDigiCollection" "RECO"
+     1 occurrences of key EcalRecHitsSorted + "reducedEcalRecHitsEB" + "" "RECO"
+     1 occurrences of key EcalRecHitsSorted + "reducedEcalRecHitsEE" + "" "RECO"
+     1 occurrences of key EcalRecHitsSorted + "reducedEcalRecHitsES" + "" "RECO"
+     1 occurrences of key GenEventInfoProduct + "generator" + "" "SIM"
+     1 occurrences of key HBHERecHitsSorted + "reducedHcalRecHits" + "hbhereco" "RECO"
+     1 occurrences of key HFRecHitsSorted + "reducedHcalRecHits" + "hfreco" "RECO"
+     1 occurrences of key HORecHitsSorted + "reducedHcalRecHits" + "horeco" "RECO"
+     1 occurrences of key HcalNoiseSummary + "hcalnoise" + "" "RECO"
+     1 occurrences of key HcalUnpackerReport + "castorDigis" + "" "RECO"
+     1 occurrences of key HcalUnpackerReport + "hcalDigis" + "" "RECO"
+     1 occurrences of key L1AcceptBunchCrossings + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key L1GlobalTriggerObjectMaps + "l1L1GtObjectMap" + "" "RECO"
+     1 occurrences of key L1GlobalTriggerReadoutRecord + "gtDigis" + "" "RECO"
+     1 occurrences of key L1TriggerScalerss + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key LHEEventProduct + "source" + "" "LHE"
+     1 occurrences of key Level1TriggerScalerss + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key LumiScalerss + "scalersRawToDigi" + "" "RECO"
+     1 occurrences of key PileupSummaryInfos + "addPileupInfo" + "" "HLT"
+     1 occurrences of key TrackingRecHitsOwned + "refittedStandAloneMuons" + "" "RECO"
+     1 occurrences of key TrackingRecHitsOwned + "standAloneMuons" + "" "RECO"
+     1 occurrences of key booledmValueMap + "PhotonIDProd" + "PhotonCutBasedIDLoose" "RECO"
+     1 occurrences of key booledmValueMap + "PhotonIDProd" + "PhotonCutBasedIDLooseEM" "RECO"
+     1 occurrences of key booledmValueMap + "PhotonIDProd" + "PhotonCutBasedIDTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidAllArbitrated" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidGMStaChiCompatibility" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidGMTkChiCompatibility" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidGMTkKinkTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidGlobalMuonPromptTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTM2DCompatibilityLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTM2DCompatibilityTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationAngLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationAngTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationOptimizedLowPtLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationOptimizedLowPtTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMLastStationTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMOneStationAngLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMOneStationAngTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMOneStationLoose" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTMOneStationTight" "RECO"
+     1 occurrences of key booledmValueMap + "muons" + "muidTrackerMuonArbitrated" "RECO"
+     1 occurrences of key double + "ak5CaloJets" + "rho" "RECO"
+     1 occurrences of key double + "ak5CaloJets" + "sigma" "RECO"
+     1 occurrences of key double + "ak5PFJets" + "rho" "RECO"
+     1 occurrences of key double + "ak5PFJets" + "sigma" "RECO"
+     1 occurrences of key double + "ak5TrackJets" + "rho" "RECO"
+     1 occurrences of key double + "ak5TrackJets" + "sigma" "RECO"
+     1 occurrences of key double + "ak7BasicJets" + "rho" "RECO"
+     1 occurrences of key double + "ak7BasicJets" + "sigma" "RECO"
+     1 occurrences of key double + "ak7CaloJets" + "rho" "RECO"
+     1 occurrences of key double + "ak7CaloJets" + "sigma" "RECO"
+     1 occurrences of key double + "ak7PFJets" + "rho" "RECO"
+     1 occurrences of key double + "ak7PFJets" + "sigma" "RECO"
+     1 occurrences of key double + "fixedGridRhoAll" + "" "RECO"
+     1 occurrences of key double + "fixedGridRhoFastjetAll" + "" "RECO"
+     1 occurrences of key double + "kt4CaloJets" + "rho" "RECO"
+     1 occurrences of key double + "kt4CaloJets" + "sigma" "RECO"
+     1 occurrences of key double + "kt4PFJets" + "rho" "RECO"
+     1 occurrences of key double + "kt4PFJets" + "sigma" "RECO"
+     1 occurrences of key double + "kt6CaloJets" + "rho" "RECO"
+     1 occurrences of key double + "kt6CaloJets" + "sigma" "RECO"
+     1 occurrences of key double + "kt6CaloJetsCentral" + "rho" "RECO"
+     1 occurrences of key double + "kt6CaloJetsCentral" + "sigma" "RECO"
+     1 occurrences of key double + "kt6PFJets" + "rho" "RECO"
+     1 occurrences of key double + "kt6PFJets" + "sigma" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralChargedPileUp" + "rho" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralChargedPileUp" + "sigma" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralNeutral" + "rho" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralNeutral" + "sigma" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralNeutralTight" + "rho" "RECO"
+     1 occurrences of key double + "kt6PFJetsCentralNeutralTight" + "sigma" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueCharged03" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueCharged04" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueChargedAll03" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueChargedAll04" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueGamma03" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueGamma04" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueNeutral03" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValueNeutral04" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValuePU03" "RECO"
+     1 occurrences of key doubleedmValueMap + "muons" + "muPFIsoValuePU04" "RECO"
+     1 occurrences of key doubles + "ak5CaloJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak5CaloJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "ak5PFJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak5PFJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "ak5TrackJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak5TrackJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "ak7BasicJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak7BasicJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "ak7CaloJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak7CaloJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "ak7PFJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "ak7PFJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "kt4CaloJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "kt4CaloJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "kt4PFJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "kt4PFJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "kt6CaloJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "kt6CaloJets" + "sigmas" "RECO"
+     1 occurrences of key doubles + "kt6PFJets" + "rhos" "RECO"
+     1 occurrences of key doubles + "kt6PFJets" + "sigmas" "RECO"
+     1 occurrences of key edmConditionsInEventBlock + "conditionsInEdm" + "" "RECO"
+     1 occurrences of key edmErrorSummaryEntrys + "logErrorHarvester" + "" "RECO"
+     1 occurrences of key edmTriggerResults + "TriggerResults" + "" "HLT"
+     1 occurrences of key edmTriggerResults + "TriggerResults" + "" "RECO"
+     1 occurrences of key edmTriggerResults + "TriggerResults" + "" "SIM"
+     1 occurrences of key floatedmValueMap + "eidLoose" + "" "RECO"
+     1 occurrences of key floatedmValueMap + "eidRobustHighEnergy" + "" "RECO"
+     1 occurrences of key floatedmValueMap + "eidRobustLoose" + "" "RECO"
+     1 occurrences of key floatedmValueMap + "eidRobustTight" + "" "RECO"
+     1 occurrences of key floatedmValueMap + "eidTight" + "" "RECO"
+     1 occurrences of key ints + "genParticles" + "" "SIM"
+     1 occurrences of key l1extraL1EmParticles + "l1extraParticles" + "Isolated" "RECO"
+     1 occurrences of key l1extraL1EmParticles + "l1extraParticles" + "NonIsolated" "RECO"
+     1 occurrences of key l1extraL1EtMissParticles + "l1extraParticles" + "MET" "RECO"
+     1 occurrences of key l1extraL1EtMissParticles + "l1extraParticles" + "MHT" "RECO"
+     1 occurrences of key l1extraL1HFRingss + "l1extraParticles" + "" "RECO"
+     1 occurrences of key l1extraL1JetParticles + "l1extraParticles" + "Central" "RECO"
+     1 occurrences of key l1extraL1JetParticles + "l1extraParticles" + "Forward" "RECO"
+     1 occurrences of key l1extraL1JetParticles + "l1extraParticles" + "Tau" "RECO"
+     1 occurrences of key l1extraL1MuonParticles + "l1extraParticles" + "" "RECO"
+     1 occurrences of key recoBasicJets + "ak7BasicJets" + "" "RECO"
+     1 occurrences of key recoBeamHaloSummary + "BeamHaloSummary" + "" "RECO"
+     1 occurrences of key recoBeamSpot + "offlineBeamSpot" + "" "RECO"
+     1 occurrences of key recoCaloClusters + "hfEMClusters" + "" "RECO"
+     1 occurrences of key recoCaloClusters + "hybridSuperClusters" + "hybridBarrelBasicClusters" "RECO"
+     1 occurrences of key recoCaloClusters + "hybridSuperClusters" + "uncleanOnlyHybridBarrelBasicClusters" "RECO"
+     1 occurrences of key recoCaloClusters + "multi5x5SuperClusters" + "multi5x5EndcapBasicClusters" "RECO"
+     1 occurrences of key recoCaloClusters + "pfElectronTranslator" + "pf" "RECO"
+     1 occurrences of key recoCaloClusters + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoCaloJets + "ak5CaloJets" + "" "RECO"
+     1 occurrences of key recoCaloJets + "ak7CaloJets" + "" "RECO"
+     1 occurrences of key recoCaloJets + "kt4CaloJets" + "" "RECO"
+     1 occurrences of key recoCaloJets + "kt6CaloJets" + "" "RECO"
+     1 occurrences of key recoCaloMETs + "corMetGlobalMuons" + "" "RECO"
+     1 occurrences of key recoCaloMETs + "met" + "" "RECO"
+     1 occurrences of key recoCaloMETs + "metHO" + "" "RECO"
+     1 occurrences of key recoCaloMETs + "metNoHF" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationAgainstElectron" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationAgainstMuon" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationByECALIsolation" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationByIsolation" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationByLeadingTrackFinding" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationByLeadingTrackPtCut" + "" "RECO"
+     1 occurrences of key recoCaloTauDiscriminator + "caloRecoTauDiscriminationByTrackIsolation" + "" "RECO"
+     1 occurrences of key recoCaloTauTagInfos + "caloRecoTauTagInfoProducer" + "" "RECO"
+     1 occurrences of key recoCaloTaus + "caloRecoTauProducer" + "" "RECO"
+     1 occurrences of key recoCastorJetIDedmValueMap + "ak7CastorJetID" + "" "RECO"
+     1 occurrences of key recoCastorTowers + "CastorTowerReco" + "" "RECO"
+     1 occurrences of key recoConversions + "allConversions" + "" "RECO"
+     1 occurrences of key recoConversions + "conversions" + "" "RECO"
+     1 occurrences of key recoConversions + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoConversions + "uncleanedOnlyAllConversions" + "" "RECO"
+     1 occurrences of key recoDeDxDataedmValueMap + "dedxDiscrimASmi" + "" "RECO"
+     1 occurrences of key recoDeDxDataedmValueMap + "dedxHarmonic2" + "" "RECO"
+     1 occurrences of key recoGenJets + "ak5GenJets" + "" "SIM"
+     1 occurrences of key recoGenJets + "ak7GenJets" + "" "SIM"
+     1 occurrences of key recoGenJets + "kt4GenJets" + "" "SIM"
+     1 occurrences of key recoGenJets + "kt6GenJets" + "" "SIM"
+     1 occurrences of key recoGenMETs + "genMetCalo" + "" "SIM"
+     1 occurrences of key recoGenMETs + "genMetCaloAndNonPrompt" + "" "SIM"
+     1 occurrences of key recoGenMETs + "genMetTrue" + "" "SIM"
+     1 occurrences of key recoGenParticles + "genParticles" + "" "SIM"
+     1 occurrences of key recoGlobalHaloData + "GlobalHaloData" + "" "RECO"
+     1 occurrences of key recoGsfElectronCores + "gsfElectronCores" + "" "RECO"
+     1 occurrences of key recoGsfElectronCores + "uncleanedOnlyGsfElectronCores" + "" "RECO"
+     1 occurrences of key recoGsfElectrons + "gsfElectrons" + "" "RECO"
+     1 occurrences of key recoGsfElectrons + "uncleanedOnlyGsfElectrons" + "" "RECO"
+     1 occurrences of key recoGsfTracks + "electronGsfTracks" + "" "RECO"
+     1 occurrences of key recoHFEMClusterShapes + "hfEMClusters" + "" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muIsoDepositCalByAssociatorTowers" + "ecal" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muIsoDepositCalByAssociatorTowers" + "hcal" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muIsoDepositCalByAssociatorTowers" + "ho" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muIsoDepositJets" + "" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muIsoDepositTk" + "" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muons" + "ecal" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muons" + "hcal" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muons" + "ho" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muons" + "muIsoDepositJets" "RECO"
+     1 occurrences of key recoIsoDepositedmValueMap + "muons" + "muIsoDepositTk" "RECO"
+     1 occurrences of key recoJPTJets + "JetPlusTrackZSPCorJetAntiKt5" + "" "RECO"
+     1 occurrences of key recoJPTJets + "TCTauJetPlusTrackZSPCorJetAntiKt5" + "" "RECO"
+     1 occurrences of key recoJetIDedmValueMap + "ak5JetID" + "" "RECO"
+     1 occurrences of key recoJetIDedmValueMap + "ak7JetID" + "" "RECO"
+     1 occurrences of key recoJetIDedmValueMap + "kt4JetID" + "" "RECO"
+     1 occurrences of key recoJetIDedmValueMap + "kt6JetID" + "" "RECO"
+     1 occurrences of key recoJetPiZeroAssociation + "ak5PFJetsRecoTauPiZeros" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "combinedSecondaryVertexBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "combinedSecondaryVertexMVABJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "ghostTrackBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "jetBProbabilityBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "jetProbabilityBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "simpleSecondaryVertexHighEffBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "simpleSecondaryVertexHighPurBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "softElectronByIP3dBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "softElectronByPtBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "softMuonBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "softMuonByIP3dBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "softMuonByPtBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "trackCountingHighEffBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTofloatsAssociationVector + "trackCountingHighPurBJetTags" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector + "ak5JetExtender" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector + "ak7JetExtender" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdTorecoJetExtendedAssociationJetExtendedDatasAssociationVector + "kt4JetExtender" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdrecoTracksrecoTrackrecoTracksTorecoTrackedmrefhelperFindUsingAdvanceedmRefVectorsAssociationVector + "ak5JetTracksAssociatorAtVertex" + "" "RECO"
+     1 occurrences of key recoJetedmRefToBaseProdrecoTracksrecoTrackrecoTracksTorecoTrackedmrefhelperFindUsingAdvanceedmRefVectorsAssociationVector + "ak7JetTracksAssociatorAtVertex" + "" "RECO"
+     1 occurrences of key recoMETs + "htMetAK5" + "" "RECO"
+     1 occurrences of key recoMETs + "htMetAK7" + "" "RECO"
+     1 occurrences of key recoMETs + "htMetIC5" + "" "RECO"
+     1 occurrences of key recoMETs + "htMetKT4" + "" "RECO"
+     1 occurrences of key recoMETs + "htMetKT6" + "" "RECO"
+     1 occurrences of key recoMETs + "tcMet" + "" "RECO"
+     1 occurrences of key recoMETs + "tcMetWithPFclusters" + "" "RECO"
+     1 occurrences of key recoMuonCosmicCompatibilityedmValueMap + "muons" + "cosmicsVeto" "RECO"
+     1 occurrences of key recoMuonMETCorrectionDataedmValueMap + "muonMETValueMapProducer" + "muCorrData" "RECO"
+     1 occurrences of key recoMuonMETCorrectionDataedmValueMap + "muonTCMETValueMapProducer" + "muCorrData" "RECO"
+     1 occurrences of key recoMuonShoweredmValueMap + "muons" + "muonShowerInformation" "RECO"
+     1 occurrences of key recoMuonTimeExtraedmValueMap + "muons" + "combined" "RECO"
+     1 occurrences of key recoMuonTimeExtraedmValueMap + "muons" + "csc" "RECO"
+     1 occurrences of key recoMuonTimeExtraedmValueMap + "muons" + "dt" "RECO"
+     1 occurrences of key recoMuons + "muons" + "" "RECO"
+     1 occurrences of key recoMuons + "muonsFromCosmics" + "" "RECO"
+     1 occurrences of key recoMuons + "muonsFromCosmics1Leg" + "" "RECO"
+     1 occurrences of key recoPFCandidateedmPtredmValueMap + "particleFlow" + "electrons" "RECO"
+     1 occurrences of key recoPFCandidateedmPtredmValueMap + "particleFlow" + "muons" "RECO"
+     1 occurrences of key recoPFCandidateedmPtredmValueMap + "particleFlow" + "photons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlow" + "" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "AddedMuonsAndHadrons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedCosmicsMuons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedFakeMuons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedHF" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedPunchThroughMuons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedPunchThroughNeutralHadrons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "CleanedTrackerAndGlobalMuons" "RECO"
+     1 occurrences of key recoPFCandidates + "particleFlowTmp" + "electrons" "RECO"
+     1 occurrences of key recoPFJets + "ak5PFJets" + "" "RECO"
+     1 occurrences of key recoPFJets + "ak7PFJets" + "" "RECO"
+     1 occurrences of key recoPFJets + "kt4PFJets" + "" "RECO"
+     1 occurrences of key recoPFJets + "kt6PFJets" + "" "RECO"
+     1 occurrences of key recoPFMETs + "pfMet" + "" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterECAL" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterHCAL" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterHFEM" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterHFHAD" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterHO" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowClusterPS" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowRecHitECAL" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowRecHitHCAL" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowRecHitHO" + "Cleaned" "RECO"
+     1 occurrences of key recoPFRecHits + "particleFlowRecHitPS" + "Cleaned" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByDecayModeFinding" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseChargedIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseCombinedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByLooseMuonRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMVAElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumChargedIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumCombinedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByMediumMuonRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByRawChargedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByRawCombinedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByRawGammaIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightChargedIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightCombinedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByTightMuonRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByVLooseChargedIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByVLooseCombinedIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByVLooseIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsPFTauDiscriminationByVLooseIsolationDBSumPtCorr" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByDecayModeSelection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLeadingPionPtCut" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLeadingTrackFinding" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLeadingTrackPtCut" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLooseElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLooseIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByLooseMuonRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByMediumElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByMediumIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTanc" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTancLoose" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTancMedium" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTancRaw" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTancTight" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTancVLoose" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTightElectronRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTightIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByTightMuonRejection" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "hpsTancTausDiscriminationByVLooseIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationAgainstElectron" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationAgainstMuon" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByECALIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByECALIsolationUsingLeadingPion" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByIsolationUsingLeadingPion" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByLeadingPionPtCut" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByLeadingTrackFinding" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByLeadingTrackPtCut" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTaNC" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTaNCfrHalfPercent" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTaNCfrOnePercent" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTaNCfrQuarterPercent" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTaNCfrTenthPercent" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTrackIsolation" + "" "RECO"
+     1 occurrences of key recoPFTauDiscriminator + "shrinkingConePFTauDiscriminationByTrackIsolationUsingLeadingPion" + "" "RECO"
+     1 occurrences of key recoPFTaus + "hpsPFTauProducer" + "" "RECO"
+     1 occurrences of key recoPFTaus + "hpsTancTaus" + "" "RECO"
+     1 occurrences of key recoPFTaus + "shrinkingConePFTauProducer" + "" "RECO"
+     1 occurrences of key recoPhotonCores + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoPhotonCores + "photonCore" + "" "RECO"
+     1 occurrences of key recoPhotons + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoPhotons + "photons" + "" "RECO"
+     1 occurrences of key recoPreshowerClusterShapes + "multi5x5PreshowerClusterShape" + "multi5x5PreshowerXClustersShape" "RECO"
+     1 occurrences of key recoPreshowerClusterShapes + "multi5x5PreshowerClusterShape" + "multi5x5PreshowerYClustersShape" "RECO"
+     1 occurrences of key recoPreshowerClusters + "multi5x5SuperClustersWithPreshower" + "preshowerXClusters" "RECO"
+     1 occurrences of key recoPreshowerClusters + "multi5x5SuperClustersWithPreshower" + "preshowerYClusters" "RECO"
+     1 occurrences of key recoPreshowerClusters + "pfElectronTranslator" + "pf" "RECO"
+     1 occurrences of key recoPreshowerClusters + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoRecoChargedRefCandidates + "trackRefsForJets" + "" "RECO"
+     1 occurrences of key recoRecoEcalCandidates + "hfRecoEcalCandidate" + "" "RECO"
+     1 occurrences of key recoRecoTauPiZeros + "hpsPFTauProducer" + "pizeros" "RECO"
+     1 occurrences of key recoRecoTauPiZeros + "hpsTancTaus" + "pizeros" "RECO"
+     1 occurrences of key recoRecoTauPiZeros + "shrinkingConePFTauProducer" + "pizeros" "RECO"
+     1 occurrences of key recoSuperClusters + "correctedHybridSuperClusters" + "" "RECO"
+     1 occurrences of key recoSuperClusters + "correctedMulti5x5SuperClustersWithPreshower" + "" "RECO"
+     1 occurrences of key recoSuperClusters + "hfEMClusters" + "" "RECO"
+     1 occurrences of key recoSuperClusters + "hybridSuperClusters" + "uncleanOnlyHybridSuperClusters" "RECO"
+     1 occurrences of key recoSuperClusters + "pfElectronTranslator" + "pf" "RECO"
+     1 occurrences of key recoSuperClusters + "pfPhotonTranslator" + "pfphot" "RECO"
+     1 occurrences of key recoSuperClustersToOnerecoHFEMClusterShapesAssociation + "hfEMClusters" + "" "RECO"
+     1 occurrences of key recoTrackExtrapolations + "trackExtrapolator" + "" "RECO"
+     1 occurrences of key recoTrackExtras + "globalMuons" + "" "RECO"
+     1 occurrences of key recoTrackExtras + "refittedStandAloneMuons" + "" "RECO"
+     1 occurrences of key recoTrackExtras + "standAloneMuons" + "" "RECO"
+     1 occurrences of key recoTrackExtras + "tevMuons" + "default" "RECO"
+     1 occurrences of key recoTrackExtras + "tevMuons" + "dyt" "RECO"
+     1 occurrences of key recoTrackExtras + "tevMuons" + "firstHit" "RECO"
+     1 occurrences of key recoTrackExtras + "tevMuons" + "picky" "RECO"
+     1 occurrences of key recoTrackJets + "ak5TrackJets" + "" "RECO"
+     1 occurrences of key recoTracks + "ckfInOutTracksFromConversions" + "" "RECO"
+     1 occurrences of key recoTracks + "ckfOutInTracksFromConversions" + "" "RECO"
+     1 occurrences of key recoTracks + "conversionStepTracks" + "" "RECO"
+     1 occurrences of key recoTracks + "cosmicMuons" + "" "RECO"
+     1 occurrences of key recoTracks + "cosmicMuons1Leg" + "" "RECO"
+     1 occurrences of key recoTracks + "generalTracks" + "" "RECO"
+     1 occurrences of key recoTracks + "globalCosmicMuons" + "" "RECO"
+     1 occurrences of key recoTracks + "globalCosmicMuons1Leg" + "" "RECO"
+     1 occurrences of key recoTracks + "globalMuons" + "" "RECO"
+     1 occurrences of key recoTracks + "refittedStandAloneMuons" + "" "RECO"
+     1 occurrences of key recoTracks + "refittedStandAloneMuons" + "UpdatedAtVtx" "RECO"
+     1 occurrences of key recoTracks + "regionalCosmicTracks" + "" "RECO"
+     1 occurrences of key recoTracks + "standAloneMuons" + "" "RECO"
+     1 occurrences of key recoTracks + "standAloneMuons" + "UpdatedAtVtx" "RECO"
+     1 occurrences of key recoTracks + "tevMuons" + "default" "RECO"
+     1 occurrences of key recoTracks + "tevMuons" + "dyt" "RECO"
+     1 occurrences of key recoTracks + "tevMuons" + "firstHit" "RECO"
+     1 occurrences of key recoTracks + "tevMuons" + "picky" "RECO"
+     1 occurrences of key recoTracks + "uncleanedOnlyCkfInOutTracksFromConversions" + "" "RECO"
+     1 occurrences of key recoTracks + "uncleanedOnlyCkfOutInTracksFromConversions" + "" "RECO"
+     1 occurrences of key recoTracksToOnerecoTracksAssociation + "tevMuons" + "default" "RECO"
+     1 occurrences of key recoTracksToOnerecoTracksAssociation + "tevMuons" + "dyt" "RECO"
+     1 occurrences of key recoTracksToOnerecoTracksAssociation + "tevMuons" + "firstHit" "RECO"
+     1 occurrences of key recoTracksToOnerecoTracksAssociation + "tevMuons" + "picky" "RECO"
+     1 occurrences of key recoVertexCompositeCandidates + "generalV0Candidates" + "Kshort" "RECO"
+     1 occurrences of key recoVertexCompositeCandidates + "generalV0Candidates" + "Lambda" "RECO"
+     1 occurrences of key recoVertexs + "offlinePrimaryVertices" + "" "RECO"
+     1 occurrences of key recoVertexs + "offlinePrimaryVerticesWithBS" + "" "RECO"
+     1 occurrences of key triggerTriggerEvent + "hltTriggerSummaryAOD" + "" "HLT"
+     1 occurrences of key uintedmValueMap + "muons" + "cosmicsVeto" "RECO"
+
+TrigReport ---------- Event  Summary ------------
+TrigReport Events total = 1 passed = 1 failed = 0
+
+TrigReport ---------- Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+TrigReport     1    0          1          1          0          0 p
+
+TrigReport -------End-Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+
+TrigReport ---------- Modules in Path: p ------------
+TrigReport  Trig Bit#    Visited     Passed     Failed      Error Name
+TrigReport     1    0          1          1          0          0 demo
+TrigReport     1    1          1          1          0          0 dump
+
+TrigReport ---------- Module Summary ------------
+TrigReport    Visited   Executed     Passed     Failed      Error Name
+TrigReport          1          1          1          0          0 demo
+TrigReport          1          1          1          0          0 dump
+TrigReport          1          1          1          0          0 TriggerResults
+
+TimeReport ---------- Event  Summary ---[sec]----
+TimeReport       event loop CPU/event = 0.085767
+TimeReport      event loop Real/event = 0.087304
+TimeReport     sum Streams Real/event = 0.031275
+TimeReport efficiency CPU/Real/thread = 0.982395
+
+TimeReport ---------- Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.027431     0.027431  p
+TimeReport  per event     per exec  Name
+
+TimeReport -------End-Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport  per event     per exec  Name
+
+TimeReport ---------- Modules in Path: p ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport   0.000297     0.000297  demo
+TimeReport   0.018582     0.018582  dump
+TimeReport  per event    per visit  Name
+
+TimeReport ---------- Module Summary ---[Real sec]----
+TimeReport  per event     per exec    per visit  Name
+TimeReport   0.000070     0.000070     0.000070  TriggerResults
+TimeReport   0.000297     0.000297     0.000297  demo
+TimeReport   0.018582     0.018582     0.018582  dump
+TimeReport  per event     per exec    per visit  Name
+
+T---Report end!
+
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 EventContent         -s EventContentAnal                     384      384
+    2 EventContent         -s EventContentAnal                     384      384
+    3 fileAction           -s file_close                             1        1
+    4 fileAction           -s file_open                              2        2
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 EventContent         1/19279309       1/19279309       1/19279309
+    2 EventContent         PostEndRun       PostEndRun       PostEndRun
+    3 fileAction           PostEndRun                        
+    4 fileAction           pre-events       pre-events       
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+System                771                 771
+
