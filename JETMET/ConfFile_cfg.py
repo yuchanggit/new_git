@@ -5,7 +5,8 @@ process = cms.Process("Demo")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(97) )
 
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
@@ -17,16 +18,24 @@ process.source = cms.Source("PoolSource",
 
 process.demo = cms.EDAnalyzer('MiniAnalyzer',
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+
     muons = cms.InputTag("slimmedMuons"),
 #    muoLabel = cms.InputTag("slimmedMuons"),
+
     electrons = cms.InputTag("slimmedElectrons"),
     taus = cms.InputTag("slimmedTaus"),
     photons = cms.InputTag("slimmedPhotons"),
+
     jets = cms.InputTag("slimmedJets"),
+#    jets = cms.InputTag("slimmedGenJets"),
+
     fatjets = cms.InputTag("slimmedJetsAK8"),
     mets = cms.InputTag("slimmedMETs"),
 )
 
+process.TFileService = cms.Service("TFileService",
+                                       fileName = cms.string('my_EDanalzyer/histodemo.root')
+                                   )
 
 
 process.p = cms.Path(process.demo)
