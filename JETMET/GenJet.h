@@ -25,17 +25,22 @@ class GenJet : public Jet {
 public:
   struct Specific {
     Specific () :
+
+      m_ChEmEnergy (0),
       m_NeEmEnergy (0),
       m_EmEnergy (0),
 
-         m_ChHadEnergy (0),
-	 m_HadEnergy (0),
+      m_ChHadEnergy (0),
+      m_NeHadEnergy (0),
+      m_HadEnergy (0),
 
-         m_MuEnergy (0),
-	 m_InvisibleEnergy (0),
+      m_MuEnergy (0),
+      m_InvisibleEnergy (0),
 
-	 m_AuxiliaryEnergy (0) {}
+      m_AuxiliaryEnergy (0) {}
 
+    /* Energy of charged EM particles */
+    float m_ChEmEnergy;
     /* Energy of neutral EM particles */
     float m_NeEmEnergy;
     /* Energy of EM particles */
@@ -43,15 +48,17 @@ public:
 
     /* Energy of charged Hadrons */
     float m_ChHadEnergy;
+    /* Energy of neutral Hadrons */
+    float m_NeHadEnergy;
     /* Energy of Hadrons */
     float m_HadEnergy;
 
     /* Energy of Muons */
     float m_MuEnergy;
-    /* Invisible energy (mu, nu, ...) */
+    /* Invisible energy (three kinds of neutrinos) */
     float m_InvisibleEnergy;
 
-    /* Anything else (undecayed Sigmas etc.) */
+    /* Anything else (Other things not listed in above) */
     float m_AuxiliaryEnergy;
   };
 
@@ -69,6 +76,9 @@ public:
 
   virtual ~GenJet() {};
 
+  /** Returns energy of charged electromagnetic particles*/
+  float chEmEnergy() const {return m_specific.m_ChEmEnergy;};
+
   /** Returns energy of neutral electromagnetic particles*/
   float neEmEnergy() const {return m_specific.m_NeEmEnergy;};
   /** Returns energy of electromagnetic particles*/
@@ -77,6 +87,8 @@ public:
 
   /** Returns energy of charged hadronic particles*/
   float chHadEnergy() const {return m_specific.m_ChHadEnergy;};
+  /** Returns energy of neutral hadronic particles*/
+  float neHadEnergy() const {return m_specific.m_NeHadEnergy;};
   /** Returns energy of hadronic particles*/
   float hadEnergy() const {return m_specific.m_HadEnergy;};
 
@@ -85,7 +97,7 @@ public:
   /** Returns invisible energy*/
   float invisibleEnergy() const {return m_specific.m_InvisibleEnergy;};
 
-  /** Returns other energy (undecayed Sigmas etc.)*/
+  /** Returns other energy*/
   float auxiliaryEnergy() const {return m_specific.m_AuxiliaryEnergy;};
 
   /// Detector Eta (use reference Z and jet kinematics only)

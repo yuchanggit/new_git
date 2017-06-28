@@ -377,10 +377,17 @@ bool reco::makeSpecific(vector<reco::CandidatePtr> const & particles,
 bool reco::makeSpecific(vector<reco::CandidatePtr> const & mcparticles, 
 			GenJet::Specific* genJetSpecific)
 {
+
   if (0==genJetSpecific) return false;
+
+  double temp_ChEM = 0;  double temp_NeEM = 0;
+  double temp_ChHad = 0; double temp_NeHad = 0;
+  double temp_Mu = 0;    double temp_Invisible = 0;
+  double temp_Auxiliary = 0;
 
   vector<reco::CandidatePtr>::const_iterator itMcParticle=mcparticles.begin();
   for (;itMcParticle!=mcparticles.end();++itMcParticle) {
+
     if ( itMcParticle->isNull() || !itMcParticle->isAvailable() ) { 
       edm::LogWarning("DataNotFound") << " JetSpecific: MC Particle is invalid\n";
       continue;
@@ -388,44 +395,115 @@ bool reco::makeSpecific(vector<reco::CandidatePtr> const & mcparticles,
     const Candidate* candidate = itMcParticle->get();
     if (candidate->hasMasterClone()) candidate = candidate->masterClone().get();
     //const GenParticle* genParticle = GenJet::genParticle(candidate);
+
     if (candidate) {
       double e = candidate->energy();
+
       switch (abs (candidate->pdgId ())) {
+
       case 22: // photon
-        genJetSpecific->m_NeEmEnergy += e;
+        temp_NeEM += e;
         break;
 
       case 11: // e
-	genJetSpecific->m_EmEnergy += e;
+        temp_ChEM += e;
 	break;
-      case 211: // pi
-      case 321: // K
+
+      case 211: // pi+
+        temp_ChHad += e;
+        break;
+
+      case 310: // KS
+        temp_NeHad += e;
+        break;
+
+      case 321: // K+
+        temp_ChHad += e;
+        break;
+
       case 130: // KL
-      case 2212: // p
-        genJetSpecific->m_ChHadEnergy += e;
+        temp_NeHad += e;
         break;
-      case 2112: // n
-	genJetSpecific->m_HadEnergy += e;
+
+      case 2212: // p 
+        temp_ChHad += e;
+        break;
+
+      case 2112: // n  
+        temp_NeHad += e;
 	break;
+
+      case 3122: // Lambda
+        temp_NeHad += e;
+        break;
+
+      case 3112: // Sigma-
+        temp_ChHad += e;
+        break;
+
+      case 3222: // Sigma+
+        temp_ChHad += e;
+        break;
+
+      case 3312: // Xi-
+        temp_ChHad += e;
+        break;
+
+      case 3322: // Xi0
+        temp_NeHad += e;
+        break;
+
+      case 3334: // Omega-
+        temp_ChHad += e;
+        break;
+
       case 13: // muon
-        genJetSpecific->m_MuEnergy += e;
+	temp_Mu += e;
         break;
+
       case 12: // nu_e
+        temp_Invisible += e;
+        break;
+
       case 14: // nu_mu
+        temp_Invisible += e;
+        break;
+
       case 16: // nu_tau
-	
-	genJetSpecific->m_InvisibleEnergy += e;
+        temp_Invisible += e;
 	break;
+
       default: 
-	genJetSpecific->m_AuxiliaryEnergy += e;
-      }
+        temp_Auxiliary += e;
+
+        std::cout<<"enter default, particle ID: "<< candidate->pdgId () 
+	<<" status: "<< candidate->status()
+        <<" energy: "<< candidate->energy()
+        <<" pt: "<< candidate->pt()
+	<<std::endl; 
+
+      }// end switch
+
     }
     else {
       edm::LogWarning("DataNotFound") <<"reco::makeGenJetSpecific: Referred  GenParticleCandidate "
 				      <<"is not available in the event\n";
     }
-  }
-  
+  }// end loop
+ 
+  genJetSpecific->m_ChEmEnergy = temp_ChEM;
+  genJetSpecific->m_NeEmEnergy = temp_NeEM;
+  genJetSpecific->m_EmEnergy   = temp_ChEM + temp_NeEM ;
+
+  genJetSpecific->m_ChHadEnergy = temp_ChHad;
+  genJetSpecific->m_NeHadEnergy = temp_NeHad;
+  genJetSpecific->m_HadEnergy   = temp_ChHad + temp_NeHad ;
+
+  genJetSpecific->m_MuEnergy = temp_Mu;
+  genJetSpecific->m_InvisibleEnergy = temp_Invisible;
+  genJetSpecific->m_AuxiliaryEnergy = temp_Auxiliary;
+
+ 
   return true;
 }
 
