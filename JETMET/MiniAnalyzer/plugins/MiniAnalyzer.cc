@@ -36,6 +36,7 @@
 
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TH1.h"
+#include "TH2.h"
 
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -90,18 +91,30 @@ class MiniAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 //      TH1D *demohisto;
 
       TH1D *h_nJet;
-      TH1D *h_jet_pt;
-      TH1D *h_jet_eta;
-      TH1D *h_jet_phi;
-      TH1D *h_jet_energy;
 
-      TH1D *h1;
-      TH1D *h2;
-      TH1D *h3;
-      TH1D *h4;
-      TH1D *h5;
-      TH1D *h6;
-      TH1D *h7;
+      TH1D *h_jet_leading_pt;
+      TH1D *h_jet_leading_eta;
+      TH1D *h_jet_leading_phi;
+      TH1D *h_jet_leading_energy;
+      TH1D *h_leading_chEm;
+      TH1D *h_leading_neEm;
+      TH1D *h_leading_Em;
+      TH1D *h_leading_chHad;
+      TH1D *h_leading_neHad;
+      TH1D *h_leading_Had;
+      TH1D *h_leading_Mu;
+      TH1D *h_leading_Invisible;
+      TH1D *h_leading_Other;
+
+      TH1D *h_leading_sum_EM;
+      TH1D *h_leading_sum_Had;
+      TH1D *h_leading_sum_All;
+
+      TH2D *h_leading_chEm_RECOvsGen;
+      TH2D *h_leading_neEm_RECOvsGen;
+
+      TH2D *h_leading_chHad_RECOvsGen;
+      TH2D *h_leading_neHad_RECOvsGen;
 
 
 };
@@ -135,18 +148,32 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig)
 //   demohisto = fs->make<TH1D>("tracks" , "Tracks" , 100 , 0 , 5000 );
 
    h_nJet       = fs->make<TH1D>("nJet"        , "Number of Jets" , 20 , 0 , 20 );
-   h_jet_pt     = fs->make<TH1D>("jet_pt"      , "jet pt"         , 50 , 0 , 500 );
-   h_jet_eta    = fs->make<TH1D>("jet_eta"     , "jet eta"        , 100 , -5 , 5 );
-   h_jet_phi    = fs->make<TH1D>("jet_phi"     , "jet phi"        , 70 , 0 , 7 );
-   h_jet_energy = fs->make<TH1D>("jet_energy"  , "jet energy"     , 50 , 0 , 500 );
 
-   h1 = fs->make<TH1D>("ChEmEnergy"      , "Charged EM Energy"     , 50 , 0 , 500 );
-   h2 = fs->make<TH1D>("NeEmEnergy"      , "Neutral EM Energy"     , 50 , 0 , 500 );
-   h3 = fs->make<TH1D>("ChHadEnergy"     , "Charged Hadron Energy" , 50 , 0 , 500 );
-   h4 = fs->make<TH1D>("NeHadEnergy"     , "Neutral Hadron Energy" , 50 , 0 , 500 );
-   h5 = fs->make<TH1D>("MuEnergy"        , "Muon energy"           , 50 , 0 , 500 );
-   h6 = fs->make<TH1D>("InvisibleEnergy" , "Invisible Energy"      , 50 , 0 , 500 );
-   h7 = fs->make<TH1D>("OtherEnergy"     , "Other Energy"          , 50 , 0 , 500 );
+   h_jet_leading_pt     = fs->make<TH1D>("jet_leading_pt"      , "leading jet pt"         , 50 , 0 , 500 );
+   h_jet_leading_eta    = fs->make<TH1D>("jet_leading_eta"     , "leading jet eta"        , 100 , -5 , 5 );
+   h_jet_leading_phi    = fs->make<TH1D>("jet_leading_phi"     , "leading jet phi"        , 140 , -7 , 7 );
+   h_jet_leading_energy = fs->make<TH1D>("jet_leading_energy"  , "leading jet energy"     , 50 , 0 , 500 );
+
+   h_leading_chEm      = fs->make<TH1D>("h_leading_chEm"      , ""     , 50 , 0 , 500 );
+   h_leading_neEm      = fs->make<TH1D>("h_leading_neEm"      , ""     , 50 , 0 , 500 );
+   h_leading_Em        = fs->make<TH1D>("h_leading_Em"        , ""     , 50 , 0 , 500 );
+   h_leading_chHad     = fs->make<TH1D>("h_leading_chHad"     , ""     , 50 , 0 , 500 );
+   h_leading_neHad     = fs->make<TH1D>("h_leading_neHad"     , ""     , 50 , 0 , 500 );
+   h_leading_Had       = fs->make<TH1D>("h_leading_Had"       , ""     , 50 , 0 , 500 );
+   h_leading_Mu        = fs->make<TH1D>("h_leading_Mu"        , ""     , 50 , 0 , 500 );
+   h_leading_Invisible = fs->make<TH1D>("h_leading_Invisible" , ""     , 50 , 0 , 500 );
+   h_leading_Other     = fs->make<TH1D>("h_leading_Other"     , ""     , 50 , 0 , 500 );
+
+   h_leading_sum_EM    = fs->make<TH1D>("h_leading_sum_EM"    , ""     , 50 , 0 , 500 );
+   h_leading_sum_Had   = fs->make<TH1D>("h_leading_sum_Had"   , ""     , 50 , 0 , 500 );
+   h_leading_sum_All   = fs->make<TH1D>("h_leading_sum_All"   , ""     , 50 , 0 , 500 );
+
+   h_leading_chEm_RECOvsGen = fs->make<TH2D>("h_leading_chEm_RECOvsGen", "", 50 , 0 , 500, 50 , 0 , 500 );
+   h_leading_neEm_RECOvsGen = fs->make<TH2D>("h_leading_neEm_RECOvsGen", "", 50 , 0 , 500, 50 , 0 , 500 );
+
+   h_leading_chHad_RECOvsGen = fs->make<TH2D>("h_leading_chHad_RECOvsGen", "", 50 , 0 , 500, 50 , 0 , 500 );
+   h_leading_neHad_RECOvsGen = fs->make<TH2D>("h_leading_neHad_RECOvsGen", "", 50 , 0 , 500, 50 , 0 , 500 );
+
 
 
 }
@@ -172,7 +199,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
 
 
-
+/*
     edm::Handle<pat::MuonCollection> muons;
     iEvent.getByToken(muonToken_, muons);
     for (const pat::Muon &mu : *muons) {
@@ -183,7 +210,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //        printf("muon with pt %4.1f, dz(PV) %+5.3f, POG loose id %d, tight id %d\n",
 //                mu.pt(), mu.muonBestTrack()->dz(PV.position()), mu.isLooseMuon(), mu.isTightMuon(PV));
     }
-
+*/
 
 
     edm::Handle<pat::JetCollection> jets;
@@ -200,42 +227,70 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (const pat::Jet &j : *jets) {
 //    for (const reco::GenJet &j : *jets) {
 
-        if (j.pt() < 30 || fabs(j.eta())>2.5 ) continue;
-        
-//        std::cout<<"jet index: "<< ijet       << std::endl; 
-//        std::cout<<"pt: "       << j.pt()     << std::endl;
-//        std::cout<<"energy: "   << j.energy() << std::endl;
-//        std::cout<<"eta: "      << j.eta()    << std::endl;
-//        std::cout<<"phi: "      << j.phi()    << std::endl;
-//        std::cout<<"abs(eta): "<<  fabs( j.eta() )    << std::endl;
+//        if (j.pt() < 30 || fabs(j.eta())>2.5 ) continue;
 
-        h_jet_pt     ->Fill( j.pt()     );
-        h_jet_eta    ->Fill( j.eta()    );
-        h_jet_phi    ->Fill( j.phi()    );
-        h_jet_energy ->Fill( j.energy() );
+        if (j.genJet() == false ) continue;
+        if (j.genJet()->pt() < 30 || fabs(j.genJet()->eta())>2.5 ) continue;
+
+        if ( ijet == 0 ){// leading jet
+
+          h_jet_leading_pt    ->Fill( j.genJet()->pt()     );
+          h_jet_leading_eta   ->Fill( j.genJet()->eta()    );
+          h_jet_leading_phi   ->Fill( j.genJet()->phi()    );
+          h_jet_leading_energy->Fill( j.genJet()->energy() );
+
+          h_leading_chEm      ->Fill( j.genJet()->chEmEnergy()  );
+          h_leading_neEm      ->Fill( j.genJet()->neEmEnergy()  );
+          h_leading_Em        ->Fill( j.genJet()->emEnergy()    );
+          h_leading_chHad     ->Fill( j.genJet()->chHadEnergy() );
+          h_leading_neHad     ->Fill( j.genJet()->neHadEnergy() );
+          h_leading_Had       ->Fill( j.genJet()->hadEnergy()   );
+          h_leading_Mu        ->Fill( j.genJet()->muEnergy()    );
+          h_leading_Invisible ->Fill( j.genJet()->invisibleEnergy()  );
+          h_leading_Other     ->Fill( j.genJet()->auxiliaryEnergy()  );
+
+
+	  h_leading_sum_EM   ->Fill( j.genJet()->chEmEnergy() + j.genJet()->neEmEnergy() ) ;
+	  h_leading_sum_Had  ->Fill( j.genJet()->chHadEnergy() + j.genJet()->neHadEnergy() ) ;
+	  h_leading_sum_All  ->Fill( j.genJet()->chEmEnergy()  + j.genJet()->neEmEnergy()  +
+				     j.genJet()->chHadEnergy() + j.genJet()->neHadEnergy() +
+				     j.genJet()->muEnergy() + j.genJet()->invisibleEnergy() + j.genJet()->auxiliaryEnergy() );
+
+
+          h_leading_chEm_RECOvsGen ->Fill ( j.genJet()->chEmEnergy() , j.electronEnergy ()      );
+          h_leading_neEm_RECOvsGen ->Fill ( j.genJet()->neEmEnergy() , j.photonEnergy ()        );
+          h_leading_chHad_RECOvsGen->Fill ( j.genJet()->chHadEnergy(), j.chargedHadronEnergy () );
+          h_leading_neHad_RECOvsGen->Fill ( j.genJet()->neHadEnergy(), j.neutralHadronEnergy () );
+
 /*
-        std::cout<<"charged EM energy: "  << j.emEnergy()	<< std::endl;
-        std::cout<<"neutral EM energy: "  << j.neEmEnergy()	<< std::endl;
-        std::cout<<"charged Had energy: " << j.chHadEnergy()	<< std::endl;
-        std::cout<<"neutral Had energy: " << j.hadEnergy()	<< std::endl;
-        std::cout<<"Muon energy: "	  << j.muEnergy()	<< std::endl;
-        std::cout<<"Invisible energy: "   << j.invisibleEnergy()<< std::endl;
-        std::cout<<"Other energy: "	  << j.auxiliaryEnergy()<< std::endl;
+          std::cout<<"reco jet electron: " << j.electronEnergy () 
+		   <<" gen jet chEM: " << j.genJet()->chEmEnergy() << std::endl;
+
+          std::cout<<"reco jet photon: " << j.photonEnergy () 
+		   <<" gen jet neEM: " << j.genJet()->neEmEnergy() << std::endl;
+
+
+          std::cout<<"reco jet chHad: " << j.chargedHadronEnergy()  
+                   <<" gen jet chHad: " << j.genJet()->chHadEnergy() << std::endl;
 */
+          std::cout<<"reco jet neHad: " << j.neutralHadronEnergy() 
+                   <<" gen jet neHad: " << j.genJet()->neHadEnergy() << std::endl;
 
-//        std::cout<<"charged EM energy: "  << j.genJet()->emEnergy()       << std::endl;
-//        std::cout<<"neutral EM energy: "  << j.genJet()->neEmEnergy()     << std::endl;
 
-//        demohisto->Fill( j.genJet()->emEnergy() );
-        h1->Fill( j.genJet()->emEnergy() );
-        h2->Fill( j.genJet()->neEmEnergy() );
-        h3->Fill( j.genJet()->chHadEnergy() );
-        h4->Fill( j.genJet()->hadEnergy() );
-        h5->Fill( j.genJet()->muEnergy() );
-        h6->Fill( j.genJet()->invisibleEnergy() );
-        h7->Fill( j.genJet()->auxiliaryEnergy() );
+/*
+          std::cout<<"energy: " <<j.genJet()->energy()
+                   <<" chEM: "  <<j.genJet()->chEmEnergy()
+                   <<" neEM: "  <<j.genJet()->neEmEnergy()
+                   <<" chHad: " <<j.genJet()->chHadEnergy()
+                   <<" neHad: " <<j.genJet()->neHadEnergy()
+                   <<" Mu: "    <<j.genJet()->muEnergy()
+                   <<" invisible: "  <<j.genJet()->invisibleEnergy()
+                   <<" other: " <<j.genJet()->auxiliaryEnergy()
+                   <<std::endl;
+*/
+        }
 
-        ijet++;   std::cout<<std::endl;
+        ijet++;   
     }
 
 
