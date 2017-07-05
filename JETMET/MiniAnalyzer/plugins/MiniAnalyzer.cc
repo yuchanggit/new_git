@@ -96,6 +96,28 @@ class MiniAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
       TH1D *h_jet_leading_eta;
       TH1D *h_jet_leading_phi;
       TH1D *h_jet_leading_energy;
+
+      TH1D *h_jet_leading_energy_RecoGen_ratio;
+      TH1D *h_jet_leading_chEM_RecoGen_ratio;
+      TH1D *h_jet_leading_neEM_RecoGen_ratio;
+      TH1D *h_jet_leading_chHad_RecoGen_ratio;
+      TH1D *h_jet_leading_neHad_RecoGen_ratio;
+      TH1D *h_jet_leading_EM_RecoGen_ratio;
+      TH1D *h_jet_leading_Had_RecoGen_ratio;
+      TH1D *h_jet_leading_EMHad_RecoGen_ratio;
+
+      TH1D *h_jet_leading_chEM_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_neEM_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_chHad_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_neHad_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_Mu_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_EM_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_Had_fraction_Of_GenEnergy;
+      TH1D *h_jet_leading_chEM_fraction_Of_GenEM;
+      TH1D *h_jet_leading_neEM_fraction_Of_GenEM;
+      TH1D *h_jet_leading_chHad_fraction_Of_GenHad;
+      TH1D *h_jet_leading_neHad_fraction_Of_GenHad;
+
       TH1D *h_leading_chEm;
       TH1D *h_leading_neEm;
       TH1D *h_leading_Em;
@@ -150,9 +172,31 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig)
    h_nJet       = fs->make<TH1D>("nJet"        , "Number of Jets" , 20 , 0 , 20 );
 
    h_jet_leading_pt     = fs->make<TH1D>("jet_leading_pt"      , "leading jet pt"         , 50 , 0 , 500 );
-   h_jet_leading_eta    = fs->make<TH1D>("jet_leading_eta"     , "leading jet eta"        , 100 , -5 , 5 );
-   h_jet_leading_phi    = fs->make<TH1D>("jet_leading_phi"     , "leading jet phi"        , 140 , -7 , 7 );
+   h_jet_leading_eta    = fs->make<TH1D>("jet_leading_eta"     , "leading jet eta"        , 60 , -3 , 3 );
+   h_jet_leading_phi    = fs->make<TH1D>("jet_leading_phi"     , "leading jet phi"        , 80 , -4 , 4 );
    h_jet_leading_energy = fs->make<TH1D>("jet_leading_energy"  , "leading jet energy"     , 50 , 0 , 500 );
+
+   h_jet_leading_energy_RecoGen_ratio = fs->make<TH1D>("jet_leading_energy_RecoGen_ratio"  , "leading jet energy RecoGen ratio"     , 2000 , 0 , 10 );
+   h_jet_leading_chEM_RecoGen_ratio   = fs->make<TH1D>("jet_leading_chEM_RecoGen_ratio"    , ""     , 2000 , 0 , 10 );
+   h_jet_leading_neEM_RecoGen_ratio   = fs->make<TH1D>("jet_leading_neEM_RecoGen_ratio"    , ""     , 2000 , 0 , 10 );
+   h_jet_leading_chHad_RecoGen_ratio  = fs->make<TH1D>("jet_leading_chHad_RecoGen_ratio"   , ""     , 2000 , 0 , 10 );
+   h_jet_leading_neHad_RecoGen_ratio  = fs->make<TH1D>("jet_leading_neHad_RecoGen_ratio"   , ""     , 2000 , 0 , 10 );
+   h_jet_leading_EM_RecoGen_ratio     = fs->make<TH1D>("jet_leading_EM_RecoGen_ratio"      , ""     , 2000 , 0 , 10 );
+   h_jet_leading_Had_RecoGen_ratio    = fs->make<TH1D>("jet_leading_Had_RecoGen_ratio"     , ""     , 2000 , 0 , 10 );
+   h_jet_leading_EMHad_RecoGen_ratio  = fs->make<TH1D>("jet_leading_EMHad_RecoGen_ratio"   , ""     , 2000 , 0 , 10 );
+
+   h_jet_leading_chEM_fraction_Of_GenEnergy  = fs->make<TH1D>("h_jet_leading_chEM_fraction_Of_GenEnergy"    , ""     , 20 , 0 , 1 );
+   h_jet_leading_neEM_fraction_Of_GenEnergy  = fs->make<TH1D>("h_jet_leading_neEM_fraction_Of_GenEnergy"    , ""     , 20 , 0 , 1 );
+   h_jet_leading_chHad_fraction_Of_GenEnergy = fs->make<TH1D>("h_jet_leading_chHad_fraction_Of_GenEnergy"   , ""     , 20 , 0 , 1 );
+   h_jet_leading_neHad_fraction_Of_GenEnergy = fs->make<TH1D>("h_jet_leading_neHad_fraction_Of_GenEnergy"   , ""     , 20 , 0 , 1 );
+   h_jet_leading_Mu_fraction_Of_GenEnergy    = fs->make<TH1D>("h_jet_leading_Mu_fraction_Of_GenEnergy"      , ""     , 20 , 0 , 1 );
+   h_jet_leading_EM_fraction_Of_GenEnergy    = fs->make<TH1D>("h_jet_leading_EM_fraction_Of_GenEnergy"      , ""     , 20 , 0 , 1 );
+   h_jet_leading_Had_fraction_Of_GenEnergy   = fs->make<TH1D>("h_jet_leading_Had_fraction_Of_GenEnergy"     , ""     , 20 , 0 , 1 );
+
+   h_jet_leading_chEM_fraction_Of_GenEM      = fs->make<TH1D>("h_jet_leading_chEM_fraction_Of_GenEM"        , ""     , 20 , 0 , 1 );
+   h_jet_leading_neEM_fraction_Of_GenEM      = fs->make<TH1D>("h_jet_leading_neEM_fraction_Of_GenEM"        , ""     , 20 , 0 , 1 );
+   h_jet_leading_chHad_fraction_Of_GenHad    = fs->make<TH1D>("h_jet_leading_chHad_fraction_Of_GenHad"      , ""     , 20 , 0 , 1 );
+   h_jet_leading_neHad_fraction_Of_GenHad    = fs->make<TH1D>("h_jet_leading_neHad_fraction_Of_GenHad"      , ""     , 20 , 0 , 1 );
 
    h_leading_chEm      = fs->make<TH1D>("h_leading_chEm"      , ""     , 50 , 0 , 500 );
    h_leading_neEm      = fs->make<TH1D>("h_leading_neEm"      , ""     , 50 , 0 , 500 );
@@ -261,6 +305,34 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           h_leading_neEm_RECOvsGen ->Fill ( j.genJet()->neEmEnergy() , j.photonEnergy ()        );
           h_leading_chHad_RECOvsGen->Fill ( j.genJet()->chHadEnergy(), j.chargedHadronEnergy () );
           h_leading_neHad_RECOvsGen->Fill ( j.genJet()->neHadEnergy(), j.neutralHadronEnergy () );
+
+          h_jet_leading_energy_RecoGen_ratio->Fill( j.energy() / j.genJet()->energy() );
+
+          h_jet_leading_chEM_RecoGen_ratio  ->Fill( j.electronEnergy() / j.genJet()->chEmEnergy() );
+          h_jet_leading_neEM_RecoGen_ratio  ->Fill( j.photonEnergy() / j.genJet()->neEmEnergy() );
+          h_jet_leading_chHad_RecoGen_ratio ->Fill( j.chargedHadronEnergy() / j.genJet()->chHadEnergy() );
+          h_jet_leading_neHad_RecoGen_ratio ->Fill( j.neutralHadronEnergy() / j.genJet()->neHadEnergy() );
+          h_jet_leading_EM_RecoGen_ratio    ->Fill( (j.electronEnergy() + j.photonEnergy() )          / ( j.genJet()->chEmEnergy() +j.genJet()->neEmEnergy() ) );
+          h_jet_leading_Had_RecoGen_ratio   ->Fill( (j.chargedHadronEnergy()+j.neutralHadronEnergy() )/ ( j.genJet()->chHadEnergy()+j.genJet()->neHadEnergy() ) );
+          h_jet_leading_EMHad_RecoGen_ratio ->Fill( (j.electronEnergy() + j.photonEnergy()+j.chargedHadronEnergy()+j.neutralHadronEnergy() ) /( j.genJet()->chEmEnergy()+j.genJet()->neEmEnergy() +j.genJet()->chHadEnergy()+j.genJet()->neHadEnergy() ) );
+
+
+
+	  h_jet_leading_chEM_fraction_Of_GenEnergy ->Fill(  j.genJet()->chEmEnergy()  / j.genJet()->energy() );
+  	  h_jet_leading_neEM_fraction_Of_GenEnergy ->Fill(  j.genJet()->neEmEnergy()  / j.genJet()->energy() );
+	  h_jet_leading_chHad_fraction_Of_GenEnergy->Fill(  j.genJet()->chHadEnergy() / j.genJet()->energy() );
+	  h_jet_leading_neHad_fraction_Of_GenEnergy->Fill(  j.genJet()->neHadEnergy() / j.genJet()->energy() );
+	  h_jet_leading_Mu_fraction_Of_GenEnergy   ->Fill(  j.genJet()->muEnergy()    / j.genJet()->energy() );
+
+          h_jet_leading_EM_fraction_Of_GenEnergy   ->Fill(  j.genJet()->emEnergy()    / j.genJet()->energy() );
+          h_jet_leading_Had_fraction_Of_GenEnergy   ->Fill(  j.genJet()->hadEnergy()    / j.genJet()->energy() );
+
+	  h_jet_leading_chEM_fraction_Of_GenEM     ->Fill(  j.genJet()->chEmEnergy()  / j.genJet()->emEnergy() );
+	  h_jet_leading_neEM_fraction_Of_GenEM     ->Fill(  j.genJet()->neEmEnergy()  / j.genJet()->emEnergy() );
+
+	  h_jet_leading_chHad_fraction_Of_GenHad   ->Fill(  j.genJet()->chHadEnergy() / j.genJet()->hadEnergy() );
+	  h_jet_leading_neHad_fraction_Of_GenHad   ->Fill(  j.genJet()->neHadEnergy() / j.genJet()->hadEnergy() );
+
 
 /*
           std::cout<<"reco jet electron: " << j.electronEnergy () 
