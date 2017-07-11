@@ -1,0 +1,16 @@
+
+
+cmsenv
+
+.L skimTree.C++ in ROOT
+
+export X509_USER_PROXY=$HOME/private/grid.proxy
+
+voms-proxy-init --voms cms  
+# or the long time version: 
+voms-proxy-init -valid 168:00
+
+export X509_USER_PROXY=$HOME/private/grid.proxy
+----------------------------------------------------------
+see the link
+https://github.com/syuvivida/xtozh_common/tree/80X_analysis/lxplus_batch/skimming

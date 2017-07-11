@@ -1,0 +1,28 @@
+cmsenv
+
+voms-proxy-init --voms cms
+
+----------------------------------------------------
+
+Taiwan Tier2
+root://se01.grid.nchc.org.tw//dpm/grid.nchc.org.tw/home/cms/store/user/yuchang/
+
+NCU Tier3
+root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/
+
+CERN EOS space
+eos ls /eos/cms/store/user/yuchang
+
+----------------------------------------------------
+
+gfal-ls example
+gfal-ls root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/yuchang/
+
+gfal-copy example
+gfal-copy root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/vieri/SingleElectron/crab_SingleElectron-Run2016B-PromptReco-v2/161104_133507/0000/NCUGlobalTuples_995.root
+
+Open ROOT file example
+root -l root://grid71.phy.ncu.edu.tw//dpm/phy.ncu.edu.tw/home/cms/store/user/vieri/SingleElectron/crab_SingleElectron-Run2016B-PromptReco-v2/161104_133507/0000/NCUGlobalTuples_995.root
+
+
+
