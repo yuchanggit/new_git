@@ -129,19 +129,19 @@ void xAna_ele(){
   // ------ begin of event loop ---------------
 
   int Number_to_print =  10000;
-  int Max_number_to_read =  1000;
+  int Max_number_to_read =  10;
 
   cout<<"starting loop events"<< endl<<endl;
 
 
   for( Long64_t ev = 0; ev < data.GetEntriesFast(); ev++ ){
 
-//    cout<<endl<<"event: "<< ev <<endl;
+    cout<<endl<<"event: "<< ev <<endl;
 
     if( ev %   Number_to_print == 0 )
       fprintf(stderr, "Processing event %lli of %lli\n", ev + 1, data.GetEntriesFast());
 
-//    if( ev > Max_number_to_read ) break;
+    if( ev > Max_number_to_read ) break;
 
     data.GetEntry(ev);
 
@@ -202,17 +202,17 @@ void xAna_ele(){
  
 //      if ( genParId[iGen] > 100 ) {ptSum_Scalar = ptSum_Scalar + thisGenPar ->Pt();}
 
-//      cout<<"gen particle loop index: "<< iGen 
-//          <<" genParId: "<< genParId[iGen] 
-//          <<" genParQ: "<< genParQ[iGen]
-//          <<" genParSt: "<< genParSt[iGen]
-//          <<" genMomParId: "<< genMomParId[iGen]
-//          <<" genParIndex: "<< genParIndex[iGen]
-//          <<" genMo1: "<< genMo1[iGen]
-//          <<" genMo2: "<< genMo2[iGen]
-//          <<" genDa1: "<< genDa1[iGen]
-//          <<" genDa2: "<< genDa2[iGen]
-//          << endl;
+      cout<<"gen particle loop index: "<< iGen 
+          <<" genParId: "<< genParId[iGen] 
+          <<" genParQ: "<< genParQ[iGen]
+          <<" genParSt: "<< genParSt[iGen]
+          <<" genMomParId: "<< genMomParId[iGen]
+          <<" genParIndex: "<< genParIndex[iGen]
+          <<" genMo1: "<< genMo1[iGen]
+          <<" genMo2: "<< genMo2[iGen]
+          <<" genDa1: "<< genDa1[iGen]
+          <<" genDa2: "<< genDa2[iGen]
+          << endl;
 
 
 
