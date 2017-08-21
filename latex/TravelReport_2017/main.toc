@@ -1,0 +1,14 @@
+\contentsline {section}{\numberline {1}Introduction}{6}
+\contentsline {section}{\numberline {2}Search for Z' to ZH to llbb with 2016 CMS data}{6}
+\contentsline {subsection}{\numberline {2.1}MC/data comparison}{6}
+\contentsline {subsection}{\numberline {2.2}Double B Tagger Scale Factor}{9}
+\contentsline {subsection}{\numberline {2.3}Estimating background by ALPHABET method}{10}
+\contentsline {subsection}{\numberline {2.4}Signal contanmination in the tau21 control sample}{13}
+\contentsline {subsection}{\numberline {2.5}The DY sample cross section correction K-factor}{14}
+\contentsline {subsection}{\numberline {2.6}Estimating background by BumpHunting method}{17}
+\contentsline {section}{\numberline {3}High Granularity Calorimeter(HGCal)}{18}
+\contentsline {subsection}{\numberline {3.1}2016 HGCal paper}{18}
+\contentsline {subsection}{\numberline {3.2}2017 May Test Beam}{19}
+\contentsline {subsection}{\numberline {3.3}2017 July Test Beam}{24}
+\contentsline {section}{\numberline {4}Service task for JMAR group}{29}
+\contentsline {section}{\numberline {5}CMS trigger shift for 2017 data taking}{29}
