@@ -40,6 +40,28 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
   Long64_t nTotal=0;
   Long64_t nPass[20]={0};
 
+  const int N_myTrig = 16;
+  std::string my_trigger[N_myTrig];
+
+  my_trigger[0] = "HLT_Ele105_CaloIdVT_GsfTrkIdT_v" ;
+  my_trigger[1] = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v" ;
+  my_trigger[2] = "HLT_Ele27_WPTight_Gsf_v" ;
+  my_trigger[3] = "HLT_Ele32_WPTight_Gsf_v" ;
+
+  my_trigger[4] = "HLT_Mu50_v" ;
+  my_trigger[5] = "HLT_TkMu50_v" ;
+
+  my_trigger[6]  = "HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v" ;
+  my_trigger[7]  = "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v" ;
+  my_trigger[8]  = "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v" ;
+  my_trigger[9]  = "HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight" ;
+  my_trigger[10] = "HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight" ;
+  my_trigger[11] = "HLT_PFMET110_PFMHT110_IDTight" ;
+  my_trigger[12] = "HLT_PFMET120_PFMHT120_IDTight" ;
+  my_trigger[13] = "HLT_PFMET170_NoiseCleaned" ;
+  my_trigger[14] = "HLT_PFMET170_HBHECleaned" ;
+  my_trigger[15] = "HLT_PFMET170_HBHE_BeamHaloCleaned" ;
+
 
   int Number_to_print =  5000; int Max_number_to_read =  1000;
   cout<<"starting loop events"<< endl<<endl;
@@ -64,32 +86,13 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
     Int_t*        trigPreScale =                   data.GetPtrInt   ("hlt_trigPrescale");
     Int_t         trigNumber   =                   data.GetInt      ("hlt_nTrigs");
 
-    Int_t    nGenPar                    = data.GetInt("nGenPar");
-    const TClonesArray* genParP4 = (TClonesArray*) data.GetPtrTObject("genParP4");
-    Int_t*   genParQ     = data.GetPtrInt("genParQ");
-    Int_t*   genParId    = data.GetPtrInt("genParId");
-    Int_t*   genParSt    = data.GetPtrInt("genParSt");
-    Int_t*   genMomParId = data.GetPtrInt("genMomParId");
-    Int_t*   genParIndex = data.GetPtrInt("genParIndex");
-    Int_t*   genMo1      = data.GetPtrInt("genMo1");
-    Int_t*   genMo2      = data.GetPtrInt("genMo2");
-    Int_t*   genDa1      = data.GetPtrInt("genDa1");
-    Int_t*   genDa2      = data.GetPtrInt("genDa2");
 
-  const Int_t    nEle        = data.GetInt("nEle");
-  const Int_t*   eleCharge   = data.GetPtrInt("eleCharge");
-  const Float_t* eleScEta    = data.GetPtrFloat("eleScEta");
-  const TClonesArray* eleP4  = (TClonesArray*) data.GetPtrTObject("eleP4");
-  const vector<bool>& eleIsPassLoose = *((vector<bool>*) data.GetPtr("eleIsPassLoose"));
+    const Int_t    nEle        = data.GetInt("nEle");
+    const Int_t*   eleCharge   = data.GetPtrInt("eleCharge");
+    const Float_t* eleScEta    = data.GetPtrFloat("eleScEta");
+    const TClonesArray* eleP4  = (TClonesArray*) data.GetPtrTObject("eleP4");
+    const vector<bool>& eleIsPassLoose = *((vector<bool>*) data.GetPtr("eleIsPassLoose"));
 
-/*
-    const Int_t    nMu          = data.GetInt("nMu");
-    const TClonesArray* muP4    = (TClonesArray*) data.GetPtrTObject("muP4");
-    const vector<bool>& isHighPtMuon        = *((vector<bool>*) data.GetPtr("isHighPtMuon"));
-    const vector<bool>& isCustomTrackerMuon = *((vector<bool>*) data.GetPtr("isCustomTrackerMuon"));
-    const Float_t* muTrkIso     = data.GetPtrFloat("muTrkIso");
-    const Float_t* muInnerTrkPt = data.GetPtrFloat("muInnerTrkPt");
-*/
 
     Int_t          FATnJet           = data.GetInt("FATnJet");
     TClonesArray*  FATjetP4          = (TClonesArray*) data.GetPtrTObject("FATjetP4");
@@ -99,29 +102,25 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
     Int_t*         FATnSubSDJet      = data.GetPtrInt("FATnSubSDJet");
     vector<float>* FATsubjetSDCSV    = data.GetPtrVectorFloat("FATsubjetSDCSV", FATnJet);
 
-    // HLT: HLT_Mu50_v OR HLT_TkMu50_v 
-
-//    cout<<"hello1"<<endl;
- 
-// HLT_Ele115_CaloIdVT_GsfTrkIdT_v7 
-// HLT_Ele27_WPTight_Gsf_v7
-// HLT_Ele32_WPTight_Gsf_v1
+    // HLT: not just (HLT_Mu50_v OR HLT_TkMu50_v)
+    // OR all trigger listed in Alberto's AN 
 
     bool isPassHLT = false;
-
-    std::string TRIGGERNAME1 = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v"; 
-    std::string TRIGGERNAME2 = "HLT_Ele27_WPTight_Gsf_v";    
-    std::string TRIGGERNAME3 = "HLT_Ele32_WPTight_Gsf_v";
-
 
     for(int it = 0; it < data.GetPtrStringSize(); it++){ // HLT loop
 
       std::string thisTrig = trigName[it];
       bool results = trigResult[it];
 
-      if( thisTrig.find(TRIGGERNAME1) != std::string::npos && results )  isPassHLT = true; //break;}
-      if( thisTrig.find(TRIGGERNAME2) != std::string::npos && results )  isPassHLT = true; //break;}
-      if( thisTrig.find(TRIGGERNAME3) != std::string::npos && results )  isPassHLT = true; //break;}
+      bool passOneHLT = false;
+
+      for (int myTrig = 0; myTrig<N_myTrig; myTrig++){ // the trigger listed in AN 
+
+        if( thisTrig.find( my_trigger[myTrig] ) != std::string::npos && results ) {passOneHLT=true; break;}
+
+      }
+
+      if (passOneHLT) {isPassHLT = true; break;}
 
     }
 
@@ -129,17 +128,12 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
     nPass[0]++;
 
  
-    // Muon in acceptance
-
-//    cout<<"hello2"<<endl;
+    // Electron in acceptance
 
     bool isPassAcc = true;
 
     TLorentzVector* leadingEle    = NULL;
     TLorentzVector* subleadingEle = NULL;
-
-//    TLorentzVector* leadingMu    = NULL;
-//    TLorentzVector* subleadingMu = NULL;
 
     if ( nEle >=2 ){
       leadingEle    = (TLorentzVector*) eleP4->At(0);
@@ -151,102 +145,61 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
       if ( fabs(eleScEta[1]) > 2.5 ) isPassAcc = false;
       if ( fabs(eleScEta[1]) > 1.4442 && fabs(eleScEta[1]) < 1.566 ) isPassAcc = false;
 
-//      if ( fabs(leadingMu->Eta())<2.4 && fabs(subleadingMu->Eta())<2.4 ) isPassAcc = true;
+      if (leadingEle->Pt()<10 || subleadingEle->Pt()<10) isPassAcc = false;
+
     }
     else isPassAcc = false;
 
-//    cout<<"isPassAcc: "<< isPassAcc << endl;
 
     if ( !isPassAcc ) continue;
     nPass[1]++;
 
+    // Z(e e) candidate
 
+    bool isPassZee = false;
 
+    TLorentzVector thisZ =( *leadingEle + *subleadingEle );
 
-    // in generator-level Z->mu mu  
+    if (thisZ.M()>70 && thisZ.M()<110 && ( eleCharge[0]*eleCharge[1]<0 ) ) isPassZee = true;
 
-//    cout<<"hello3"<<endl;
-
-
-//    bool isPassGenZmumu = false;
-    bool isPassGenZee = false;
-
-    if(!isData){// for MC
-      for ( int iGen=0; iGen<nGenPar; iGen++ ){
-        TLorentzVector* thisGenPar = (TLorentzVector*) genParP4 ->At(iGen);
-
-        if( genParId[iGen] == 23 && abs(genParId[ genDa1[iGen]]) == 11 && abs(genParId[ genDa2[iGen]]) == 11  )
-        { isPassGenZee = true; break; }
-
-      }
-    }
-
-    if ( !isData && !isPassGenZee ) continue;
+    if(!isPassZee) continue;
     nPass[2]++;
 
 
 
-    // Muon pt
-
-//    cout<<"hello4-1"<<endl;
+    // Electron pt
 
     bool isPassElePt = false;
 
-//    cout<<"hello4-2"<<endl;
-
     if ( leadingEle->Pt()>55 && subleadingEle->Pt()>20 ) isPassElePt = true;
-
-//    cout<<"hello4-3"<<endl;
 
     if ( !isPassElePt) continue;
     nPass[3]++;
 
 
-    // Muon ID
-
-//    cout<<"hello5"<<endl;
+    // Electron ID
 
     bool isPassEleID = false;
 
-//    if( (isHighPtMuon[0] || isHighPtMuon[1]) && isCustomTrackerMuon[0] && isCustomTrackerMuon[1] ) isPassMuonID=true; 
     if ( eleIsPassLoose[0] && eleIsPassLoose[1] ) isPassEleID = true;
 
     if ( !isPassEleID) continue;
     nPass[4]++;
 
+    // Electron Isolation has been included in ID cut
 
-/*
-    // Muon Isolation
-    bool isPassMuonIso = false;
-
-    if ( leadingMu->DeltaR(*subleadingMu) >0.3 ){ // if the two muons are far away, use regular isolation 
-      if ( muTrkIso[0]/leadingMu->Pt() <0.1 && muTrkIso[1]/subleadingMu->Pt()<0.1 ) isPassMuonIso = true; 
-    }
-    else if ( leadingMu->DeltaR(*subleadingMu) <0.3 ){ // if the two muons are close, use corrected isolation
-      if( (muTrkIso[0]-muInnerTrkPt[1])/leadingMu->Pt()<0.1 && (muTrkIso[1]-muInnerTrkPt[0])/subleadingMu->Pt()<0.1)isPassMuonIso=true;
-    }
-
-    if ( !isPassMuonIso) continue;
-    nPass[5]++;
-*/
 
     // boosted Z boson
 
-//    cout<<"hello6"<<endl;
-
     bool isPassBoostedZ = false; 
 
-    TLorentzVector thisZ =( *leadingEle + *subleadingEle ); 
-
-    if (thisZ.M()>70 && thisZ.M()<110 && thisZ.Pt()>200 ) isPassBoostedZ = true;
+    if ( thisZ.Pt()>200 ) isPassBoostedZ = true;
 
     if ( !isPassBoostedZ) continue;
     nPass[5]++;
 
 
     // AK8Jet
-
-//    cout<<"hello7"<<endl;
 
     Int_t goodFATJetID = -1;
     TLorentzVector* thisJet = NULL;
@@ -270,8 +223,6 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
 
     // Event Cleaning
 
-//    cout<<"hello8"<<endl;
-
     bool isPassCleaning = false; 
 
     if ( ( thisZ.Eta() -  thisJet->Eta() )< 1.3 ) isPassCleaning = true;
@@ -281,13 +232,11 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
 
     TLorentzVector l4_X = (*thisJet) + thisZ ;
 
-    if (l4_X.M()< 800 ) continue;
+    if (l4_X.M()< 750 ) continue;
     nPass[8]++;
 
 
     // Higgs mass
-
-//    cout<<"hello9"<<endl;
 
     double Jet_SDmass_corrected = ( FATjetPuppiSDmass[goodFATJetID] )*getPUPPIweight(thisJet->Pt(),thisJet->Eta(),tf1);
 
@@ -317,14 +266,15 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
   } // ------------------ end of event loop ------------------
 
   fprintf(stderr, "Processed all events\n");
-/*
+
+  cout<<endl;
   cout<<"nTotal: "                   << nTotal   << endl;
   cout<<"nPass[0] for HLT: "         << nPass[0] << endl;
   cout<<"nPass[1] for Acceptance: "  << nPass[1] << endl;
-  cout<<"nPass[2] for Gen Z->mu mu: "<< nPass[2] << endl;
-  cout<<"nPass[3] for Muon Pt: "     << nPass[3] << endl;
-  cout<<"nPass[4] for Muon ID: "     << nPass[4] << endl;
-  cout<<"nPass[5] for Muon Iso: "    << nPass[5] << endl;
+  cout<<"nPass[2] for Z(e e) candidate: "<< nPass[2] << endl;
+  cout<<"nPass[3] for Electron Pt: "     << nPass[3] << endl;
+  cout<<"nPass[4] for Electron ID: "     << nPass[4] << endl;
+  cout<<"nPass[5] for Electron Iso: "    << nPass[5] << endl;
   cout<<"nPass[6] for Boosted Z: "   << nPass[6] << endl;
   cout<<"nPass[7] for AK8Jet: "      << nPass[7] << endl;
   cout<<"nPass[8] for Event Cleaning: " << nPass[8] << endl;
@@ -332,15 +282,12 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
   cout<<"nPass[10] for Higgs mass: " << nPass[10] << endl;
   cout<<"nPass[11] for >= 1 b-tagged: " << nPass[11] << endl;
   cout<<"nPass[12] for >= 2 b-tagged: " << nPass[12] << endl;
-*/
 
   // histogram for events
 
   const int Nbins = 13; 
 
   TH1D* h_CutFlow = new TH1D("h_CutFlow","Yu-hsiang check events",Nbins , 0,Nbins );
-
-//  char* cut_name[Nbins] = {"All","Trigger","Muon in acc.","Z(#mu#mu) candidate","Muon P_{T}","Muon Id","Muon Iso","Z boost","AK8 jet","Cleaning","X mass","H mass","1 b-tag","2 b-tag"};  
 
   char* cut_name[Nbins] = {"All","Trigger","Ele in acc.","Z(ee) candidate","Ele P_{T}","Ele Id","Z boost","AK8 jet","Cleaning","X mass","H mass","1 b-tag","2 b-tag"};
 

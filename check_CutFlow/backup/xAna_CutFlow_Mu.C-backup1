@@ -40,28 +40,6 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
   Long64_t nTotal=0;
   Long64_t nPass[20]={0};
 
-  const int N_myTrig = 16;
-  std::string my_trigger[N_myTrig];
-
-  my_trigger[0] = "HLT_Ele105_CaloIdVT_GsfTrkIdT_v" ;
-  my_trigger[1] = "HLT_Ele115_CaloIdVT_GsfTrkIdT_v" ;
-  my_trigger[2] = "HLT_Ele27_WPTight_Gsf_v" ;
-  my_trigger[3] = "HLT_Ele32_WPTight_Gsf_v" ;
-
-  my_trigger[4] = "HLT_Mu50_v" ;
-  my_trigger[5] = "HLT_TkMu50_v" ;
-
-  my_trigger[6]  = "HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v" ; 
-  my_trigger[7]  = "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v" ; 
-  my_trigger[8]  = "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v" ; 
-  my_trigger[9]  = "HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight" ; 
-  my_trigger[10] = "HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight" ; 
-  my_trigger[11] = "HLT_PFMET110_PFMHT110_IDTight" ; 
-  my_trigger[12] = "HLT_PFMET120_PFMHT120_IDTight" ; 
-  my_trigger[13] = "HLT_PFMET170_NoiseCleaned" ; 
-  my_trigger[14] = "HLT_PFMET170_HBHECleaned" ; 
-  my_trigger[15] = "HLT_PFMET170_HBHE_BeamHaloCleaned" ; 
-
 
   int Number_to_print =  5000; int Max_number_to_read =  10000;
   cout<<"starting loop events"<< endl<<endl;
@@ -86,6 +64,18 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
     Int_t*        trigPreScale =                   data.GetPtrInt   ("hlt_trigPrescale");
     Int_t         trigNumber   =                   data.GetInt      ("hlt_nTrigs");
 
+    Int_t    nGenPar                    = data.GetInt("nGenPar");
+    const TClonesArray* genParP4 = (TClonesArray*) data.GetPtrTObject("genParP4");
+    Int_t*   genParQ     = data.GetPtrInt("genParQ");
+    Int_t*   genParId    = data.GetPtrInt("genParId");
+    Int_t*   genParSt    = data.GetPtrInt("genParSt");
+    Int_t*   genMomParId = data.GetPtrInt("genMomParId");
+    Int_t*   genParIndex = data.GetPtrInt("genParIndex");
+    Int_t*   genMo1      = data.GetPtrInt("genMo1");
+    Int_t*   genMo2      = data.GetPtrInt("genMo2");
+    Int_t*   genDa1      = data.GetPtrInt("genDa1");
+    Int_t*   genDa2      = data.GetPtrInt("genDa2");
+
 
     const Int_t    nMu          = data.GetInt("nMu");
     const TClonesArray* muP4    = (TClonesArray*) data.GetPtrTObject("muP4");
@@ -93,7 +83,7 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
     const vector<bool>& isCustomTrackerMuon = *((vector<bool>*) data.GetPtr("isCustomTrackerMuon"));
     const Float_t* muTrkIso     = data.GetPtrFloat("muTrkIso");
     const Float_t* muInnerTrkPt = data.GetPtrFloat("muInnerTrkPt");
-    const Int_t*   muCharge     = data.GetPtrInt("muCharge");
+
 
     Int_t          FATnJet           = data.GetInt("FATnJet");
     TClonesArray*  FATjetP4          = (TClonesArray*) data.GetPtrTObject("FATjetP4");
@@ -103,28 +93,20 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
     Int_t*         FATnSubSDJet      = data.GetPtrInt("FATnSubSDJet");
     vector<float>* FATsubjetSDCSV    = data.GetPtrVectorFloat("FATsubjetSDCSV", FATnJet);
 
-
-
-
-    // HLT: not just (HLT_Mu50_v OR HLT_TkMu50_v)
-    // OR all trigger listed in Alberto's AN 
+    // HLT: HLT_Mu50_v OR HLT_TkMu50_v 
 
     bool isPassHLT = false;
+
+    std::string TRIGGERNAME1 = "HLT_Mu50_v"; 
+    std::string TRIGGERNAME2 = "HLT_TkMu50_v";    
 
     for(int it = 0; it < data.GetPtrStringSize(); it++){ // HLT loop
 
       std::string thisTrig = trigName[it];
       bool results = trigResult[it];
 
-      bool passOneHLT = false;
-
-      for (int myTrig = 0; myTrig<N_myTrig; myTrig++){ // the trigger listed in AN 
-
-        if( thisTrig.find( my_trigger[myTrig] ) != std::string::npos && results ) {passOneHLT=true; break;}
-
-      }
-
-      if (passOneHLT) {isPassHLT = true; break;}
+      if( thisTrig.find(TRIGGERNAME1) != std::string::npos && results ) {isPassHLT = true; break;}
+      if( thisTrig.find(TRIGGERNAME2) != std::string::npos && results ) {isPassHLT = true; break;}
 
     }
 
@@ -143,28 +125,30 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
       leadingMu    = (TLorentzVector*) muP4->At(0);
       subleadingMu = (TLorentzVector*) muP4->At(1);
 
-      if ( fabs(leadingMu   ->Eta() )<2.4 && 
-           fabs(subleadingMu->Eta() )<2.4 && 
-           leadingMu   ->Pt()>10          &&
-           subleadingMu->Pt()>10      
-
-         ) isPassAcc = true;
+      if ( fabs(leadingMu->Eta())<2.4 && fabs(subleadingMu->Eta())<2.4 ) isPassAcc = true;
     }
 
     if ( !isPassAcc ) continue;
     nPass[1]++;
 
 
-    // Z(mu mu) candidate
+    // in generator-level Z->mu mu  
 
-    bool isPassZmumu = false;
+    bool isPassGenZmumu = false;
 
-    TLorentzVector thisZ =( *leadingMu + *subleadingMu );
+    if(!isData){// for MC
+      for ( int iGen=0; iGen<nGenPar; iGen++ ){
+        TLorentzVector* thisGenPar = (TLorentzVector*) genParP4 ->At(iGen);
 
-    if (thisZ.M()>70 && thisZ.M()<110 && ( muCharge[0]*muCharge[1]<0 ) ) isPassZmumu = true; 
+        if( genParId[iGen] == 23 && abs(genParId[ genDa1[iGen]]) == 13 && abs(genParId[ genDa2[iGen]]) == 13  )
+        { isPassGenZmumu = true; break; }
 
-    if(!isPassZmumu) continue;
+      }
+    }
+
+    if ( !isData && !isPassGenZmumu ) continue;
     nPass[2]++;
+
 
 
     // Muon pt
@@ -206,7 +190,9 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     bool isPassBoostedZ = false; 
 
-    if (  thisZ.Pt()>200 ) isPassBoostedZ = true;
+    TLorentzVector thisZ =( *leadingMu + *subleadingMu ); 
+
+    if (thisZ.M()>70 && thisZ.M()<110 && thisZ.Pt()>200 ) isPassBoostedZ = true;
 
     if ( !isPassBoostedZ) continue;
     nPass[6]++;
@@ -245,7 +231,7 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     TLorentzVector l4_X = (*thisJet) + thisZ ;
 
-    if (l4_X.M()< 750 ) continue;
+    if (l4_X.M()< 800 ) continue;
     nPass[9]++;
 
 
@@ -280,11 +266,10 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
   fprintf(stderr, "Processed all events\n");
 
-  cout<<endl;
   cout<<"nTotal: "                   << nTotal   << endl;
   cout<<"nPass[0] for HLT: "         << nPass[0] << endl;
   cout<<"nPass[1] for Acceptance: "  << nPass[1] << endl;
-  cout<<"nPass[2] for Z(mu mu) candidate: "<< nPass[2] << endl;
+  cout<<"nPass[2] for Gen Z->mu mu: "<< nPass[2] << endl;
   cout<<"nPass[3] for Muon Pt: "     << nPass[3] << endl;
   cout<<"nPass[4] for Muon ID: "     << nPass[4] << endl;
   cout<<"nPass[5] for Muon Iso: "    << nPass[5] << endl;
