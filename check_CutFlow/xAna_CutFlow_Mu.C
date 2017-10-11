@@ -134,24 +134,22 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
  
     // Muon in acceptance
 
-    bool isPassAcc = false;
+    std::vector<Int_t> AccMuons;
 
-    TLorentzVector* leadingMu    = NULL;
-    TLorentzVector* subleadingMu = NULL;
+    for (int im=0; im<nMu; im++){
 
-    if ( nMu >=2 ){
-      leadingMu    = (TLorentzVector*) muP4->At(0);
-      subleadingMu = (TLorentzVector*) muP4->At(1);
+      double muPt = ( (TLorentzVector*) muP4->At( im ) ) ->Pt() ;
+      double muEta =( (TLorentzVector*) muP4->At( im ) ) ->Eta();
 
-      if ( fabs(leadingMu   ->Eta() )<2.4 && 
-           fabs(subleadingMu->Eta() )<2.4 && 
-           leadingMu   ->Pt()>10          &&
-           subleadingMu->Pt()>10      
+      if ( fabs( muEta ) > 2.4 ) continue;
+      if ( muPt < 10 ) continue;
 
-         ) isPassAcc = true;
+      AccMuons.push_back( im );
+
     }
 
-    if ( !isPassAcc ) continue;
+
+    if ( AccMuons.size() <2 ) continue;
     nPass[1]++;
 
 
@@ -159,9 +157,38 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     bool isPassZmumu = false;
 
-    TLorentzVector thisZ =( *leadingMu + *subleadingMu );
+    int leadingMuIndex    = -1;
+    int subleadingMuIndex = -1;
 
-    if (thisZ.M()>70 && thisZ.M()<110 && ( muCharge[0]*muCharge[1]<0 ) ) isPassZmumu = true; 
+    double highestZpt = 0;
+
+    for (int i=0; i< AccMuons.size(); i++){
+//    for (int im=0; im< nMu; im++){
+
+      for (int j=i+1; j< AccMuons.size(); j++){
+//      for (int jm=im+1; jm< nMu; jm++){
+
+        int im = AccMuons[i]; int jm = AccMuons[j];
+
+        TLorentzVector* thisMu = (TLorentzVector*) muP4->At( im );
+        TLorentzVector* thatMu = (TLorentzVector*) muP4->At( jm );
+
+        TLorentzVector thisZ =( *thisMu + *thatMu );
+
+        double Zpt = thisZ.Pt();
+
+        if (Zpt > highestZpt ) { highestZpt = Zpt; leadingMuIndex = im; subleadingMuIndex = jm;}
+
+      }
+    }
+
+
+    TLorentzVector* leadingMu    = (TLorentzVector*) muP4->At( leadingMuIndex    );
+    TLorentzVector* subleadingMu = (TLorentzVector*) muP4->At( subleadingMuIndex );
+
+    TLorentzVector candidate_Z =( *leadingMu + *subleadingMu );
+
+    if (candidate_Z.M()>70 && candidate_Z.M()<110 && ( muCharge[leadingMuIndex]*muCharge[subleadingMuIndex]<0 ) ) isPassZmumu = true;
 
     if(!isPassZmumu) continue;
     nPass[2]++;
@@ -181,7 +208,7 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     bool isPassMuonID = false;
 
-    if( (isHighPtMuon[0] || isHighPtMuon[1]) && isCustomTrackerMuon[0] && isCustomTrackerMuon[1] ) isPassMuonID=true; 
+    if( (isHighPtMuon[leadingMuIndex] || isHighPtMuon[subleadingMuIndex]) && isCustomTrackerMuon[leadingMuIndex] && isCustomTrackerMuon[subleadingMuIndex] ) isPassMuonID=true; 
     if ( !isPassMuonID) continue;
     nPass[4]++;
 
@@ -192,10 +219,10 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
     bool isPassMuonIso = false;
 
     if ( leadingMu->DeltaR(*subleadingMu) >0.3 ){ // if the two muons are far away, use regular isolation 
-      if ( muTrkIso[0]/leadingMu->Pt() <0.1 && muTrkIso[1]/subleadingMu->Pt()<0.1 ) isPassMuonIso = true; 
+      if ( muTrkIso[leadingMuIndex]/leadingMu->Pt() <0.1 && muTrkIso[subleadingMuIndex]/subleadingMu->Pt()<0.1 ) isPassMuonIso = true; 
     }
     else if ( leadingMu->DeltaR(*subleadingMu) <0.3 ){ // if the two muons are close, use corrected isolation
-      if( (muTrkIso[0]-muInnerTrkPt[1])/leadingMu->Pt()<0.1 && (muTrkIso[1]-muInnerTrkPt[0])/subleadingMu->Pt()<0.1)isPassMuonIso=true;
+      if( (muTrkIso[leadingMuIndex]-muInnerTrkPt[subleadingMuIndex])/leadingMu->Pt()<0.1 && (muTrkIso[subleadingMuIndex]-muInnerTrkPt[leadingMuIndex])/subleadingMu->Pt()<0.1)isPassMuonIso=true;
     }
 
     if ( !isPassMuonIso) continue;
@@ -206,7 +233,7 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     bool isPassBoostedZ = false; 
 
-    if (  thisZ.Pt()>200 ) isPassBoostedZ = true;
+    if (  candidate_Z.Pt()>200 ) isPassBoostedZ = true;
 
     if ( !isPassBoostedZ) continue;
     nPass[6]++;
@@ -224,7 +251,7 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
       if( thisJet->Pt() < 200 ) continue;
       if( fabs(thisJet->Eta()) > 2.4 ) continue;
       if( !FATjetPassIDLoose[ij] ) continue;
-      if( thisJet->DeltaR(*leadingMu) < 0.8 || thisJet->DeltaR(*leadingMu) < 0.8 ) continue;
+      if( thisJet->DeltaR(*leadingMu) < 0.8 || thisJet->DeltaR(*subleadingMu) < 0.8 ) continue;
 
       goodFATJetID = ij;
       break;
@@ -238,12 +265,12 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
 
     bool isPassCleaning = false; 
 
-    if ( ( thisZ.Eta() -  thisJet->Eta() )< 1.3 ) isPassCleaning = true;
+    if ( ( candidate_Z.Eta() -  thisJet->Eta() )< 1.3 ) isPassCleaning = true;
     nPass[8]++;
 
     // X mass
 
-    TLorentzVector l4_X = (*thisJet) + thisZ ;
+    TLorentzVector l4_X = (*thisJet) + candidate_Z ;
 
     if (l4_X.M()< 750 ) continue;
     nPass[9]++;
@@ -276,6 +303,17 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
     nPass[12]++;
 
 
+    // test
+    if (NbTag ==1)
+    nPass[13]++;
+
+    if (NbTag ==2)
+    nPass[14]++;
+
+    if (NbTag >2)
+    nPass[15]++;
+
+
   } // ------------------ end of event loop ------------------
 
   fprintf(stderr, "Processed all events\n");
@@ -295,6 +333,10 @@ void xAna_CutFlow_Mu(std::string inputFile, std::string outputFolder, std::strin
   cout<<"nPass[10] for Higgs mass: " << nPass[10] << endl;
   cout<<"nPass[11] for >= 1 b-tagged: " << nPass[11] << endl;
   cout<<"nPass[12] for >= 2 b-tagged: " << nPass[12] << endl;
+
+  cout<<"nPass[13] for == 1 b-tagged: " << nPass[13] << endl;
+  cout<<"nPass[14] for == 2 b-tagged: " << nPass[14] << endl;
+  cout<<"nPass[15] for > 2  b-tagged: " << nPass[15] << endl;
 
 
   // histogram for events

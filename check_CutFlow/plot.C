@@ -22,6 +22,11 @@ void plot( std::string outputFolder, std::string outputFile){
 
   // figure style
 
+  h_CutFlow_eff->GetYaxis ()->SetRangeUser(0 ,1.2 );
+
+//  h_CutFlow_eff ->GetYaxis()->SetNdivisions(505);
+  h_CutFlow_eff ->GetYaxis()->SetNdivisions(512);
+
   h_CutFlow_eff->GetYaxis()->SetTitle("Efficiency");
   h_CutFlow_eff->SetStats(0);
 
@@ -37,6 +42,7 @@ void plot( std::string outputFolder, std::string outputFile){
   // Draw
 
   TCanvas* c1 = new TCanvas("c1","c1",10,10,800,600);
+  c1-> SetGrid();
 
   h_CutFlow_eff         ->Draw();
   h_CutFlow_eff_Alberto ->Draw("same");
@@ -49,8 +55,8 @@ void plot( std::string outputFolder, std::string outputFile){
   // Save
 
   TString pdf_name;
-  if ( outputFile.find("DiMuonChannel"    )!= std::string::npos ) pdf_name = "compareEff_Mu.pdf";
-  if ( outputFile.find("DiElectronChannel")!= std::string::npos ) pdf_name = "compareEff_Ele.pdf";
+  if ( outputFile.find("DiMuonChannel"    )!= std::string::npos ) pdf_name = "output_ROOT/compareEff_Mu.pdf";
+  if ( outputFile.find("DiElectronChannel")!= std::string::npos ) pdf_name = "output_ROOT/compareEff_Ele.pdf";
   c1->SaveAs( pdf_name );
 
 

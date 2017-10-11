@@ -130,37 +130,61 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
  
     // Electron in acceptance
 
-    bool isPassAcc = true;
+    std::vector<Int_t> AccElectrons;
 
-    TLorentzVector* leadingEle    = NULL;
-    TLorentzVector* subleadingEle = NULL;
+    for (int ie=0; ie<nEle; ie++){
 
-    if ( nEle >=2 ){
-      leadingEle    = (TLorentzVector*) eleP4->At(0);
-      subleadingEle = (TLorentzVector*) eleP4->At(1);
+      double elePt = ( (TLorentzVector*) eleP4->At( ie ) ) ->Pt(); 
+      double eleEta = eleScEta[ie];
 
-      if ( fabs(eleScEta[0]) > 2.5 ) isPassAcc = false;
-      if ( fabs(eleScEta[0]) > 1.4442 && fabs(eleScEta[0]) < 1.566 ) isPassAcc = false;      
+      if ( fabs( eleEta ) > 2.5 || ( fabs( eleEta ) > 1.4442 && fabs( eleEta ) < 1.566 ) ) continue;
+      if ( elePt < 10 ) continue; 
 
-      if ( fabs(eleScEta[1]) > 2.5 ) isPassAcc = false;
-      if ( fabs(eleScEta[1]) > 1.4442 && fabs(eleScEta[1]) < 1.566 ) isPassAcc = false;
-
-      if (leadingEle->Pt()<10 || subleadingEle->Pt()<10) isPassAcc = false;
+      AccElectrons.push_back( ie );
 
     }
-    else isPassAcc = false;
 
 
-    if ( !isPassAcc ) continue;
+    if ( AccElectrons.size() <2 ) continue;
     nPass[1]++;
+
 
     // Z(e e) candidate
 
     bool isPassZee = false;
 
-    TLorentzVector thisZ =( *leadingEle + *subleadingEle );
+    int leadingEleIndex    = -1; 
+    int subleadingEleIndex = -1;
 
-    if (thisZ.M()>70 && thisZ.M()<110 && ( eleCharge[0]*eleCharge[1]<0 ) ) isPassZee = true;
+    double highestZpt = 0;
+
+    for (int i=0; i< AccElectrons.size(); i++){
+//    for (int ie=0; ie< nEle; ie++){
+
+      for (int j=i+1; j< AccElectrons.size(); j++){
+//      for (int je=ie+1; je< nEle; je++){
+
+        int ie = AccElectrons[i]; int je = AccElectrons[j];
+
+        TLorentzVector* thisEle = (TLorentzVector*) eleP4->At( ie );
+        TLorentzVector* thatEle = (TLorentzVector*) eleP4->At( je );
+
+        TLorentzVector thisZ =( *thisEle + *thatEle );
+
+        double Zpt = thisZ.Pt();
+
+        if (Zpt > highestZpt ) { highestZpt = Zpt; leadingEleIndex = ie; subleadingEleIndex = je;}
+
+      }
+    }
+
+
+    TLorentzVector* leadingEle    = (TLorentzVector*) eleP4->At( leadingEleIndex    );    
+    TLorentzVector* subleadingEle = (TLorentzVector*) eleP4->At( subleadingEleIndex ); 
+
+    TLorentzVector candidate_Z =( *leadingEle + *subleadingEle );
+
+    if (candidate_Z.M()>70 && candidate_Z.M()<110 && ( eleCharge[leadingEleIndex]*eleCharge[subleadingEleIndex]<0 ) ) isPassZee = true;
 
     if(!isPassZee) continue;
     nPass[2]++;
@@ -181,7 +205,7 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
 
     bool isPassEleID = false;
 
-    if ( eleIsPassLoose[0] && eleIsPassLoose[1] ) isPassEleID = true;
+    if ( eleIsPassLoose[leadingEleIndex] && eleIsPassLoose[subleadingEleIndex] ) isPassEleID = true;
 
     if ( !isPassEleID) continue;
     nPass[4]++;
@@ -193,7 +217,7 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
 
     bool isPassBoostedZ = false; 
 
-    if ( thisZ.Pt()>200 ) isPassBoostedZ = true;
+    if ( candidate_Z.Pt()>200 ) isPassBoostedZ = true;
 
     if ( !isPassBoostedZ) continue;
     nPass[5]++;
@@ -211,7 +235,7 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
       if( thisJet->Pt() < 200 ) continue;
       if( fabs(thisJet->Eta()) > 2.4 ) continue;
       if( !FATjetPassIDLoose[ij] ) continue;
-      if( thisJet->DeltaR(*leadingEle) < 0.8 || thisJet->DeltaR(*leadingEle) < 0.8 ) continue;
+      if( thisJet->DeltaR(*leadingEle) < 0.8 || thisJet->DeltaR(*subleadingEle) < 0.8 ) continue;
 
       goodFATJetID = ij;
       break;
@@ -225,12 +249,12 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
 
     bool isPassCleaning = false; 
 
-    if ( ( thisZ.Eta() -  thisJet->Eta() )< 1.3 ) isPassCleaning = true;
+    if ( ( candidate_Z.Eta() -  thisJet->Eta() )< 1.3 ) isPassCleaning = true;
     nPass[7]++;
 
     // X mass
 
-    TLorentzVector l4_X = (*thisJet) + thisZ ;
+    TLorentzVector l4_X = (*thisJet) + candidate_Z ;
 
     if (l4_X.M()< 750 ) continue;
     nPass[8]++;
@@ -263,6 +287,17 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
     nPass[11]++;
 
 
+    // test
+    if (NbTag ==1)
+    nPass[12]++;
+
+    if (NbTag ==2)
+    nPass[13]++;
+
+    if (NbTag >2)
+    nPass[14]++;
+
+
   } // ------------------ end of event loop ------------------
 
   fprintf(stderr, "Processed all events\n");
@@ -274,14 +309,19 @@ void xAna_CutFlow_Ele(std::string inputFile, std::string outputFolder, std::stri
   cout<<"nPass[2] for Z(e e) candidate: "<< nPass[2] << endl;
   cout<<"nPass[3] for Electron Pt: "     << nPass[3] << endl;
   cout<<"nPass[4] for Electron ID: "     << nPass[4] << endl;
-  cout<<"nPass[5] for Electron Iso: "    << nPass[5] << endl;
-  cout<<"nPass[6] for Boosted Z: "   << nPass[6] << endl;
-  cout<<"nPass[7] for AK8Jet: "      << nPass[7] << endl;
-  cout<<"nPass[8] for Event Cleaning: " << nPass[8] << endl;
-  cout<<"nPass[9] for X mass: "      << nPass[9] << endl;
-  cout<<"nPass[10] for Higgs mass: " << nPass[10] << endl;
-  cout<<"nPass[11] for >= 1 b-tagged: " << nPass[11] << endl;
-  cout<<"nPass[12] for >= 2 b-tagged: " << nPass[12] << endl;
+//  cout<<"nPass[5] for Electron Iso: "    << nPass[5] << endl;
+  cout<<"nPass[5] for Boosted Z: "   << nPass[5] << endl;
+  cout<<"nPass[6] for AK8Jet: "      << nPass[6] << endl;
+  cout<<"nPass[7] for Event Cleaning: " << nPass[7] << endl;
+  cout<<"nPass[8] for X mass: "      << nPass[8] << endl;
+  cout<<"nPass[9] for Higgs mass: " << nPass[9] << endl;
+  cout<<"nPass[10] for >= 1 b-tagged: " << nPass[10] << endl;
+  cout<<"nPass[11] for >= 2 b-tagged: " << nPass[11] << endl;
+
+
+  cout<<"nPass[12] for == 1 b-tagged: " << nPass[12] << endl;
+  cout<<"nPass[13] for == 2 b-tagged: " << nPass[13] << endl;
+  cout<<"nPass[14] for > 2 b-tagged: " << nPass[14] << endl;
 
   // histogram for events
 
